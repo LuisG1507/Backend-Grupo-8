@@ -1,6 +1,5 @@
-package pe.edu.pe.smartrent_backend.DTOS;
+package pe.edu.pe.smartrent_backend.DTOS.userDTOS;
 
-import jakarta.persistence.*;
 import pe.edu.pe.smartrent_backend.Entities.Roles;
 
 import java.time.LocalDate;

@@ -11,10 +11,10 @@ public interface IUser {
 
     public void Update(Users user); //Modificar
 
-    public Users listId(int id); //ListarId
+    public Users listId(Integer id); //ListarId
 
     public List<Users> list(); //Listartodo
 
-    public void Delete(int id);
+    public void Delete(Integer id);
 
 }

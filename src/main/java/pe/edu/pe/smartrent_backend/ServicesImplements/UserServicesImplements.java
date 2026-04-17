@@ -28,7 +28,7 @@ public class UserServicesImplements implements IUser {
     }
 
     @Override
-    public Users listId(int id) {
+    public Users listId(Integer id) {
         return uR.findById(id).orElse(null);
     }
 
@@ -38,7 +38,7 @@ public class UserServicesImplements implements IUser {
     }
 
     @Override
-    public void Delete(int id) {
+    public void Delete(Integer id) {
         uR.deleteById(id);
     }
 }

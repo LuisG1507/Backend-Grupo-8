@@ -28,13 +28,13 @@ public class Estate {
     private String city;
 
     @Column(name = "monthlyPrice", nullable = false)
-    private double monthlyPrice;
+    private Double monthlyPrice;
 
     @Column(name = "type", length = 100, nullable = false)
     private String type;
 
     @Column(name = "state", nullable = false)
-    private boolean state;
+    private Boolean state;
 
     @Column(name = "rooms", nullable = false)
     private Integer rooms;
@@ -43,7 +43,7 @@ public class Estate {
     private Integer bathrooms;
 
     @Column(name = "areaM2", nullable = false)
-    private double areaM2;
+    private Double areaM2;
 
     @Column(name = "creationDate", nullable = false)
     private LocalDate creationDate;
@@ -55,7 +55,7 @@ public class Estate {
     public Estate() {
     }
 
-    public Estate(Integer idEstate, String title, String description, String adress, String district, String city, double monthlyPrice, String type, boolean state, Integer rooms, Integer bathrooms, double areaM2, LocalDate creationDate, Users users) {
+    public Estate(Integer idEstate, String title, String description, String adress, String district, String city, Double monthlyPrice, String type, Boolean state, Integer rooms, Integer bathrooms, Double areaM2, LocalDate creationDate, Users users) {
         this.idEstate = idEstate;
         this.title = title;
         this.description = description;
@@ -120,11 +120,11 @@ public class Estate {
         this.city = city;
     }
 
-    public double getMonthlyPrice() {
+    public Double getMonthlyPrice() {
         return monthlyPrice;
     }
 
-    public void setMonthlyPrice(double monthlyPrice) {
+    public void setMonthlyPrice(Double monthlyPrice) {
         this.monthlyPrice = monthlyPrice;
     }
 
@@ -136,11 +136,11 @@ public class Estate {
         this.type = type;
     }
 
-    public boolean isState() {
+    public Boolean getState() {
         return state;
     }
 
-    public void setState(boolean state) {
+    public void setState(Boolean state) {
         this.state = state;
     }
 
@@ -160,11 +160,11 @@ public class Estate {
         this.bathrooms = bathrooms;
     }
 
-    public double getAreaM2() {
+    public Double getAreaM2() {
         return areaM2;
     }
 
-    public void setAreaM2(double areaM2) {
+    public void setAreaM2(Double areaM2) {
         this.areaM2 = areaM2;
     }
 
