@@ -1,40 +1,18 @@
-package pe.edu.pe.smartrent_backend.Entities;
+package pe.edu.pe.smartrent_backend.DTOS.Models3DDTOs;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import pe.edu.pe.smartrent_backend.Entities.Estate;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "Models3D")
-public class Models3D {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class Models3DCompleteDTO {
     private Integer idModels3D;
-
-    @Column(name = "fileURL", length = 200, nullable = false)
     private String fileURL;
-
-    @Column(name = "state", length = 100, nullable = false)
     private String state;
-
-    @Column(name = "createDate", nullable = false)
     private LocalDate createDate;
-
-    @OneToOne
-    @JoinColumn(name = "idEstate")
     private Estate estate;
-
-    public Models3D() {
-    }
-
-    public Models3D(Integer idModels3D, String fileURL, String state, LocalDate createDate, Estate estate) {
-        this.idModels3D = idModels3D;
-        this.fileURL = fileURL;
-        this.state = state;
-        this.createDate = createDate;
-        this.estate = estate;
-    }
 
     public Integer getIdModels3D() {
         return idModels3D;
