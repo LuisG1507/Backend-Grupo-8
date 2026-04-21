@@ -1,6 +1,7 @@
 package pe.edu.upc.api9233.entities;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,47 +12,47 @@ public class Contract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idContract;
 
-    @Column(name = "fecha_inicio")
-    private LocalDateTime fechaInicio;
+    @Column(name = "start_date")
+    private LocalDateTime startDate;
 
-    @Column(name = "fecha_fin")
-    private LocalDateTime fechaFin;
+    @Column(name = "end_date")
+    private LocalDateTime endDate;
 
-    @Column(name = "monto_mensual")
-    private Double montoMensual;
+    @Column(name = "monthly_amount")
+    private Double monthlyAmount;
 
-    @Column
-    private boolean estado;
+    @Column(name = "status")
+    private boolean status;
 
-    @Column(name = "fecha_creacion")
-    private LocalDateTime fechaCreacion;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_inmueble", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_estate")
     private Estate estate;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_arrendador", nullable = false)
-    private User arrendador;
+    @ManyToOne
+    @JoinColumn(name = "id_arrendador")
+    private Users lessor;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_arrendatario", nullable = false)
-    private User arrendatario;
+    @ManyToOne
+    @JoinColumn(name = "id_arrendatario")
+    private Users lessee;
 
     public Contract() {
     }
 
-    public Contract(int idContract, LocalDateTime fechaInicio, LocalDateTime fechaFin, Double montoMensual,
-                    boolean estado, LocalDateTime fechaCreacion, Estate estate, User arrendador, User arrendatario) {
+    public Contract(int idContract, LocalDateTime startDate, LocalDateTime endDate, Double monthlyAmount,
+                    boolean status, LocalDateTime createdAt, Estate estate, Users lessor, Users lessee) {
         this.idContract = idContract;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
-        this.montoMensual = montoMensual;
-        this.estado = estado;
-        this.fechaCreacion = fechaCreacion;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.monthlyAmount = monthlyAmount;
+        this.status = status;
+        this.createdAt = createdAt;
         this.estate = estate;
-        this.arrendador = arrendador;
-        this.arrendatario = arrendatario;
+        this.lessor = lessor;
+        this.lessee = lessee;
     }
 
     public int getIdContract() {
@@ -62,44 +63,44 @@ public class Contract {
         this.idContract = idContract;
     }
 
-    public LocalDateTime getFechaInicio() {
-        return fechaInicio;
+    public LocalDateTime getStartDate() {
+        return startDate;
     }
 
-    public void setFechaInicio(LocalDateTime fechaInicio) {
-        this.fechaInicio = fechaInicio;
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
     }
 
-    public LocalDateTime getFechaFin() {
-        return fechaFin;
+    public LocalDateTime getEndDate() {
+        return endDate;
     }
 
-    public void setFechaFin(LocalDateTime fechaFin) {
-        this.fechaFin = fechaFin;
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
 
-    public Double getMontoMensual() {
-        return montoMensual;
+    public Double getMonthlyAmount() {
+        return monthlyAmount;
     }
 
-    public void setMontoMensual(Double montoMensual) {
-        this.montoMensual = montoMensual;
+    public void setMonthlyAmount(Double monthlyAmount) {
+        this.monthlyAmount = monthlyAmount;
     }
 
-    public boolean isEstado() {
-        return estado;
+    public boolean isStatus() {
+        return status;
     }
 
-    public void setEstado(boolean estado) {
-        this.estado = estado;
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Estate getEstate() {
@@ -110,19 +111,19 @@ public class Contract {
         this.estate = estate;
     }
 
-    public User getArrendador() {
-        return arrendador;
+    public Users getLessor() {
+        return lessor;
     }
 
-    public void setArrendador(User arrendador) {
-        this.arrendador = arrendador;
+    public void setLessor(Users lessor) {
+        this.lessor = lessor;
     }
 
-    public User getArrendatario() {
-        return arrendatario;
+    public Users getLessee() {
+        return lessee;
     }
 
-    public void setArrendatario(User arrendatario) {
-        this.arrendatario = arrendatario;
+    public void setLessee(Users lessee) {
+        this.lessee = lessee;
     }
 }
