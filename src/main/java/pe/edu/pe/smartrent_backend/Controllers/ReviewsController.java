@@ -32,7 +32,7 @@ public class ReviewsController {
         r.setUser(u);
 
         Estate e = new Estate();
-        e.setIdEstate(rD.getIdEstate()); // Corregido: idEstate
+        e.setIdEstate(rD.getIdEstate());
         r.setEstate(e);
 
         rI.insert(r);
@@ -45,8 +45,8 @@ public class ReviewsController {
         List<ReviewsCompleteDTO> list = rI.list().stream().map(y -> {
             ReviewsCompleteDTO dto = m.map(y, ReviewsCompleteDTO.class);
             dto.setIdReview(y.getIdReview());
-            dto.setIdUser(y.getUser().getId());
-            dto.setIdEstate(y.getEstate().getIdEstate()); // Corregido
+            dto.setIdUser(y.getUser().getIdUser());
+            dto.setIdEstate(y.getEstate().getIdEstate());
             return dto;
         }).collect(Collectors.toList());
 

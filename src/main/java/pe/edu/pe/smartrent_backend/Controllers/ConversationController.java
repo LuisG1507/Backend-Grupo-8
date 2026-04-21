@@ -26,15 +26,15 @@ public class ConversationController {
         Conversation c = new Conversation();
 
         Users u1 = new Users();
-        u1.setId(cD.getIdUser1());
+        u1.setIdUser(cD.getIdUser1());
         c.setUser1(u1);
 
         Users u2 = new Users();
-        u2.setId(cD.getIdUser2());
+        u2.setIdUser(cD.getIdUser2());
         c.setUser2(u2);
 
         Estate e = new Estate();
-        e.setIdEstate(cD.getIdEstate()); // Corregido
+        e.setIdEstate(cD.getIdEstate());
         c.setEstate(e);
 
         cI.insert(c);
@@ -45,10 +45,10 @@ public class ConversationController {
     public ResponseEntity<?> listarTodo() {
         List<ConversationCompleteDTO> list = cI.list().stream().map(y -> {
             ConversationCompleteDTO dto = new ConversationCompleteDTO();
-            dto.setId(y.getIdConversation()); // Corregido: getIdConversation
-            dto.setIdUser1(y.getUser1().getId());
-            dto.setIdUser2(y.getUser2().getId());
-            dto.setIdEstate(y.getEstate().getIdEstate()); // Corregido
+            dto.setId(y.getIdConversation());
+            dto.setIdUser1(y.getUser1().getIdUser());
+            dto.setIdUser2(y.getUser2().getIdUser());
+            dto.setIdEstate(y.getEstate().getIdEstate());
             return dto;
         }).collect(Collectors.toList());
 
@@ -67,11 +67,11 @@ public class ConversationController {
         }
 
         Users u1 = new Users();
-        u1.setId(cC.getIdUser1());
+        u1.setIdUser(cC.getIdUser1());
         exist.setUser1(u1);
 
         Users u2 = new Users();
-        u2.setId(cC.getIdUser2());
+        u2.setIdUser(cC.getIdUser2());
         exist.setUser2(u2);
 
         Estate e = new Estate();

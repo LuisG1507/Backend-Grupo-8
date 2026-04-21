@@ -27,8 +27,8 @@ public class RiskPointsController {
         RiskPoints r = m.map(rD, RiskPoints.class);
 
         Models3D mod = new Models3D();
-        mod.setIdModels3D(rD.getIdModel3D()); // Corregido: idModels3D
-        r.setModels3D(mod); // Corregido: setModels3D (con 's')
+        mod.setIdModels3D(rD.getIdModel3D());
+        r.setModels3D(mod);
 
         rP.insert(r);
         return new ResponseEntity<>("Registrado correctamente", HttpStatus.OK);
@@ -39,48 +39,11 @@ public class RiskPointsController {
         ModelMapper m = new ModelMapper();
         List<RiskPointsCompleteDTO> list = rP.list().stream().map(y -> {
             RiskPointsCompleteDTO dto = m.map(y, RiskPointsCompleteDTO.class);
-            dto.setId(y.getIdRiskPoints()); // Corregido: getIdRiskPoints
-            dto.setIdModel3D(y.getModels3D().getIdModels3D()); // Corregido
+            dto.setId(y.getIdRiskPoints());
+            dto.setIdModel3D(y.getModels3D().getIdModels3D());
             return dto;
         }).collect(Collectors.toList());
 
-        if (list.isEmpty()) {
-            return new ResponseEntity<>("No hay valores en esta tabla", HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(list, HttpStatus.OK);
-        }
-    }
-
-    @PutMapping("/actualizar")
-    public ResponseEntity<String> actualizar(@RequestBody RiskPointsCompleteDTO rC) {
-        RiskPoints exist = rP.listId(rC.getId());
-        if (exist == null || exist.getIdRiskPoints() == null) {
-            return new ResponseEntity<>("El punto de riesgo no fue encontrado", HttpStatus.NOT_FOUND);
-        }
-
-        exist.setDescription(rC.getDescription());
-        exist.setCordX(rC.getCordX());
-        exist.setCordY(rC.getCordY());
-        exist.setCordZ(rC.getCordZ());
-        exist.setSeverity(rC.getSeverity());
-
-        Models3D mod = new Models3D();
-        mod.setIdModels3D(rC.getIdModel3D());
-        exist.setModels3D(mod);
-
-        rP.update(exist);
-
-        return new ResponseEntity<>("Se ha actualizado de forma correcta", HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminar(@PathVariable Integer id) {
-        RiskPoints exist = rP.listId(id);
-        if (exist != null && exist.getIdRiskPoints() != null) {
-            rP.delete(id);
-            return new ResponseEntity<>("El valor ha sido eliminado", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("No se ha encontrado el valor ingresado", HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }
