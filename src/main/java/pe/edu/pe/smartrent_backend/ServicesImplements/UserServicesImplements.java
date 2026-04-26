@@ -41,5 +41,10 @@ public class UserServicesImplements implements IUser {
     public void Delete(Integer id) {
         uR.deleteById(id);
     }
+
+    @Override
+    public Users BuscarPorDNI(Integer id) {
+        return uR.findByDNI(id);
+    }
 }
 

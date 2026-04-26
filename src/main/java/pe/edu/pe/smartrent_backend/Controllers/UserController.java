@@ -7,9 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserDTO;
+import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UsersByDniDTO;
 import pe.edu.pe.smartrent_backend.Entities.Users;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,5 +70,22 @@ public class UserController {
         uS.Delete(id);
         return ResponseEntity.ok("Registro con ID " + id + " eliminado correctamente.");
     }
+
+
+
+    //Listar por DNI
+    @GetMapping("findByDni/{id}")
+    public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {
+        Users p = uS.BuscarPorDNI(id);
+        if (p == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("No existe un registro con el ID: " + id);
+        }
+        ModelMapper m = new ModelMapper();
+        UsersByDniDTO dto = m.map(p,UsersByDniDTO .class);
+        return ResponseEntity.ok(dto);
+    }
+
 
 }

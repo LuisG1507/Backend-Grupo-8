@@ -17,4 +17,7 @@ public interface IUser {
 
     public void Delete(Integer id);
 
+    public Users BuscarPorDNI(Integer id); //Filtro Simple para buscar por DNI
+
+
 }
