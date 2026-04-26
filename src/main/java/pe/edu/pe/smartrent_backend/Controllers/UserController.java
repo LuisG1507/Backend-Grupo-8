@@ -7,11 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserDTO;
-import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UsersByDniDTO;
+import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UsersSinContraseniaDTO;
 import pe.edu.pe.smartrent_backend.Entities.Users;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,9 +82,20 @@ public class UserController {
                     .body("No existe un registro con el ID: " + id);
         }
         ModelMapper m = new ModelMapper();
-        UsersByDniDTO dto = m.map(p,UsersByDniDTO .class);
+        UsersSinContraseniaDTO dto = m.map(p, UsersSinContraseniaDTO.class);
         return ResponseEntity.ok(dto);
     }
+
+
+    //Listar
+    @GetMapping("/findByStatus")
+    public List<UsersSinContraseniaDTO> fyndByStatus() {
+        return uS.fyndByStatus().stream().map(x -> {
+            ModelMapper m = new ModelMapper();
+            return m.map(x, UsersSinContraseniaDTO.class);
+        }).collect(Collectors.toList());
+    }
+
 
 
 }

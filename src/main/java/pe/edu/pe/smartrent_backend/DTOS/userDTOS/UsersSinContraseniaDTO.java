@@ -5,7 +5,7 @@ import pe.edu.pe.smartrent_backend.Entities.Roles;
 import java.time.LocalDate;
 import java.util.List;
 
-public class UsersByDniDTO {
+public class UsersSinContraseniaDTO {
     private String name;
     private String lastName;
     private Integer dni;
@@ -16,7 +16,7 @@ public class UsersByDniDTO {
     private LocalDate createdDate;
     private LocalDate updateDate;
     private Boolean enabled;
-    private List<Roles> roles;
+    private String role;
 
 
     public String getName() {
@@ -99,11 +99,11 @@ public class UsersByDniDTO {
         this.enabled = enabled;
     }
 
-    public List<Roles> getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(List<Roles> roles) {
-        this.roles = roles;
+    public void setRole(String role) {
+        this.role = role;
     }
 }

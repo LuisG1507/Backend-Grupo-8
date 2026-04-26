@@ -46,5 +46,10 @@ public class UserServicesImplements implements IUser {
     public Users BuscarPorDNI(Integer id) {
         return uR.findByDNI(id);
     }
+
+    @Override
+    public List<Users> fyndByStatus() {
+        return uR.findByStatusVerification();
+    }
 }
 
