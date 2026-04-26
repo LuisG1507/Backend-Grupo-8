@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.pe.smartrent_backend.DTOS.Models3DDTOs.ModelEstateDTO;
 import pe.edu.pe.smartrent_backend.DTOS.Models3DDTOs.Models3DCompleteDTO;
 import pe.edu.pe.smartrent_backend.DTOS.Models3DDTOs.Models3DDTO;
 import pe.edu.pe.smartrent_backend.Entities.Models3D;
@@ -67,5 +68,25 @@ public class Models3DController {
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe el valor ingresado");
         }
+    }
+
+    @GetMapping("/estado/{state}")
+    public List<Models3D> buscarEstado(@PathVariable String state){
+        return mI.buscarPorEstado(state);
+    }
+
+    @GetMapping("/fecha/{date}")
+    public List<Models3D> buscarFecha(@PathVariable String date){
+        return mI.buscarPorFecha(date);
+    }
+
+    @GetMapping("/ubicacion")
+    public List<Object[]> ubicacion(){
+        return mI.modelosConUbicacion();
+    }
+
+    @GetMapping("/estateModels")
+    public List<Object[]> estateModel(){
+        return mI.inmueblesConModelo();
     }
 }

@@ -1,7 +1,6 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-import pe.edu.pe.smartrent_backend.Entities.Estate;
+import pe.edu.pe.smartrent_backend.DTOS.Models3DDTOs.ModelEstateDTO;
 import pe.edu.pe.smartrent_backend.Entities.Models3D;
 
 import java.util.List;
@@ -14,5 +13,9 @@ public interface IModels3D {
     public void actualizar(Models3D models3D);
     public List<Models3D> Listar();
     public void eliminar(Integer id);
+    List<Models3D> buscarPorEstado(String state);
+    List<Models3D> buscarPorFecha(String fecha);
+    List<Object[]> modelosConUbicacion();
+    List<Object[]> inmueblesConModelo();
 
 }

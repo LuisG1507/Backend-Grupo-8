@@ -1,6 +1,8 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
 
 
+import pe.edu.pe.smartrent_backend.DTOS.EstateDTOS.OwnerEstateDTO;
+import pe.edu.pe.smartrent_backend.DTOS.EstateDTOS.UserEstateDTO;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 
 import java.util.List;
@@ -13,6 +15,8 @@ public interface IEstate {
     public void Actualizar(Estate estE);
     public List<Estate> listar();
     public void eliminar(Integer id);
-
-
+    public List<Estate> filtrarInmueblesPorCiudadDistritoTipo(String city, String district, String type);
+    public double amountTotal();
+    public List<OwnerEstateDTO> listUsersEstate();
+    public List<UserEstateDTO> listINNERJOIN(String d);
 }
