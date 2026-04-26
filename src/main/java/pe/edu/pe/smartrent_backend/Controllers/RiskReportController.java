@@ -36,7 +36,6 @@ public class RiskReportController {
         RiskReport p = m.map(dto, RiskReport.class);
         p.setIdRiskReport(id);
 
-
         RiskReport existente = rS.listId(id);
         if (existente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
