@@ -7,11 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.EstateDTOS.EstateCompleteDTO;
 import pe.edu.pe.smartrent_backend.DTOS.EstateDTOS.EstateDTO;
+import pe.edu.pe.smartrent_backend.DTOS.EstateDTOS.OwnerEstateDTO;
+import pe.edu.pe.smartrent_backend.DTOS.EstateDTOS.UserEstateDTO;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Repositories.IEstateRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IEstate;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -79,6 +82,26 @@ public class EstateController {
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se ha encontrado el valor ingresado");
         }
+    }
+
+    @GetMapping("/filtro/{f1}/{f2}/{t1}")
+    public List<Estate> filtroEstate(@PathVariable String f1, @PathVariable String f2, @PathVariable String t1){
+        return eI.filtrarInmueblesPorCiudadDistritoTipo(f1, f2, t1);
+    }
+
+    @GetMapping("/amountT")
+    public Double amountTotalPrice(){
+            return eI.amountTotal();
+    }
+
+    @GetMapping("/owners-estates")
+    public List<OwnerEstateDTO> listUsersEst(){
+        return eI.listUsersEstate();
+    }
+
+    @GetMapping("/user-estate/{district}")
+    public List<UserEstateDTO> listUsersEst(@PathVariable String district){
+        return eI.listINNERJOIN(district);
     }
 
 }
