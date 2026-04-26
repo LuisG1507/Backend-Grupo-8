@@ -33,5 +33,15 @@ public interface IEstateRepository extends JpaRepository<Estate, Integer> {
             "WHERE e.district = :dist ", nativeQuery = true)
     List<UserEstateDTO> listUserEstateDistrict(String dist);
 
+    @Query(value = "SELECT \n" +
+            "    e.title,\n" +
+            "    e.district,\n" +
+            "    e.monthly_price,\n" +
+            "    e.rooms\n" +
+            "FROM estate e\n" +
+            "WHERE e.monthly_price > (SELECT AVG(monthly_price) FROM estate)\n" +
+            "ORDER BY e.monthly_price DESC;", nativeQuery = true)
+    List<Object[]> aar();
+
 
 }

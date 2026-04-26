@@ -7,10 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserDTO;
+import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UsersIncidentsRankingDTO;
 import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UsersSinContraseniaDTO;
 import pe.edu.pe.smartrent_backend.Entities.Users;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,7 +76,7 @@ public class UserController {
 
 
     //Listar por DNI
-    @GetMapping("findByDni/{id}")
+    @GetMapping("/findByDni/{id}")
     public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {
         Users p = uS.BuscarPorDNI(id);
         if (p == null) {
@@ -96,6 +99,29 @@ public class UserController {
         }).collect(Collectors.toList());
     }
 
+
+    //Listar por fechas
+    @GetMapping("/findByCreatedDate/{f1}/{f2}")
+    public List<UsersSinContraseniaDTO> fyndByCreatedDate(@PathVariable("f1") LocalDate f1,
+                                                          @PathVariable("f2") LocalDate f2) {
+        return uS.userByRangeDate(f1,f2).stream().map(x -> {
+            ModelMapper m = new ModelMapper();
+            return m.map(x, UsersSinContraseniaDTO.class);
+        }).collect(Collectors.toList());
+    }
+
+    @GetMapping("/RankingIncidents")
+    public List<UsersIncidentsRankingDTO> RankingIncidents() {
+        List<Object[]> resultados = uS.RankingUsuariosIncidencias();
+        List<UsersIncidentsRankingDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            UsersIncidentsRankingDTO dto = new UsersIncidentsRankingDTO();
+            dto.setNombre(((String) row[0]));
+            dto.setCantidad(((Number) row[1]).intValue());
+            lista.add(dto);
+        }
+        return lista;
+    }
 
 
 }

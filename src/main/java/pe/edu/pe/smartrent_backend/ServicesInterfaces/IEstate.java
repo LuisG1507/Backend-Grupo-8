@@ -18,4 +18,6 @@ public interface IEstate {
     public double amountTotal();
     public List<OwnerEstateDTO> listUsersEstate();
     public List<UserEstateDTO> listINNERJOIN(String d);
+    public List<Object[]> AboveAverageRents();
+
 }

@@ -6,4 +6,6 @@ import pe.edu.pe.smartrent_backend.Entities.RiskPoints;
 
 @Repository
 public interface RiskPointsRepository extends JpaRepository<RiskPoints, Integer> {
+
+
 }

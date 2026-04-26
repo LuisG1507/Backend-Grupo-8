@@ -3,6 +3,7 @@ package pe.edu.pe.smartrent_backend.ServicesInterfaces;
 import org.apache.catalina.User;
 import pe.edu.pe.smartrent_backend.Entities.Users;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface IUser {
@@ -20,4 +21,8 @@ public interface IUser {
     public Users BuscarPorDNI(Integer id); //Filtro Simple para buscar por DNI
 
     public List<Users> fyndByStatus(); //ListarVerificados
+
+    public List<Users> userByRangeDate(LocalDate f1, LocalDate f2);
+
+    public List<Object[]> RankingUsuariosIncidencias();
 }

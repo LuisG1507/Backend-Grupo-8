@@ -5,13 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.EstateCompleteDTO;
-import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.EstateDTO;
-import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.OwnerEstateDTO;
-import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.UserEstateDTO;
+import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IEstate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -101,5 +99,23 @@ public class EstateController {
     public List<UserEstateDTO> listUsersEst(@PathVariable String district){
         return eI.listINNERJOIN(district);
     }
+
+    //Listas tipo Object[]
+    @GetMapping("/AlquilerEncimaDelPromedio")
+    public List<AboveAverageRentsDTO> AVG() {
+        List<Object[]> resultados = eI.AboveAverageRents();
+        List<AboveAverageRentsDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            AboveAverageRentsDTO dto = new AboveAverageRentsDTO();
+            dto.setTitle(((String) row[0]));
+            dto.setDistrict(((String) row[1]));
+            dto.setMontlhy_price(((Double) row[2]).doubleValue());
+            dto.setRooms(((Integer) row[3]));
+            lista.add(dto);
+        }
+        return lista;
+    }
+
+
 
 }

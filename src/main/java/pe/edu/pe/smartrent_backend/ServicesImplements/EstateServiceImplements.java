@@ -61,4 +61,9 @@ public class EstateServiceImplements implements IEstate {
     public List<UserEstateDTO> listINNERJOIN(String d) {
         return eR.listUserEstateDistrict(d);
     }
+
+    @Override
+    public List<Object[]> AboveAverageRents() {
+        return eR.aar();
+    }
 }
