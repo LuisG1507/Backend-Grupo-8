@@ -1,3 +1,5 @@
+package pe.edu.pe.smartrent_backend.Entities;
+
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

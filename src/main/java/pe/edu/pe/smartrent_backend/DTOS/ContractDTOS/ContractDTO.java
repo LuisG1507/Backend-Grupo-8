@@ -1,3 +1,5 @@
+package pe.edu.pe.smartrent_backend.DTOS.ContractDTOS;
+
 import java.time.LocalDateTime;
 
 public class ContractDTO {

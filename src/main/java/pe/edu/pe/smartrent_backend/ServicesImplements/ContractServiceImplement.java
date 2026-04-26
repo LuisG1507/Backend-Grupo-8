@@ -1,11 +1,9 @@
-package pe.edu.upc.api9233.servicesimplements;
-
+package pe.edu.pe.smartrent_backend.ServicesImplements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.upc.api9233.entities.Contract;
-import pe.edu.upc.api9233.repositories.IContractRepository;
-import pe.edu.upc.api9233.servicesinterfaces.IContractService;
-
+import pe.edu.pe.smartrent_backend.Entities.Contract;
+import pe.edu.pe.smartrent_backend.Repositories.IContractRepository;
+import pe.edu.pe.smartrent_backend.ServicesInterfaces.IContractService;
 import java.util.List;
 import java.util.Optional;
 
