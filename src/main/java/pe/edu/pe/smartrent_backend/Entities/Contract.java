@@ -1,4 +1,4 @@
-package pe.edu.upc.api9233.entities;
+package pe.edu.pe.smartrent_backend.Entities;
 
 import jakarta.persistence.*;
 

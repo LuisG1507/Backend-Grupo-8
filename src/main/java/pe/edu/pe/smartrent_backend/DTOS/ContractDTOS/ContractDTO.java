@@ -1,4 +1,4 @@
-package pe.edu.upc.api9233.dtos;
+package pe.edu.pe.smartrent_backend.DTOS.ContractDTOS;
 
 import java.time.LocalDateTime;
 
