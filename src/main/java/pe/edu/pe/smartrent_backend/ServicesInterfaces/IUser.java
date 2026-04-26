@@ -19,5 +19,5 @@ public interface IUser {
 
     public Users BuscarPorDNI(Integer id); //Filtro Simple para buscar por DNI
 
-
+    public List<Users> fyndByStatus(); //ListarVerificados
 }
