@@ -2,9 +2,10 @@ package pe.edu.pe.smartrent_backend.ServicesImplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.EstateConversationCountDTO;
 import pe.edu.pe.smartrent_backend.Entities.Conversation;
-import pe.edu.pe.smartrent_backend.Repositories.ConversationRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IConversationService;
+import pe.edu.pe.smartrent_backend.Repositories.IConversationRepository; // <-- IMPORTANTE: Ahora tiene la 'I'
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
 public class ConversationServiceImplements implements IConversationService {
 
     @Autowired
-    private ConversationRepository cR;
+    private IConversationRepository cR; // <-- IMPORTANTE: Ahora usa la Interfaz correcta
 
     @Override
     public void insert(Conversation conversation) {
@@ -31,11 +32,16 @@ public class ConversationServiceImplements implements IConversationService {
 
     @Override
     public Conversation listId(Integer id) {
-        return cR.findById(id).orElse(null);
+        return cR.findById(id).orElse(new Conversation());
     }
 
     @Override
     public void update(Conversation conversation) {
         cR.save(conversation);
+    }
+
+    @Override
+    public List<EstateConversationCountDTO> getConversationCountPerEstate() {
+        return cR.getConversationCountPerEstate();
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.ConversationCompleteDTO;
 import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.ConversationDTO;
+import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.EstateConversationCountDTO;
 import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.Users;
@@ -92,5 +93,10 @@ public class ConversationController {
         } else {
             return new ResponseEntity<>("No se ha encontrado el valor ingresado", HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/reporte-popularidad")
+    public List<EstateConversationCountDTO> reportePopularidad() {
+        return cI.getConversationCountPerEstate();
     }
 }

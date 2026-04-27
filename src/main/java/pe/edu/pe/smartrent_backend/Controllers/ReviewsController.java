@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.EstateAverageRatingDTO;
 import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.ReviewsCompleteDTO;
 import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.ReviewsDTO;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
@@ -90,5 +91,23 @@ public class ReviewsController {
         } else {
             return new ResponseEntity<>("No se ha encontrado el valor ingresado", HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/filtro-calificacion/{minRating}")
+    public List<ReviewsDTO> filtrar(@PathVariable Double minRating) {
+        return rI.listByMinRating(minRating).stream().map(r -> {
+            ReviewsDTO dto = new ReviewsDTO();
+            dto.setCalification(r.getCalification());
+            dto.setComment(r.getComment());
+            dto.setCreationDate(r.getCreationDate());
+            dto.setIdUser(r.getUser().getIdUser());
+            dto.setIdEstate(r.getEstate().getIdEstate());
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+    @GetMapping("/reporte-promedios")
+    public List<pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.EstateAverageRatingDTO> reportePromedios() {
+        return rI.getAverageRatingPerEstate();
     }
 }
