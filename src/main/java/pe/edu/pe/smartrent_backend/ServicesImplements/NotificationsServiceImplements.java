@@ -7,6 +7,7 @@ import pe.edu.pe.smartrent_backend.Repositories.INotificationsRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.INotifications;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NotificationsServiceImplements implements INotifications {
@@ -14,28 +15,36 @@ public class NotificationsServiceImplements implements INotifications {
     private INotificationsRepository nR;
 
     @Override
-    public void Registrar(Notifications notifications) {
-        nR.save(notifications);
+    public Notifications Registrar(Notifications notifications) {
+        return nR.save(notifications);
     }
-
     @Override
     public void Update(Notifications notifications) {
         nR.save(notifications);
     }
-
     @Override
     public List<Notifications> list() {
         return nR.findAll();
     }
 
     @Override
-    public Notifications listId(Integer id) {
-        return nR.findById(id).orElse(null);
+    public Optional<Notifications> listId(int id) {
+        return nR.findById(id);
     }
 
     @Override
     public void Delete(Integer id) {
         nR.deleteById(id);
 
+    }
+
+    @Override
+    public List<Notifications> buscarNoLeidos() {
+        return nR.findByReadFalse();
+    }
+
+    @Override
+    public List<Notifications> findRecentSecurityAlertsJPQL() {
+        return nR.findRecentSecurityAlertsJPQL();
     }
 }

@@ -5,14 +5,23 @@ import pe.edu.pe.smartrent_backend.Entities.Users;
 
 import java.time.LocalDate;
 
-public class MessagesDTO {
-
-
+public class MessagesCompleteDTO {
+    private Integer idMessage;
     private String content;
     private String status;
     private LocalDate dateSent;
     private Conversation conversation;
     private Users user;
+
+
+    public Integer getIdMessage() {
+
+        return idMessage;
+    }
+
+    public void setIdMessage(Integer idMessage) {
+        this.idMessage = idMessage;
+    }
 
     public String getContent() {
         return content;

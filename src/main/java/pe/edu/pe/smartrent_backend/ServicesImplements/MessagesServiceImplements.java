@@ -7,35 +7,39 @@ import pe.edu.pe.smartrent_backend.Repositories.IMessagesRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IMessages;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MessagesServiceImplements implements IMessages {
     @Autowired
     private IMessagesRepository mR;
-
     @Override
-    public void Registrar(Messages messages) {
-        mR.save(messages);
+    public Messages Registrar(Messages messages) {
+        return mR.save(messages);
     }
-
     @Override
     public void Update(Messages messages) {
     mR.save(messages);
     }
-
     @Override
     public List<Messages> list() {
         return mR.findAll();
     }
-
     @Override
-    public Messages listId(Integer id) {
-        return mR.findById(id).orElse(null);
+    public Optional<Messages> listId(int id) {
+        return mR.findById(id);
     }
-
     @Override
     public void Delete(Integer id) {
         mR.deleteById(id);
-
     }
+    @Override
+    public List<Messages> findByStatus(String status) {
+        return mR.findByStatus(status);
+    }
+    @Override
+    public List<Messages> findUrgentMessagesWithUserJPQL() {
+        return mR.findUrgentMessagesWithUserJPQL();
+    }
+
 }

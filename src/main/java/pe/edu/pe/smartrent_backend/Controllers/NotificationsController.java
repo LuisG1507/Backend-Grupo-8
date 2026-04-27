@@ -5,11 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsCompleteDTO;
 import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsDTO;
+import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsTypeQueryDTO;
+import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import pe.edu.pe.smartrent_backend.Entities.Notifications;
+import pe.edu.pe.smartrent_backend.Entities.Users;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.INotifications;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -18,38 +24,89 @@ public class NotificationsController {
     @Autowired
     private INotifications nS;
 
-    @PostMapping
-    public void registrar(@RequestBody NotificationsDTO dto){
-        ModelMapper m= new ModelMapper();
-        Notifications n= m.map(dto,Notifications.class);
-        nS.Registrar(n);
-    }
-    @PutMapping("/{id}")
-    public ResponseEntity<String> modificar(@PathVariable int id, @RequestBody NotificationsDTO dto) {
+    @PostMapping("/web")
+    public ResponseEntity<NotificationsCompleteDTO> registrar(@RequestBody NotificationsCompleteDTO dto) {
         ModelMapper m = new ModelMapper();
         Notifications n = m.map(dto, Notifications.class);
-        n.setIdNotification(id);
-        Notifications existente = nS.listId(id);
-        if (existente == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se puede modificar.No existe un registro con el ID:" + id);
-        }
-        nS.Update(n);
-        return ResponseEntity.ok("Registro con ID "+id+"Modificado exitosamente");
+        Notifications cur = nS.Registrar(n);
+        NotificationsCompleteDTO responseDTO = m.map(cur, NotificationsCompleteDTO.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
-    @GetMapping
-    public List<NotificationsDTO>listar (){
-        return nS.list().stream().map(x -> {ModelMapper m= new ModelMapper();
-        return m.map(x, NotificationsDTO.class);
-        }).collect(Collectors.toList());
+
+    @GetMapping("/list")
+    public ResponseEntity<List<NotificationsDTO>>listar(){
+        ModelMapper m= new ModelMapper();
+        List<NotificationsDTO>lista=nS.list().stream().map(y ->m.map(y, NotificationsDTO.class)).collect(Collectors.toList());
+        return ResponseEntity.ok(lista);
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminar (@PathVariable("id") Integer id){
-        Notifications n= nS.listId(id);
-        if (n== null){
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe un registro con el ID:"+id) ;
+    public ResponseEntity<String> eliminar (@PathVariable int id){
+        Optional<Notifications>notifications= nS.listId(id);
+        if (notifications.isPresent()){
+           nS.Delete(id);
+            return ResponseEntity.ok("Notificación eliminada correctamente") ;
         }
-        nS.Delete(id);
-        return ResponseEntity.ok("Registro con ID"+id+"Elimando correctamente");
+        else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Notificación no encontrada");
+        }
+    }
+
+    @PutMapping("/actualizar")
+    public ResponseEntity<String> actualizar(@RequestBody NotificationsCompleteDTO dto) {
+        Optional<Notifications> existente = nS.listId(dto.getIdNotification());
+        if (existente.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Mensaje no encontrado");
+        }
+        // Validación de campos (siguiendo el ejemplo de Project de la profe)
+        if (dto.getMessage() == null || dto.getMessage().isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body("El contenido del mensaje no puede estar vacío");
+        }
+        Notifications m = existente.get();
+        m.setTitle(dto.getTitle());
+        m.setMessage(dto.getMessage());
+        m.setType(dto.getType());
+        m.setRead(dto.getRead());
+        m.setCreatedDate(dto.getCreatedDate());
+        m.setUser(dto.getUser());
+        nS.Update(m);
+        return ResponseEntity.ok("Mensaje actualizado correctamente");
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable int id) {
+        ModelMapper m = new ModelMapper();
+        Optional<Notifications> notification = nS.listId(id);
+
+        if (notification.isPresent()) {
+            NotificationsCompleteDTO dto = m.map(notification.get(), NotificationsCompleteDTO.class);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Notificación no encontrada");
+        }
+    }
+
+    //QuerySimple
+    @GetMapping("/no-leidas")
+    public ResponseEntity<List<NotificationsDTO>> listarNoLeidas() {
+        ModelMapper m = new ModelMapper();
+        List<NotificationsDTO> lista = nS.buscarNoLeidos().stream()
+                .map(y -> m.map(y, NotificationsDTO.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(lista);
+    }
+
+    //QueryToma
+    @GetMapping("/alertas-seguridad")
+    public ResponseEntity<List<NotificationsTypeQueryDTO>> listarAlertasSeguridad() {
+        ModelMapper m = new ModelMapper();
+        List<NotificationsTypeQueryDTO> lista = nS.findRecentSecurityAlertsJPQL().stream()
+                .map(y -> m.map(y, NotificationsTypeQueryDTO.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(lista);
     }
 
 

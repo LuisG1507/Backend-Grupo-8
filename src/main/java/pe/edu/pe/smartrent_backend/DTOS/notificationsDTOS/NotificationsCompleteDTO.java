@@ -1,19 +1,26 @@
 package pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS;
 
-import jakarta.persistence.Column;
 import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import pe.edu.pe.smartrent_backend.Entities.Users;
 
 import java.time.LocalDate;
 
-public class NotificationsDTO {
-
+public class NotificationsCompleteDTO {
+    private Integer idNotification;
     private String title;
     private String message;
     private String type;
     private Boolean read;
     private LocalDate createdDate;
     private Users user;
+
+    public Integer getIdNotification() {
+        return idNotification;
+    }
+
+    public void setIdNotification(Integer idNotification) {
+        this.idNotification = idNotification;
+    }
 
     public String getTitle() {
         return title;

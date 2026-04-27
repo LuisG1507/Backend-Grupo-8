@@ -10,4 +10,5 @@ public class SmartRentBackendApplication {
         SpringApplication.run(SmartRentBackendApplication.class, args);
     }
 
+
 }
