@@ -1,7 +1,4 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
-
-import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.EstateWithoutActiveContractDTO;
-import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.LessorIncomeDTO;
 import pe.edu.pe.smartrent_backend.Entities.Contract;
 
 import java.util.List;
@@ -14,6 +11,7 @@ public interface IContractService {
     public void update(Contract c);
     public void delete(int id);
 
-    public List<LessorIncomeDTO> getIncomeByLessor();
-    public List<EstateWithoutActiveContractDTO> getEstatesWithoutActiveContract();
+    List<Object[]> getIncomeByLessorNative();
+    List<Object[]> getEstatesWithoutActiveContractNative();
+
 }
