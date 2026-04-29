@@ -7,15 +7,6 @@ public class LessorIncomeDTO {
     private Long contractCount;
     private Double totalMonthlyIncome;
 
-    public LessorIncomeDTO() {
-    }
-
-    public LessorIncomeDTO(Integer idLessor, String lessorName, Long contractCount, Double totalMonthlyIncome) {
-        this.idLessor = idLessor;
-        this.lessorName = lessorName;
-        this.contractCount = contractCount;
-        this.totalMonthlyIncome = totalMonthlyIncome;
-    }
 
     public Integer getIdLessor() {
         return idLessor;
