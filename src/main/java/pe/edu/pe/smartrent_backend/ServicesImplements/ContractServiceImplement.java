@@ -2,15 +2,12 @@ package pe.edu.pe.smartrent_backend.ServicesImplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.EstateWithoutActiveContractDTO;
-import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.LessorIncomeDTO;
 import pe.edu.pe.smartrent_backend.Entities.Contract;
 import pe.edu.pe.smartrent_backend.Repositories.IContractRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IContractService;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ContractServiceImplement implements IContractService {
@@ -44,24 +41,13 @@ public class ContractServiceImplement implements IContractService {
     }
 
     @Override
-    public List<LessorIncomeDTO> getIncomeByLessor() {
-        return cR.getIncomeByLessor().stream().map(row ->
-                new LessorIncomeDTO(
-                        ((Number) row[0]).intValue(),
-                        (String) row[1],
-                        ((Number) row[2]).longValue(),
-                        ((Number) row[3]).doubleValue()
-                )
-        ).collect(Collectors.toList());
+    public List<Object[]> getIncomeByLessorNative() {
+        return cR.getIncomeByLessor();
     }
 
     @Override
-    public List<EstateWithoutActiveContractDTO> getEstatesWithoutActiveContract() {
-        return cR.getEstatesWithoutActiveContract().stream().map(row ->
-                new EstateWithoutActiveContractDTO(
-                        ((Number) row[0]).intValue(),
-                        (String) row[1]
-                )
-        ).collect(Collectors.toList());
+    public List<Object[]> getEstatesWithoutActiveContractNative() {
+        return cR.getEstatesWithoutActiveContract();
     }
+
 }
