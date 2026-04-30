@@ -6,9 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.RiskReportDTO;
-import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserDTO;
 import pe.edu.pe.smartrent_backend.Entities.RiskReport;
-import pe.edu.pe.smartrent_backend.Entities.Users;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IRiskReport;
 
 import java.util.List;

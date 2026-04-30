@@ -1,6 +1,6 @@
 package pe.edu.pe.smartrent_backend.DTOS.estateDTOS;
 
-import pe.edu.pe.smartrent_backend.Entities.Users;
+import pe.edu.pe.smartrent_backend.Entities.User;
 
 import java.time.LocalDate;
 
@@ -18,7 +18,7 @@ public class EstateCompleteDTO {
     private Integer bathrooms;
     private Double areaM2;
     private LocalDate creationDate;
-    private Users users;
+    private User user;
 
     public Integer getIdEstate() {
         return idEstate;
@@ -124,11 +124,11 @@ public class EstateCompleteDTO {
         this.creationDate = creationDate;
     }
 
-    public Users getUsers() {
-        return users;
+    public User getUsers() {
+        return user;
     }
 
-    public void setUsers(Users users) {
-        this.users = users;
+    public void setUsers(User user) {
+        this.user = user;
     }
 }

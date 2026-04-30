@@ -13,11 +13,11 @@ public class Conversation {
 
     @ManyToOne
     @JoinColumn(name = "idUser1")
-    private Users user1;
+    private User user1;
 
     @ManyToOne
     @JoinColumn(name = "idUser2")
-    private Users user2;
+    private User user2;
 
     @ManyToOne
     @JoinColumn(name = "idEstate")
@@ -26,7 +26,7 @@ public class Conversation {
     public Conversation() {
     }
 
-    public Conversation(Integer idConversation, Users user1, Users user2, Estate estate) {
+    public Conversation(Integer idConversation, User user1, User user2, Estate estate) {
         this.idConversation = idConversation;
         this.user1 = user1;
         this.user2 = user2;
@@ -41,19 +41,19 @@ public class Conversation {
         this.idConversation = idConversation;
     }
 
-    public Users getUser1() {
+    public User getUser1() {
         return user1;
     }
 
-    public void setUser1(Users user1) {
+    public void setUser1(User user1) {
         this.user1 = user1;
     }
 
-    public Users getUser2() {
+    public User getUser2() {
         return user2;
     }
 
-    public void setUser2(Users user2) {
+    public void setUser2(User user2) {
         this.user2 = user2;
     }
 

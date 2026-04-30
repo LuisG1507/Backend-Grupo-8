@@ -1,7 +1,6 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
 
 import pe.edu.pe.smartrent_backend.Entities.RiskReport;
-import pe.edu.pe.smartrent_backend.Entities.Users;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package pe.edu.pe.smartrent_backend.DTOS.messagesDTOS;
 
 import pe.edu.pe.smartrent_backend.Entities.Conversation;
-import pe.edu.pe.smartrent_backend.Entities.Users;
+import pe.edu.pe.smartrent_backend.Entities.User;
 
 import java.time.LocalDate;
 
@@ -11,7 +11,7 @@ public class MessagesCompleteDTO {
     private String status;
     private LocalDate dateSent;
     private Conversation conversation;
-    private Users user;
+    private User user;
 
 
     public Integer getIdMessage() {
@@ -55,11 +55,11 @@ public class MessagesCompleteDTO {
         this.conversation = conversation;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }

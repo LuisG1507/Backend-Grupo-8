@@ -4,7 +4,6 @@ package pe.edu.pe.smartrent_backend.ServicesImplements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.pe.smartrent_backend.Entities.RiskReport;
-import pe.edu.pe.smartrent_backend.Entities.Users;
 import pe.edu.pe.smartrent_backend.Repositories.IRiskReportRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IRiskReport;
 
