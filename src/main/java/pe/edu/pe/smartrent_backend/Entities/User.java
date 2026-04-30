@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Users")
-public class Users implements Serializable {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,19 +48,15 @@ public class Users implements Serializable {
     @Column(name = "enabled", nullable = false)
     private Boolean enabled;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_rol",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private List<Roles> roles;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private List<Role> roles;
 
 
-    public Users() {
+    public User() {
     }
 
-    public Users(Integer idUser, String name, String lastName, Integer dni, String username, String password, Boolean statusVerification, String profilePhoto, String phoneNumber, LocalDate createdDate, LocalDate updateDate, Boolean enabled, List<Roles> roles) {
+    public User(Integer idUser, String name, String lastName, Integer dni, String username, String password, Boolean statusVerification, String profilePhoto, String phoneNumber, LocalDate createdDate, LocalDate updateDate, Boolean enabled, List<Role> roles) {
         this.idUser = idUser;
         this.name = name;
         this.lastName = lastName;
@@ -172,11 +168,11 @@ public class Users implements Serializable {
         this.enabled = enabled;
     }
 
-    public List<Roles> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Roles> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 

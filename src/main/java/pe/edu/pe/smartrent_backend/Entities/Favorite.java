@@ -18,7 +18,7 @@ public class Favorite {
 
     @ManyToOne
     @JoinColumn(name = "idUser")
-    private Users user;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "idEstate")
@@ -27,7 +27,7 @@ public class Favorite {
     public Favorite() {
     }
 
-    public Favorite(Integer idFavorite, LocalDate creationDate, Users user, Estate estate) {
+    public Favorite(Integer idFavorite, LocalDate creationDate, User user, Estate estate) {
         this.idFavorite = idFavorite;
         this.creationDate = creationDate;
         this.user = user;
@@ -50,11 +50,11 @@ public class Favorite {
         this.creationDate = creationDate;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

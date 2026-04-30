@@ -3,7 +3,6 @@ package pe.edu.pe.smartrent_backend.Entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Reviews")
@@ -24,7 +23,7 @@ public class Reviews {
 
     @ManyToOne
     @JoinColumn(name = "idUser")
-    private Users user;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "idEstate")
@@ -33,7 +32,7 @@ public class Reviews {
     public Reviews() {
     }
 
-    public Reviews(Integer idReview, Double calification, String comment, LocalDate creationDate, Users user, Estate estate) {
+    public Reviews(Integer idReview, Double calification, String comment, LocalDate creationDate, User user, Estate estate) {
         this.idReview = idReview;
         this.calification = calification;
         this.comment = comment;
@@ -74,11 +73,11 @@ public class Reviews {
         this.creationDate = creationDate;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
