@@ -29,11 +29,11 @@ public class Notifications {
 
     @ManyToOne
     @JoinColumn(name = "idUser")
-    private Users user;
+    private User user;
 
     public Notifications() {}
 
-    public Notifications(Integer idNotification, String title, String message, String type, Boolean read, LocalDate createdDate, Users user) {
+    public Notifications(Integer idNotification, String title, String message, String type, Boolean read, LocalDate createdDate, User user) {
         this.idNotification = idNotification;
         this.title = title;
         this.message = message;
@@ -91,11 +91,11 @@ public class Notifications {
         this.createdDate = createdDate;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }

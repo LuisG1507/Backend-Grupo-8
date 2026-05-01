@@ -1,9 +1,11 @@
 package pe.edu.pe.smartrent_backend.ServicesImplements;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.pe.smartrent_backend.Entities.Contract;
 import pe.edu.pe.smartrent_backend.Repositories.IContractRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IContractService;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -33,9 +35,19 @@ public class ContractServiceImplement implements IContractService {
         cR.save(c);
     }
 
-    
     @Override
     public void delete(int id) {
         cR.deleteById(id);
     }
+
+    @Override
+    public List<Object[]> getIncomeByLessorNative() {
+        return cR.getIncomeByLessor();
+    }
+
+    @Override
+    public List<Object[]> getEstatesWithoutActiveContractNative() {
+        return cR.getEstatesWithoutActiveContract();
+    }
+
 }

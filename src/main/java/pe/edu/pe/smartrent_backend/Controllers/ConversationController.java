@@ -9,9 +9,10 @@ import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.ConversationDTO;
 import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.EstateConversationCountDTO;
 import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
-import pe.edu.pe.smartrent_backend.Entities.Users;
+import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IConversationService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,11 +27,11 @@ public class ConversationController {
     public ResponseEntity<String> registrar(@RequestBody ConversationDTO cD) {
         Conversation c = new Conversation();
 
-        Users u1 = new Users();
+        User u1 = new User();
         u1.setIdUser(cD.getIdUser1());
         c.setUser1(u1);
 
-        Users u2 = new Users();
+        User u2 = new User();
         u2.setIdUser(cD.getIdUser2());
         c.setUser2(u2);
 
@@ -67,11 +68,11 @@ public class ConversationController {
             return new ResponseEntity<>("La conversación no fue encontrada", HttpStatus.NOT_FOUND);
         }
 
-        Users u1 = new Users();
+        User u1 = new User();
         u1.setIdUser(cC.getIdUser1());
         exist.setUser1(u1);
 
-        Users u2 = new Users();
+        User u2 = new User();
         u2.setIdUser(cC.getIdUser2());
         exist.setUser2(u2);
 
@@ -95,8 +96,21 @@ public class ConversationController {
         }
     }
 
+
+
+
+    //Listas tipo Object[]
     @GetMapping("/reporte-popularidad")
-    public List<EstateConversationCountDTO> reportePopularidad() {
-        return cI.getConversationCountPerEstate();
+    public List<EstateConversationCountDTO> ECD() {
+        List<Object[]> resultados = cI.getConversationCountPerEstate();
+        List<EstateConversationCountDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            EstateConversationCountDTO dto = new EstateConversationCountDTO();
+            dto.setEstateTitle(((String) row[0]));
+            dto.setConversationCount(((Number) row[1]).intValue());
+            lista.add(dto);
+        }
+        return lista;
     }
+
 }

@@ -1,7 +1,6 @@
 package pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS;
 
-import jakarta.persistence.*;
-import pe.edu.pe.smartrent_backend.Entities.Users;
+import pe.edu.pe.smartrent_backend.Entities.User;
 
 import java.time.LocalDate;
 
@@ -11,7 +10,7 @@ public class UserBackgroundDTO {
     private String description;
     private String source;
     private LocalDate registrationDate;
-    private Users user;
+    private User user;
 
     public String getType() {
         return type;
@@ -45,11 +44,11 @@ public class UserBackgroundDTO {
         this.registrationDate = registrationDate;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }

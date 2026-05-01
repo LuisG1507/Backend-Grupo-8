@@ -8,11 +8,15 @@ import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.ContractDTO;
 import pe.edu.pe.smartrent_backend.Entities.Contract;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
-import pe.edu.pe.smartrent_backend.Entities.Users;
+import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.Repositories.IEstateRepository;
 import pe.edu.pe.smartrent_backend.Repositories.IUserRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IContractService;
 
+import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.EstateWithoutActiveContractDTO;
+import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.LessorIncomeDTO;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,8 +56,8 @@ public class ContractController {
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody ContractDTO dto) {
         Optional<Estate> estateOpt = eR.findById(dto.getIdEstate());
-        Optional<Users> lessorOpt = uR.findById(dto.getIdLessor());
-        Optional<Users> lesseeOpt = uR.findById(dto.getIdLessee());
+        Optional<User> lessorOpt = uR.findById(dto.getIdLessor());
+        Optional<User> lesseeOpt = uR.findById(dto.getIdLessee());
 
         if (estateOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("The estate does not exist");
@@ -122,8 +126,8 @@ public class ContractController {
         }
 
         Optional<Estate> estateOpt = eR.findById(dto.getIdEstate());
-        Optional<Users> lessorOpt = uR.findById(dto.getIdLessor());
-        Optional<Users> lesseeOpt = uR.findById(dto.getIdLessee());
+        Optional<User> lessorOpt = uR.findById(dto.getIdLessor());
+        Optional<User> lesseeOpt = uR.findById(dto.getIdLessee());
 
         if (estateOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("The estate does not exist");
@@ -161,4 +165,47 @@ public class ContractController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Contract not found");
         }
     }
+
+    @GetMapping("/reporte-ingresos-arrendador")
+    public ResponseEntity<?> reporteIngresosArrendador() {
+        List<Object[]> lista = cS.getIncomeByLessorNative();
+
+        if (lista.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No hay contratos activos para generar el reporte");
+        }
+
+        List<LessorIncomeDTO> respuesta = new ArrayList<>();
+        for (Object[] fila : lista) {
+            LessorIncomeDTO dto = new LessorIncomeDTO();
+            dto.setIdLessor(((Number) fila[0]).intValue());
+            dto.setLessorName((String) fila[1]);
+            dto.setContractCount(((Number) fila[2]).longValue());
+            dto.setTotalMonthlyIncome(((Number) fila[3]).doubleValue());
+            respuesta.add(dto);
+        }
+
+        return ResponseEntity.ok(respuesta);
+    }
+
+    @GetMapping("/reporte-inmuebles-sin-contrato-activo")
+    public ResponseEntity<?> reporteInmueblesSinContratoActivo() {
+        List<Object[]> lista = cS.getEstatesWithoutActiveContractNative();
+
+        if (lista.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No hay inmuebles sin contrato activo");
+        }
+
+        List<EstateWithoutActiveContractDTO> respuesta = new ArrayList<>();
+        for (Object[] fila : lista) {
+            EstateWithoutActiveContractDTO dto = new EstateWithoutActiveContractDTO();
+            dto.setIdEstate(((Number) fila[0]).intValue());
+            dto.setEstateTitle((String) fila[1]);
+            respuesta.add(dto);
+        }
+
+        return ResponseEntity.ok(respuesta);
+    }
+
 }

@@ -1,6 +1,6 @@
 package pe.edu.pe.smartrent_backend.DTOS.userDTOS;
 
-public class UsersIncidentsRankingDTO {
+public class UserIncidentsRankingDTO {
 
     private String nombre;
     private Integer cantidad;

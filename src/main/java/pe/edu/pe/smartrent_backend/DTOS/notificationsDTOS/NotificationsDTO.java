@@ -1,8 +1,6 @@
 package pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS;
 
-import jakarta.persistence.Column;
-import pe.edu.pe.smartrent_backend.Entities.Conversation;
-import pe.edu.pe.smartrent_backend.Entities.Users;
+import pe.edu.pe.smartrent_backend.Entities.User;
 
 import java.time.LocalDate;
 
@@ -13,7 +11,7 @@ public class NotificationsDTO {
     private String type;
     private Boolean read;
     private LocalDate createdDate;
-    private Users user;
+    private User user;
 
     public String getTitle() {
         return title;
@@ -55,11 +53,11 @@ public class NotificationsDTO {
         this.createdDate = createdDate;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }

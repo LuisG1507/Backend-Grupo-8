@@ -5,12 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.RiskReportDTO;
-import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserDTO;
+import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.RiskReport;
-import pe.edu.pe.smartrent_backend.Entities.Users;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IRiskReport;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,4 +66,81 @@ public class RiskReportController {
         rS.Delete(id);
         return ResponseEntity.ok("Registro con ID " + id + " eliminado correctamente.");
     }
+
+
+
+//             ⡏⢱ ⣏⡉ ⡎⠑ ⡇ ⢎⡑ ⡇ ⡎⢱ ⡷⣸ ⣏⡉ ⢎⡑
+//             ⠧⠜ ⠧⠤ ⠣⠔ ⠇ ⠢⠜ ⠇ ⠣⠜ ⠇⠹ ⠧⠤ ⠢⠜
+
+
+    //// Inmuebles con más reportes de riesgo
+    @GetMapping("/Decision1")
+    public List<RiskReportDecisionDTO1> D1() {
+        List<Object[]> resultados = rS.RRDecision1();
+        List<RiskReportDecisionDTO1> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            RiskReportDecisionDTO1 dto = new RiskReportDecisionDTO1();
+            dto.setTitle(((String) row[0]));
+            dto.setCity(((String) row[1]));
+            dto.setTotal_reportes(((Number) row[2]).intValue());
+            lista.add(dto);
+        }
+        return lista;
+    }
+
+
+    // Distribución de reportes por nivel de riesgo con porcentaje
+    @GetMapping("/Decision2")
+    public List<RiskReportDecisionDTO2> obtenerReporteRiesgos() {
+        List<Object[]> resultados = rS.RRDecision2();
+        List<RiskReportDecisionDTO2> lista = new ArrayList<>();
+
+        for (Object[] row : resultados) {
+            RiskReportDecisionDTO2 dto = new RiskReportDecisionDTO2();
+
+            dto.setRisk_level((String) row[0]);
+
+            dto.setTotal(((Number) row[1]).intValue());
+
+            dto.setPorcentaje(((Number) row[2]).doubleValue());
+
+            lista.add(dto);
+        }
+        return lista;
+    }
+
+    // Usuarios que más reportes han generado
+
+    @GetMapping("/Decision3")
+    public List<RiskReportDecisionDTO3> reporteDecision3() {
+        List<Object[]> resultados = rS.RRDecision3();
+        List<RiskReportDecisionDTO3> lista = new ArrayList<>();
+
+        for (Object[] row : resultados) {
+            RiskReportDecisionDTO3 dto = new RiskReportDecisionDTO3();
+            dto.setName((String) row[0]);
+            dto.setLast_name((String) row[1]);
+            dto.setTotal_reports(((Number) row[2]).intValue());
+            lista.add(dto);
+        }
+        return lista;
+    }
+
+  //4. Inmuebles con nivel de riesgo ALTO que aún tienen contrato activo (situación crítica)
+    @GetMapping("/decision-04")
+    public List<RiskReportDecisionDTO4> reporteDecision4() {
+        List<Object[]> resultados = rS.RRDecision4();
+        List<RiskReportDecisionDTO4> lista = new ArrayList<>();
+
+        for (Object[] row : resultados) {
+            RiskReportDecisionDTO4 dto = new RiskReportDecisionDTO4();
+            dto.setTitle((String) row[0]);
+            dto.setCity((String) row[1]);
+            dto.setDistrict((String) row[2]);
+            dto.setReportes_altos(((Number) row[3]).intValue());
+            lista.add(dto);
+        }
+        return lista;
+    }
+
 }

@@ -4,16 +4,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsCompleteDTO;
 import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsDTO;
 import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsTypeQueryDTO;
-import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import pe.edu.pe.smartrent_backend.Entities.Notifications;
-import pe.edu.pe.smartrent_backend.Entities.Users;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.INotifications;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,6 +23,7 @@ public class NotificationsController {
     private INotifications nS;
 
     @PostMapping("/web")
+        @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<NotificationsCompleteDTO> registrar(@RequestBody NotificationsCompleteDTO dto) {
         ModelMapper m = new ModelMapper();
         Notifications n = m.map(dto, Notifications.class);
@@ -34,6 +33,7 @@ public class NotificationsController {
     }
 
     @GetMapping("/list")
+        @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<NotificationsDTO>>listar(){
         ModelMapper m= new ModelMapper();
         List<NotificationsDTO>lista=nS.list().stream().map(y ->m.map(y, NotificationsDTO.class)).collect(Collectors.toList());
@@ -41,6 +41,7 @@ public class NotificationsController {
     }
 
     @DeleteMapping("/{id}")
+        @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar (@PathVariable int id){
         Optional<Notifications>notifications= nS.listId(id);
         if (notifications.isPresent()){
@@ -53,6 +54,7 @@ public class NotificationsController {
     }
 
     @PutMapping("/actualizar")
+        @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> actualizar(@RequestBody NotificationsCompleteDTO dto) {
         Optional<Notifications> existente = nS.listId(dto.getIdNotification());
         if (existente.isEmpty()) {
@@ -76,6 +78,7 @@ public class NotificationsController {
     }
 
     @GetMapping("/{id}")
+        @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> buscarPorId(@PathVariable int id) {
         ModelMapper m = new ModelMapper();
         Optional<Notifications> notification = nS.listId(id);
@@ -91,6 +94,7 @@ public class NotificationsController {
 
     //QuerySimple
     @GetMapping("/no-leidas")
+        @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<NotificationsDTO>> listarNoLeidas() {
         ModelMapper m = new ModelMapper();
         List<NotificationsDTO> lista = nS.buscarNoLeidos().stream()
@@ -101,6 +105,7 @@ public class NotificationsController {
 
     //QueryToma
     @GetMapping("/alertas-seguridad")
+        @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<NotificationsTypeQueryDTO>> listarAlertasSeguridad() {
         ModelMapper m = new ModelMapper();
         List<NotificationsTypeQueryDTO> lista = nS.findRecentSecurityAlertsJPQL().stream()

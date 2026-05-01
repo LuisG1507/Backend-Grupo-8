@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.MessagesCompleteDTO;
 import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.MessagesDTO;
@@ -25,6 +26,7 @@ public class MessagesController {
     private IMessages mS;
 
     @PostMapping("/registrar")
+        @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<MessagesCompleteDTO> registrar(@RequestBody MessagesCompleteDTO dto) {
         ModelMapper m = new ModelMapper();
         Messages n = m.map(dto, Messages.class);
@@ -34,6 +36,7 @@ public class MessagesController {
     }
 
     @PutMapping("/actualizar")
+        @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> actualizar(@RequestBody MessagesCompleteDTO dto) {
         Optional<Messages> existente = mS.listId(dto.getIdMessage());
         if (existente.isEmpty()) {
@@ -56,12 +59,14 @@ public class MessagesController {
     }
 
     @GetMapping("/listar")
+        @PreAuthorize("hasAuthority('ARRENDATARIO')")
     public ResponseEntity<List<MessagesDTO>>listar(){
         ModelMapper m= new ModelMapper();
         List<MessagesDTO>lista=mS.list().stream().map(y ->m.map(y, MessagesDTO.class)).collect(Collectors.toList());
         return ResponseEntity.ok(lista);
     }
     @DeleteMapping("/{id}")
+        @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         Optional<Messages> message = mS.listId(id);
         if (message.isPresent()) {
@@ -73,6 +78,7 @@ public class MessagesController {
         }
     }
     @GetMapping("/{id}")
+        @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> buscarPorId(@PathVariable int id) {
         ModelMapper m = new ModelMapper();
         Optional<Messages> project = mS.listId(id);
@@ -88,6 +94,7 @@ public class MessagesController {
 
     //QuerySimple
     @GetMapping("/buscar-por-estado")
+        @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<MessagesDTO>> buscarPorEstado(@RequestParam String status) {
         ModelMapper m = new ModelMapper();
         List<MessagesDTO> lista = mS.findByStatus(status).stream()
@@ -98,6 +105,7 @@ public class MessagesController {
 
     //QueryTomaDecision
     @GetMapping("/urgentes-usuario")
+        @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<MessagesUserQueryDTO>> listarUrgentes() {
         ModelMapper m = new ModelMapper();
         List<MessagesUserQueryDTO> lista = mS.findUrgentMessagesWithUserJPQL().stream()

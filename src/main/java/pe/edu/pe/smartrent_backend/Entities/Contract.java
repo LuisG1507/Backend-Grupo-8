@@ -33,17 +33,17 @@ public class Contract {
 
     @ManyToOne
     @JoinColumn(name = "id_arrendador")
-    private Users lessor;
+    private User lessor;
 
     @ManyToOne
     @JoinColumn(name = "id_arrendatario")
-    private Users lessee;
+    private User lessee;
 
     public Contract() {
     }
 
     public Contract(int idContract, LocalDateTime startDate, LocalDateTime endDate, Double monthlyAmount,
-                    boolean status, LocalDateTime createdAt, Estate estate, Users lessor, Users lessee) {
+                    boolean status, LocalDateTime createdAt, Estate estate, User lessor, User lessee) {
         this.idContract = idContract;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -111,19 +111,19 @@ public class Contract {
         this.estate = estate;
     }
 
-    public Users getLessor() {
+    public User getLessor() {
         return lessor;
     }
 
-    public void setLessor(Users lessor) {
+    public void setLessor(User lessor) {
         this.lessor = lessor;
     }
 
-    public Users getLessee() {
+    public User getLessee() {
         return lessee;
     }
 
-    public void setLessee(Users lessee) {
+    public void setLessee(User lessee) {
         this.lessee = lessee;
     }
 }

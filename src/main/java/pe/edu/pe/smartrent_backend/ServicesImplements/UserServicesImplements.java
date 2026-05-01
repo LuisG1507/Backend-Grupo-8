@@ -1,7 +1,7 @@
 package pe.edu.pe.smartrent_backend.ServicesImplements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.pe.smartrent_backend.Entities.Users;
+import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.Repositories.IUserRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
@@ -17,22 +17,22 @@ public class UserServicesImplements implements IUser {
 
 
     @Override
-    public void Register(Users user) {
+    public void Register(User user) {
         uR.save(user);
     }
 
     @Override
-    public void Update(Users user) {
+    public void Update(User user) {
         uR.save(user);
     }
 
     @Override
-    public Users listId(Integer id) {
+    public User listId(Integer id) {
         return uR.findById(id).orElse(null);
     }
 
     @Override
-    public List<Users> list() {
+    public List<User> list() {
         return uR.findAll();
     }
 
@@ -42,17 +42,17 @@ public class UserServicesImplements implements IUser {
     }
 
     @Override
-    public Users BuscarPorDNI(Integer id) {
+    public User BuscarPorDNI(Integer id) {
         return uR.findByDNI(id);
     }
 
     @Override
-    public List<Users> fyndByStatus() {
+    public List<User> fyndByStatus() {
         return uR.findByStatusVerification();
     }
 
     @Override
-    public List<Users> userByRangeDate(LocalDate f1, LocalDate f2) {
+    public List<User> userByRangeDate(LocalDate f1, LocalDate f2) {
         return uR.findByCreatedDateBetween(f1, f2);
     }
 

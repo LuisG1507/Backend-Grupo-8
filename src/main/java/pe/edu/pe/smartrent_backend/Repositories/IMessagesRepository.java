@@ -14,7 +14,7 @@ public interface IMessagesRepository extends JpaRepository <Messages, Integer> {
     List<Messages> findByStatus(String status);
 
     //QueryTomaDecisiones
-    @Query("SELECT m FROM Messages m JOIN m.user u WHERE m.status = 'URGENTE'")
+    @Query("SELECT m FROM Messages m JOIN m.user u WHERE m.status = 'LEIDO'")
     List<Messages> findUrgentMessagesWithUserJPQL();
 
 }

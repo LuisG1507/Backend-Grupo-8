@@ -7,9 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserDTO;
-import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UsersIncidentsRankingDTO;
-import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UsersSinContraseniaDTO;
-import pe.edu.pe.smartrent_backend.Entities.Users;
+import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserIncidentsRankingDTO;
+import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserSinContraseniaDTO;
+import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
 import java.time.LocalDate;
@@ -29,7 +29,7 @@ public class UserController {
     @PostMapping
     public void registrar(@RequestBody UserDTO dto) {
         ModelMapper m = new ModelMapper();
-        Users p = m.map(dto, Users.class);
+        User p = m.map(dto, User.class);
         uS.Register(p);
     }
 
@@ -37,11 +37,11 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<String> modificar(@PathVariable int id, @RequestBody UserDTO dto) {
         ModelMapper m = new ModelMapper();
-        Users p = m.map(dto, Users.class);
+        User p = m.map(dto, User.class);
         p.setIdUser(id);
 
 
-        Users existente = uS.listId(id);
+        User existente = uS.listId(id);
         if (existente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("No se puede modificar. No existe un registro con el ID: " + id);
@@ -64,7 +64,7 @@ public class UserController {
     //Eliminar
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminar(@PathVariable("id") Integer id) {
-        Users p = uS.listId(id);
+        User p = uS.listId(id);
         if (p == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("No existe un registro con el ID: " + id);
@@ -78,44 +78,44 @@ public class UserController {
     //Listar por DNI
     @GetMapping("/findByDni/{id}")
     public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {
-        Users p = uS.BuscarPorDNI(id);
+        User p = uS.BuscarPorDNI(id);
         if (p == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body("No existe un registro con el ID: " + id);
         }
         ModelMapper m = new ModelMapper();
-        UsersSinContraseniaDTO dto = m.map(p, UsersSinContraseniaDTO.class);
+        UserSinContraseniaDTO dto = m.map(p, UserSinContraseniaDTO.class);
         return ResponseEntity.ok(dto);
     }
 
 
     //Listar
     @GetMapping("/findByStatus")
-    public List<UsersSinContraseniaDTO> fyndByStatus() {
+    public List<UserSinContraseniaDTO> fyndByStatus() {
         return uS.fyndByStatus().stream().map(x -> {
             ModelMapper m = new ModelMapper();
-            return m.map(x, UsersSinContraseniaDTO.class);
+            return m.map(x, UserSinContraseniaDTO.class);
         }).collect(Collectors.toList());
     }
 
 
     //Listar por fechas
     @GetMapping("/findByCreatedDate/{f1}/{f2}")
-    public List<UsersSinContraseniaDTO> fyndByCreatedDate(@PathVariable("f1") LocalDate f1,
-                                                          @PathVariable("f2") LocalDate f2) {
+    public List<UserSinContraseniaDTO> fyndByCreatedDate(@PathVariable("f1") LocalDate f1,
+                                                         @PathVariable("f2") LocalDate f2) {
         return uS.userByRangeDate(f1,f2).stream().map(x -> {
             ModelMapper m = new ModelMapper();
-            return m.map(x, UsersSinContraseniaDTO.class);
+            return m.map(x, UserSinContraseniaDTO.class);
         }).collect(Collectors.toList());
     }
 
     @GetMapping("/RankingIncidents")
-    public List<UsersIncidentsRankingDTO> RankingIncidents() {
+    public List<UserIncidentsRankingDTO> RankingIncidents() {
         List<Object[]> resultados = uS.RankingUsuariosIncidencias();
-        List<UsersIncidentsRankingDTO> lista = new ArrayList<>();
+        List<UserIncidentsRankingDTO> lista = new ArrayList<>();
         for (Object[] row : resultados) {
-            UsersIncidentsRankingDTO dto = new UsersIncidentsRankingDTO();
+            UserIncidentsRankingDTO dto = new UserIncidentsRankingDTO();
             dto.setNombre(((String) row[0]));
             dto.setCantidad(((Number) row[1]).intValue());
             lista.add(dto);

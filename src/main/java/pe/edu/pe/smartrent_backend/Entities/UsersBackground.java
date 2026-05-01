@@ -2,7 +2,6 @@ package pe.edu.pe.smartrent_backend.Entities;
 
 
 import jakarta.persistence.*;
-import org.apache.catalina.User;
 
 import java.time.LocalDate;
 
@@ -28,12 +27,12 @@ public class UsersBackground {
 
     @ManyToOne
     @JoinColumn(name = "idUser")
-    private Users user;
+    private User user;
 
     public UsersBackground() {
     }
 
-    public UsersBackground(Integer idBackground, String type, String description, String source, LocalDate registrationDate, Users user) {
+    public UsersBackground(Integer idBackground, String type, String description, String source, LocalDate registrationDate, User user) {
         this.idBackground = idBackground;
         this.type = type;
         this.description = description;
@@ -82,11 +81,11 @@ public class UsersBackground {
         this.registrationDate = registrationDate;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }

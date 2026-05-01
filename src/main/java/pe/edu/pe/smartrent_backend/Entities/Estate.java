@@ -1,7 +1,6 @@
 package pe.edu.pe.smartrent_backend.Entities;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;
@@ -55,12 +54,12 @@ public class Estate {
 
     @ManyToOne
     @JoinColumn(name = "idUser")
-    private Users users;
+    private User user;
 
     public Estate() {
     }
 
-    public Estate(Integer idEstate, String title, String description, String adress, String district, String city, Double monthlyPrice, String type, Boolean state, Integer rooms, Integer bathrooms, Double areaM2, LocalDate creationDate, Users users) {
+    public Estate(Integer idEstate, String title, String description, String adress, String district, String city, Double monthlyPrice, String type, Boolean state, Integer rooms, Integer bathrooms, Double areaM2, LocalDate creationDate, User user) {
         this.idEstate = idEstate;
         this.title = title;
         this.description = description;
@@ -74,7 +73,7 @@ public class Estate {
         this.bathrooms = bathrooms;
         this.areaM2 = areaM2;
         this.creationDate = creationDate;
-        this.users = users;
+        this.user = user;
     }
 
     public Integer getIdEstate() {
@@ -181,11 +180,11 @@ public class Estate {
         this.creationDate = creationDate;
     }
 
-    public Users getUsers() {
-        return users;
+    public User getUsers() {
+        return user;
     }
 
-    public void setUsers(Users users) {
-        this.users = users;
+    public void setUsers(User user) {
+        this.user = user;
     }
 }

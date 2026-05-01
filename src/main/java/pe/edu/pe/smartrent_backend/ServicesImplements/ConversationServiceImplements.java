@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.EstateConversationCountDTO;
 import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IConversationService;
-import pe.edu.pe.smartrent_backend.Repositories.IConversationRepository; // <-- IMPORTANTE: Ahora tiene la 'I'
+import pe.edu.pe.smartrent_backend.Repositories.IConversationRepository;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
 public class ConversationServiceImplements implements IConversationService {
 
     @Autowired
-    private IConversationRepository cR; // <-- IMPORTANTE: Ahora usa la Interfaz correcta
+    private IConversationRepository cR;
 
     @Override
     public void insert(Conversation conversation) {
@@ -41,7 +41,7 @@ public class ConversationServiceImplements implements IConversationService {
     }
 
     @Override
-    public List<EstateConversationCountDTO> getConversationCountPerEstate() {
+    public List<Object[]> getConversationCountPerEstate() {
         return cR.getConversationCountPerEstate();
     }
 }
