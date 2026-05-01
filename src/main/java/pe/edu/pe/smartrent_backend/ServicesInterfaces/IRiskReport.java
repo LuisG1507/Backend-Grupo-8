@@ -22,7 +22,7 @@ public interface IRiskReport {
     public List<Object[]> RRDecision1(); // Inmuebles con más reportes de riesgo
     public List<Object[]> RRDecision2(); // Distribución de reportes por nivel de riesgo con porcentaje
     public List<Object[]> RRDecision3(); // Usuarios que más reportes han generado
-    public List<Object[]> RRDecision4();
+    public List<Object[]> RRDecision4(); //Inmuebles con nivel de riesgo ALTO que aún tienen contrato activo (situación crítica)
 
 
 }

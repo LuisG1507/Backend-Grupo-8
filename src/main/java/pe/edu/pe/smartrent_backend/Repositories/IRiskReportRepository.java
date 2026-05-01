@@ -38,4 +38,15 @@ public interface IRiskReportRepository extends JpaRepository<RiskReport,Integer>
     List<Object[]> RRD3();
 
 
+    //Inmuebles con nivel de riesgo ALTO que aún tienen contrato activo (situación crítica)
+
+    @Query(value = "SELECT e.title, e.city, e.district, COUNT(rr.id_risk_report) AS reportes_altos\n" +
+            "FROM risk_report rr\n" +
+            "INNER JOIN estate e ON rr.id_estate = e.id_estate\n" +
+            "INNER JOIN contract c ON e.id_estate = c.id_estate AND c.status = true\n" +
+            "WHERE rr.risk_level = 'ALTO'\n" +
+            "GROUP BY e.id_estate, e.title, e.city, e.district\n" +
+            "ORDER BY reportes_altos DESC", nativeQuery = true)
+    List<Object[]> RRD4();
+
 }

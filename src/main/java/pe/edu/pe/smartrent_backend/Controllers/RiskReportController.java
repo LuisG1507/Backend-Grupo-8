@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.RiskReportDTO;
-import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.RiskReportDecisionDTO1;
-import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.RiskReportDecisionDTO2;
-import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.RiskReportDecisionDTO3;
+import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.RiskReport;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IRiskReport;
 
@@ -124,6 +121,23 @@ public class RiskReportController {
             dto.setName((String) row[0]);
             dto.setLast_name((String) row[1]);
             dto.setTotal_reports(((Number) row[2]).intValue());
+            lista.add(dto);
+        }
+        return lista;
+    }
+
+  //4. Inmuebles con nivel de riesgo ALTO que aún tienen contrato activo (situación crítica)
+    @GetMapping("/decision-04")
+    public List<RiskReportDecisionDTO4> reporteDecision4() {
+        List<Object[]> resultados = rS.RRDecision4();
+        List<RiskReportDecisionDTO4> lista = new ArrayList<>();
+
+        for (Object[] row : resultados) {
+            RiskReportDecisionDTO4 dto = new RiskReportDecisionDTO4();
+            dto.setTitle((String) row[0]);
+            dto.setCity((String) row[1]);
+            dto.setDistrict((String) row[2]);
+            dto.setReportes_altos(((Number) row[3]).intValue());
             lista.add(dto);
         }
         return lista;
