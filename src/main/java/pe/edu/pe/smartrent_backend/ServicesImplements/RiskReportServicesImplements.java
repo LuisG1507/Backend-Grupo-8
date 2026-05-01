@@ -56,7 +56,7 @@ public class RiskReportServicesImplements implements IRiskReport {
 
     @Override
     public List<Object[]> RRDecision3() {
-        return List.of();
+        return rR.RRD3();
     }
 
     @Override

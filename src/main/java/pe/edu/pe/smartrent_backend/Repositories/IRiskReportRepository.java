@@ -19,8 +19,6 @@ public interface IRiskReportRepository extends JpaRepository<RiskReport,Integer>
     List<Object[]> RRD1();
 
     //Distribución de puntos de riesgo por severidad con porcentaje
-
-
     @Query(value = "SELECT severity,\n" +
             "       COUNT(*) AS total,\n" +
             "       ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM risk_points), 2) AS porcentaje\n" +
@@ -28,5 +26,16 @@ public interface IRiskReportRepository extends JpaRepository<RiskReport,Integer>
             "GROUP BY severity\n" +
             "ORDER BY total DESC", nativeQuery = true)
     List<Object[]> RRD2();
+
+
+    //Usuarios que más reportes han generado
+
+    @Query(value = "SELECT u.name, u.last_name, COUNT(rr.id_risk_report) AS total_reportes\n" +
+            "FROM risk_report rr\n" +
+            "INNER JOIN users u ON rr.id_user = u.id_user\n" +
+            "GROUP BY u.id_user, u.name, u.last_name\n" +
+            "ORDER BY total_reportes DESC\n",nativeQuery = true)
+    List<Object[]> RRD3();
+
 
 }

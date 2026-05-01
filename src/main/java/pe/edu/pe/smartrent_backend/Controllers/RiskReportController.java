@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.RiskReportDTO;
 import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.RiskReportDecisionDTO1;
 import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.RiskReportDecisionDTO2;
+import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.RiskReportDecisionDTO3;
 import pe.edu.pe.smartrent_backend.Entities.RiskReport;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IRiskReport;
 
@@ -91,7 +92,7 @@ public class RiskReportController {
     }
 
 
-    //Distribución de puntos de riesgo por severidad con porcentaje
+    // Distribución de reportes por nivel de riesgo con porcentaje
     @GetMapping("/Decision2")
     public List<RiskReportDecisionDTO2> obtenerReporteRiesgos() {
         List<Object[]> resultados = rS.RRDecision2();
@@ -111,8 +112,21 @@ public class RiskReportController {
         return lista;
     }
 
-    // Inmuebles con más puntos de severidad crítica (prioridad de intervención)
+    // Usuarios que más reportes han generado
 
+    @GetMapping("/Decision3")
+    public List<RiskReportDecisionDTO3> reporteDecision3() {
+        List<Object[]> resultados = rS.RRDecision3();
+        List<RiskReportDecisionDTO3> lista = new ArrayList<>();
 
+        for (Object[] row : resultados) {
+            RiskReportDecisionDTO3 dto = new RiskReportDecisionDTO3();
+            dto.setName((String) row[0]);
+            dto.setLast_name((String) row[1]);
+            dto.setTotal_reports(((Number) row[2]).intValue());
+            lista.add(dto);
+        }
+        return lista;
+    }
 
 }
