@@ -17,4 +17,11 @@ public interface IRole {
     public List<Role> list(); //Listartodo
 
     public void Delete(Integer id); //Eliminar
+
+
+    //Decisiones
+
+
+    public List<Object[]> RDecision1(); // Distribución de roles en la plataforma con porcentaje
+    public List<Object[]> RDecision2(); // Usuarios con más de un rol asignado
 }
