@@ -5,14 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.EstateAverageRatingDTO;
-import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.ReviewsCompleteDTO;
-import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.ReviewsDTO;
+import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.Reviews;
 import pe.edu.pe.smartrent_backend.Entities.Users;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IReviewsService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -106,8 +105,66 @@ public class ReviewsController {
         }).collect(Collectors.toList());
     }
 
-    @GetMapping("/reporte-promedios")
-    public List<pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.EstateAverageRatingDTO> reportePromedios() {
-        return rI.getAverageRatingPerEstate();
+    // 1. Inmuebles con calificación por debajo del promedio general
+    @GetMapping("/below-average")
+    public ResponseEntity<?> belowAverage() {
+        List<Object[]> resultados = rI.findEstatesBelowAverageRating();
+        List<ReviewsBelowAverageDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            ReviewsBelowAverageDTO dto = new ReviewsBelowAverageDTO();
+            dto.setTitle(row[0].toString());
+            dto.setCity(row[1].toString());
+            dto.setAverage(((Number) row[2]).doubleValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
+
+    // Arrendadores con mejor calificación promedio en sus inmuebles
+    @GetMapping("/best-lessors")
+    public ResponseEntity<?> bestLessors() {
+        List<Object[]> resultados = rI.findLessorsWithBestRating();
+        List<ReviewsLessorRatingDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            ReviewsLessorRatingDTO dto = new ReviewsLessorRatingDTO();
+            dto.setName(row[0].toString());
+            dto.setLastName(row[1].toString());
+            dto.setAverage(((Number) row[2]).doubleValue());
+            dto.setTotalReviews(((Number) row[3]).longValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
+
+    // Inmuebles sin ninguna reseña (sin retroalimentación)
+    @GetMapping("/no-reviews")
+    public ResponseEntity<?> noReviews() {
+        List<Object[]> resultados = rI.findEstatesWithNoReviews();
+        List<ReviewsNoReviewEstateDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            ReviewsNoReviewEstateDTO dto = new ReviewsNoReviewEstateDTO();
+            dto.setIdEstate(((Number) row[0]).intValue());
+            dto.setTitle(row[1].toString());
+            dto.setCity(row[2].toString());
+            dto.setMonthlyPrice(((Number) row[3]).doubleValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
+
+    //Distribución de calificaciones en la plataforma
+    @GetMapping("/rating-distribution")
+    public ResponseEntity<?> ratingDistribution() {
+        List<Object[]> resultados = rI.findRatingDistribution();
+        List<ReviewsRatingDistributionDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            ReviewsRatingDistributionDTO dto = new ReviewsRatingDistributionDTO();
+            dto.setBad(((Number) row[0]).longValue());
+            dto.setRegular(((Number) row[1]).longValue());
+            dto.setGood(((Number) row[2]).longValue());
+            dto.setGlobalAverage(((Number) row[3]).doubleValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
     }
 }

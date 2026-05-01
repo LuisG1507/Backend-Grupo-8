@@ -2,8 +2,7 @@ package pe.edu.pe.smartrent_backend.ServicesImplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.OwnerEstateDTO;
-import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.UserEstateDTO;
+import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Repositories.IEstateRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IEstate;
@@ -40,6 +39,26 @@ public class EstateServiceImplements implements IEstate {
     @Override
     public void eliminar(Integer id) {
         eR.deleteById(id);
+    }
+
+    @Override
+    public List<Object[]> findAvgPriceByCityAndType() {
+        return eR.findAvgPriceByCityAndType();
+    }
+
+    @Override
+    public List<Object[]> findBestPricePerRoom() {
+        return eR.findBestPricePerRoom();
+    }
+
+    @Override
+    public List<Object[]> findDistrictsWithMostAvailableEstates() {
+        return eR.findDistrictsWithMostAvailableEstates();
+    }
+
+    @Override
+    public List<Object[]> findDistributionByTypeAndPriceRange() {
+        return eR.findDistributionByTypeAndPriceRange();
     }
 
     @Override

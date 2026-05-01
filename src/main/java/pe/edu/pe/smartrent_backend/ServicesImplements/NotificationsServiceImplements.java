@@ -2,6 +2,10 @@ package pe.edu.pe.smartrent_backend.ServicesImplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationReadRateDTO;
+import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationSecurityAlertDTO;
+import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationTypeMonthlyDTO;
+import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationUnreadUserDTO;
 import pe.edu.pe.smartrent_backend.Entities.Notifications;
 import pe.edu.pe.smartrent_backend.Repositories.INotificationsRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.INotifications;
@@ -46,5 +50,25 @@ public class NotificationsServiceImplements implements INotifications {
     @Override
     public List<Notifications> findRecentSecurityAlertsJPQL() {
         return nR.findRecentSecurityAlertsJPQL();
+    }
+
+    @Override
+    public List<Object[]> findReadRateByType() {
+        return nR.findReadRateByType();
+    }
+
+    @Override
+    public List<Object[]> findUsersWithMostUnreadNotifications() {
+        return nR.findUsersWithMostUnreadNotifications();
+    }
+
+    @Override
+    public List<Object[]> findMostGeneratedTypesLastMonth() {
+        return nR.findMostGeneratedTypesLastMonth();
+    }
+
+    @Override
+    public List<Object[]> findDaysWithMostSecurityAlerts() {
+        return nR.findDaysWithMostSecurityAlerts();
     }
 }

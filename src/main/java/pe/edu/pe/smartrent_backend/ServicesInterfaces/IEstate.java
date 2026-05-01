@@ -1,8 +1,7 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
 
 
-import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.OwnerEstateDTO;
-import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.UserEstateDTO;
+import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 
 import java.util.List;
@@ -19,5 +18,13 @@ public interface IEstate {
     public List<OwnerEstateDTO> listUsersEstate();
     public List<UserEstateDTO> listINNERJOIN(String d);
     public List<Object[]> AboveAverageRents();
+
+    List<Object[]> findAvgPriceByCityAndType();
+    List<Object[]> findBestPricePerRoom();
+    List<Object[]> findDistrictsWithMostAvailableEstates();
+    List<Object[]> findDistributionByTypeAndPriceRange();
+
+
+
 
 }

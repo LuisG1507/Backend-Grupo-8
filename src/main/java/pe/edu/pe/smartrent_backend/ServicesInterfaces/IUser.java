@@ -1,6 +1,10 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
 
 import org.apache.catalina.User;
+import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserEnabledByRoleDTO;
+import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserMonthlyGrowthDTO;
+import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserUnverifiedWithBackgroundDTO;
+import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserVerificationStatsDTO;
 import pe.edu.pe.smartrent_backend.Entities.Users;
 
 import java.time.LocalDate;
@@ -25,4 +29,9 @@ public interface IUser {
     public List<Users> userByRangeDate(LocalDate f1, LocalDate f2);
 
     public List<Object[]> RankingUsuariosIncidencias();
+
+    List<Object[]> findVerificationStats();
+    List<UserUnverifiedWithBackgroundDTO> findUnverifiedUsersWithBackgrounds();
+    List<Object[]> findMonthlyGrowth();
+    List<Object[]> findEnabledUsersByRole();
 }

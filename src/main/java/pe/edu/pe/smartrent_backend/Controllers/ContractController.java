@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.ContractDTO;
+import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Contract;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.Users;
@@ -13,6 +13,8 @@ import pe.edu.pe.smartrent_backend.Repositories.IEstateRepository;
 import pe.edu.pe.smartrent_backend.Repositories.IUserRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IContractService;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -160,5 +162,65 @@ public class ContractController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Contract not found");
         }
+    }
+
+    @GetMapping("/lessors-above-average")
+    public ResponseEntity<?> lessorsAboveAverage() {
+        List<Object[]> resultados = cS.findLessorsAboveAverageIncome();
+        List<ContractLessorIncomeDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            ContractLessorIncomeDTO dto = new ContractLessorIncomeDTO();
+            dto.setName(row[0].toString());
+            dto.setLastName(row[1].toString());
+            dto.setTotalIncome(((Number) row[2]).doubleValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
+    @GetMapping("/contract-rate")
+    public ResponseEntity<?> contractRate() {
+        List<Object[]> resultados = cS.findContractRatePerLessor();
+        List<ContractLessorContractRateDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            ContractLessorContractRateDTO dto = new ContractLessorContractRateDTO();
+            dto.setName(row[0].toString());
+            dto.setLastName(row[1].toString());
+            dto.setActive(((Number) row[2]).longValue());
+            dto.setInactive(((Number) row[3]).longValue());
+            dto.setTotal(((Number) row[4]).longValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/estate-rotation")
+    public ResponseEntity<?> estateRotation() {
+        List<Object[]> resultados = cS.findEstatesWithHighestRotation();
+        List<ContractEstateRotationDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            ContractEstateRotationDTO dto = new ContractEstateRotationDTO();
+            dto.setTitle(row[0].toString());
+            dto.setCity(row[1].toString());
+            dto.setDistrict(row[2].toString());
+            dto.setTotalContracts(((Number) row[3]).longValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/expiring-soon")
+    public ResponseEntity<?> expiringSoon() {
+        List<Object[]> resultados = cS.findContractsExpiringSoon();
+        List<ContractExpiringDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            ContractExpiringDTO dto = new ContractExpiringDTO();
+            dto.setName(row[0].toString());
+            dto.setLastName(row[1].toString());
+            dto.setEstateTitle(row[2].toString());
+            dto.setEndDate((LocalDateTime) row[3]);
+            dto.setDaysRemaining(((Number) row[4]).longValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
     }
 }

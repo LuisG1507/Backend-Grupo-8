@@ -1,6 +1,10 @@
 package pe.edu.pe.smartrent_backend.ServicesImplements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.ContractEstateRotationDTO;
+import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.ContractExpiringDTO;
+import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.ContractLessorContractRateDTO;
+import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.ContractLessorIncomeDTO;
 import pe.edu.pe.smartrent_backend.Entities.Contract;
 import pe.edu.pe.smartrent_backend.Repositories.IContractRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IContractService;
@@ -37,5 +41,25 @@ public class ContractServiceImplement implements IContractService {
     @Override
     public void delete(int id) {
         cR.deleteById(id);
+    }
+
+    @Override
+    public List<Object[]> findLessorsAboveAverageIncome() {
+        return cR.findLessorsAboveAverageIncome();
+    }
+
+    @Override
+    public List<Object[]> findContractRatePerLessor() {
+        return cR.findContractRatePerLessor();
+    }
+
+    @Override
+    public List<Object[]> findEstatesWithHighestRotation() {
+        return cR.findEstatesWithHighestRotation();
+    }
+
+    @Override
+    public List<Object[]> findContractsExpiringSoon() {
+        return cR.findContractsExpiringSoon();
     }
 }

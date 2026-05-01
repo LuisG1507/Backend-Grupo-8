@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.ConversationCompleteDTO;
-import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.ConversationDTO;
-import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.EstateConversationCountDTO;
+import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.Users;
@@ -96,9 +94,6 @@ public class ConversationController {
         }
     }
 
-
-
-
     //Listas tipo Object[]
     @GetMapping("/reporte-popularidad")
     public List<EstateConversationCountDTO> ECD() {
@@ -113,4 +108,61 @@ public class ConversationController {
         return lista;
     }
 
+    @GetMapping("/unconverted-interest")
+    public ResponseEntity<?> unconvertedInterest() {
+        List<Object[]> resultados = cI.findEstatesWithConversationsButNoContract();
+        List<ConversationEstateInterestDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            ConversationEstateInterestDTO dto = new ConversationEstateInterestDTO();
+            dto.setTitle(row[0].toString());
+            dto.setCity(row[1].toString());
+            dto.setTotalConversations(((Number) row[2]).longValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/most-active-initiators")
+    public ResponseEntity<?> mostActiveInitiators() {
+        List<Object[]> resultados = cI.findMostActiveInitiators();
+        List<ConversationUserCountDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            ConversationUserCountDTO dto = new ConversationUserCountDTO();
+            dto.setName(row[0].toString());
+            dto.setLastName(row[1].toString());
+            dto.setTotalConversations(((Number) row[2]).longValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/no-conversations")
+    public ResponseEntity<?> noConversations() {
+        List<Object[]> resultados = cI.findEstatesWithNoConversations();
+        List<ConversationNoEstateDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            ConversationNoEstateDTO dto = new ConversationNoEstateDTO();
+            dto.setIdEstate(((Number) row[0]).intValue());
+            dto.setTitle(row[1].toString());
+            dto.setCity(row[2].toString());
+            dto.setMonthlyPrice(((Number) row[3]).doubleValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/average-by-city")
+    public ResponseEntity<?> averageByCity() {
+        List<Object[]> resultados = cI.findAverageConversationsPerEstateByCity();
+        List<ConversationAverageCityDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            ConversationAverageCityDTO dto = new ConversationAverageCityDTO();
+            dto.setCity(row[0].toString());
+            dto.setTotalConversations(((Number) row[1]).longValue());
+            dto.setTotalEstates(((Number) row[2]).longValue());
+            dto.setAverage(((Number) row[3]).doubleValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
 }
