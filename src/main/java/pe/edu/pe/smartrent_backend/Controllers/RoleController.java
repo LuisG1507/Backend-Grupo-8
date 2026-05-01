@@ -118,7 +118,7 @@ public class RoleController {
             RoleDecisionDTO2 dto = new RoleDecisionDTO2();
             dto.setName((String) row[0]);
             dto.setLast_name((String) row[1]);
-            dto.setCantidad_roles((String) row[2]);
+            dto.setCantidad_roles(((Number) row[2]).intValue());
             lista.add(dto);
         }
         return lista;
