@@ -19,7 +19,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/Users")
-public class UserController {
+public class
+UserController {
 
     @Autowired
     private IUser uS;
