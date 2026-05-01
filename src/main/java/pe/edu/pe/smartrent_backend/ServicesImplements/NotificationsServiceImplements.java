@@ -6,6 +6,7 @@ import pe.edu.pe.smartrent_backend.Entities.Notifications;
 import pe.edu.pe.smartrent_backend.Repositories.INotificationsRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.INotifications;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +45,7 @@ public class NotificationsServiceImplements implements INotifications {
     }
 
     @Override
-    public List<Notifications> findRecentSecurityAlertsJPQL() {
-        return nR.findRecentSecurityAlertsJPQL();
+    public List<Notifications> findRecentSecurityAlertsJPQL(){
+        return nR.findRecentSecurityAlertsJPQL(LocalDate.now().minusDays(7));
     }
 }

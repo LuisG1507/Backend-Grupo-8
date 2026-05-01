@@ -1,11 +1,9 @@
 package pe.edu.pe.smartrent_backend.ServicesImplements;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.pe.smartrent_backend.Entities.RiskPoints;
-import pe.edu.pe.smartrent_backend.Repositories.RiskPointsRepository;
+import pe.edu.pe.smartrent_backend.Repositories.IRiskPointsRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IRiskPointsService;
 
 import java.util.List;
@@ -14,7 +12,7 @@ import java.util.List;
 public class RiskPointsServiceImplements implements IRiskPointsService {
 
     @Autowired
-    private RiskPointsRepository rP;
+    private IRiskPointsRepository rP;
 
     @Override
     public void insert(RiskPoints riskPoint) {
