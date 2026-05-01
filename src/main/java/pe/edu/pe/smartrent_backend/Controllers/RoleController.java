@@ -7,9 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.roleDTOS.RoleDTO;
 import pe.edu.pe.smartrent_backend.DTOS.roleDTOS.RoleDTOudl;
+import pe.edu.pe.smartrent_backend.DTOS.roleDTOS.RoleDecisionDTO1;
+import pe.edu.pe.smartrent_backend.DTOS.roleDTOS.RoleDecisionDTO2;
 import pe.edu.pe.smartrent_backend.Entities.Role;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IRole;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,6 +85,45 @@ public class RoleController {
         RoleDTO dto = m.map(p,RoleDTO .class);
         return ResponseEntity.ok(dto);
     }
+
+
+
+//             ⡏⢱ ⣏⡉ ⡎⠑ ⡇ ⢎⡑ ⡇ ⡎⢱ ⡷⣸ ⣏⡉ ⢎⡑
+//             ⠧⠜ ⠧⠤ ⠣⠔ ⠇ ⠢⠜ ⠇ ⠣⠜ ⠇⠹ ⠧⠤ ⠢⠜
+
+    //Distribución de roles en la plataforma con porcentaje
+    @GetMapping("/decision-01")
+    public List<RoleDecisionDTO1> reporteDecision1() {
+        List<Object[]> resultados = rS.RDecision1();
+        List<RoleDecisionDTO1> lista = new ArrayList<>();
+
+        for (Object[] row : resultados) {
+            RoleDecisionDTO1 dto = new RoleDecisionDTO1();
+            dto.setRol((String) row[0]);
+            dto.setTotal(((Number) row[1]).intValue());
+            dto.setPercentage(((Number) row[2]).doubleValue());
+            lista.add(dto);
+        }
+        return lista;
+    }
+
+
+    //Usuarios con más de un rol asignado
+    @GetMapping("/decision-02")
+    public List<RoleDecisionDTO2> reporteDecision2() {
+        List<Object[]> resultados = rS.RDecision2();
+        List<RoleDecisionDTO2> lista = new ArrayList<>();
+
+        for (Object[] row : resultados) {
+            RoleDecisionDTO2 dto = new RoleDecisionDTO2();
+            dto.setName((String) row[0]);
+            dto.setLast_name((String) row[1]);
+            dto.setCantidad_roles((String) row[2]);
+            lista.add(dto);
+        }
+        return lista;
+    }
+
 
 
 }
