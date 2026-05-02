@@ -116,6 +116,62 @@ public class EstateController {
         return lista;
     }
 
+    @GetMapping("/avg-price-by-city")
+    public ResponseEntity<?> avgPriceByCityAndType() {
+        List<Object[]> resultados = eI.findAvgPriceByCityAndType();
+        List<EstateAvgPriceDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            EstateAvgPriceDTO dto = new EstateAvgPriceDTO();
+            dto.setCity(row[0].toString());
+            dto.setType(row[1].toString());
+            dto.setAveragePrice(((Number) row[2]).doubleValue());
+            dto.setQuantity(((Number) row[3]).longValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
 
+    @GetMapping("/best-price-per-room")
+    public ResponseEntity<?> bestPricePerRoom() {
+        List<Object[]> resultados = eI.findBestPricePerRoom();
+        List<EstatePricePerRoomDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            EstatePricePerRoomDTO dto = new EstatePricePerRoomDTO();
+            dto.setTitle(row[0].toString());
+            dto.setCity(row[1].toString());
+            dto.setRooms(((Number) row[2]).intValue());
+            dto.setMonthlyPrice(((Number) row[3]).doubleValue());
+            dto.setPricePerRoom(((Number) row[4]).doubleValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
 
+    @GetMapping("/available-districts")
+    public ResponseEntity<?> availableDistricts() {
+        List<Object[]> resultados = eI.findDistrictsWithMostAvailableEstates();
+        List<EstateDistrictAvailabilityDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            EstateDistrictAvailabilityDTO dto = new EstateDistrictAvailabilityDTO();
+            dto.setDistrict(row[0].toString());
+            dto.setAvailableEstates(((Number) row[1]).longValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/price-range-distribution")
+    public ResponseEntity<?> priceRangeDistribution() {
+        List<Object[]> resultados = eI.findDistributionByTypeAndPriceRange();
+        List<EstatePriceRangeDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            EstatePriceRangeDTO dto = new EstatePriceRangeDTO();
+            dto.setType(row[0].toString());
+            dto.setLowRange(((Number) row[1]).longValue());
+            dto.setMidRange(((Number) row[2]).longValue());
+            dto.setHighRange(((Number) row[3]).longValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
 }

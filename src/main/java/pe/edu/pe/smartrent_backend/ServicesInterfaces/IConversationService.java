@@ -1,6 +1,6 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
 
-import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.EstateConversationCountDTO;
+import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import java.util.List;
 
@@ -12,5 +12,10 @@ public interface IConversationService {
     public Conversation listId(Integer id);
     public void update(Conversation conversation);
     public List<Object[]> getConversationCountPerEstate();
+
+    List<Object[]> findEstatesWithConversationsButNoContract();
+    List<Object[]> findMostActiveInitiators();
+    List<Object[]> findEstatesWithNoConversations();
+    List<Object[]> findAverageConversationsPerEstateByCity();
 
 }

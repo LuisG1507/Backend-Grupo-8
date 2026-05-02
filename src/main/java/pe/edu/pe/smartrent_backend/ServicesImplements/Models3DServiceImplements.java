@@ -2,6 +2,10 @@ package pe.edu.pe.smartrent_backend.ServicesImplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Models3DActiveByCityDTO;
+import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Models3DCriticalRiskDTO;
+import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Models3DNoModelEstateDTO;
+import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Models3DStateRateDTO;
 import pe.edu.pe.smartrent_backend.Entities.Models3D;
 import pe.edu.pe.smartrent_backend.Repositories.IModels3DRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IModels3D;
@@ -58,5 +62,25 @@ public class Models3DServiceImplements implements IModels3D {
     @Override
     public List<Object[]> inmueblesConModelo() {
         return mR.inmueblesConModelo();
+    }
+
+    @Override
+    public List<Object[]> findEstatesWithoutModel() {
+        return mR.findEstatesWithoutModel();
+    }
+
+    @Override
+    public List<Object[]> findCitiesWithMostActiveModels() {
+        return mR.findCitiesWithMostActiveModels();
+    }
+
+    @Override
+    public List<Object[]> findStateRate() {
+        return mR.findStateRate();
+    }
+
+    @Override
+    public List<Object[]> findEstatesWithCriticalRiskPoints() {
+        return mR.findEstatesWithCriticalRiskPoints();
     }
 }
