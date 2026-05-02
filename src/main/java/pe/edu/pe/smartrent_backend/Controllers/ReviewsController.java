@@ -4,12 +4,15 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.Reviews;
 import pe.edu.pe.smartrent_backend.Entities.User;
+import pe.edu.pe.smartrent_backend.ServicesInterfaces.IEstate;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IReviewsService;
+import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,12 @@ public class ReviewsController {
 
     @Autowired
     private IReviewsService rI;
+
+    @Autowired
+    private IUser uS;
+
+    @Autowired
+    private IEstate eS;
 
     @PostMapping
     public ResponseEntity<String> registrar(@RequestBody ReviewsDTO rD) {
@@ -57,30 +66,29 @@ public class ReviewsController {
         }
     }
 
-    @PutMapping("/actualizar")
-    public ResponseEntity<String> actualizar(@RequestBody ReviewsCompleteDTO rC) {
-        Reviews exist = rI.listId(rC.getIdReview());
-        if (exist == null || exist.getIdReview() == null) {
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<String> actualizar(@PathVariable int id, @RequestBody ReviewsCompleteDTO rC) {
+
+        Reviews exist = rI.listId(id); // ← Usa el id del PathVariable, no del DTO
+        if (exist == null) {
             return new ResponseEntity<>("La reseña no fue encontrada", HttpStatus.NOT_FOUND);
         }
+
+        User u = uS.listId(rC.getIdUser());
+        if (u == null) return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+
+        Estate e = eS.listarId(rC.getIdEstate()).orElse(null);
+        if (e == null) return new ResponseEntity<>("Propiedad no encontrada", HttpStatus.NOT_FOUND);
 
         exist.setCalification(rC.getCalification());
         exist.setComment(rC.getComment());
         exist.setCreationDate(rC.getCreationDate());
-
-        User u = new User();
-        u.setIdUser(rC.getIdUser());
         exist.setUser(u);
-
-        Estate e = new Estate();
-        e.setIdEstate(rC.getIdEstate());
         exist.setEstate(e);
 
         rI.update(exist);
-
         return new ResponseEntity<>("Se ha actualizado de forma correcta", HttpStatus.OK);
     }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminar(@PathVariable Integer id) {
         Reviews exist = rI.listId(id);

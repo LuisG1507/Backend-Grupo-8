@@ -15,8 +15,10 @@ public interface IUserBackground {
     public void Update(UsersBackground ub); //Actualizar
     public UsersBackground listId(Integer id); //ListarId
     public void Delete(Integer id); //Eliminar
-    List<UserBackgroundTypeFrequencyDTO> findMostFrequentTypes();
-    List<UserBackgroundAverageDTO> findHighRiskUsers();
-    List<UserBackgroundSourceDTO> findMostReportingSources();
-    List<UserBackgroundMonthlyDTO> findMonthlyTrend();
+
+
+    List<Object[]> findMostFrequentTypes();
+    List<Object[]> findHighRiskUsers();
+    List<Object[]> findMostReportingSources();
+    List<Object[]> findMonthlyTrend();
 }

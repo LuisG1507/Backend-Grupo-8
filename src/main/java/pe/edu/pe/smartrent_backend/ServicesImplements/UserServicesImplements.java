@@ -69,7 +69,7 @@ public class UserServicesImplements implements IUser {
     }
 
     @Override
-    public List<UserUnverifiedWithBackgroundDTO> findUnverifiedUsersWithBackgrounds() {
+    public List<Object[]> findUnverifiedUsersWithBackgrounds() {
         return uR.findUnverifiedUsersWithBackgrounds();
     }
 
