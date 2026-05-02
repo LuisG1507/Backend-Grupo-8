@@ -15,8 +15,8 @@ public interface IEstate {
     public void eliminar(Integer id);
     public List<Estate> filtrarInmueblesPorCiudadDistritoTipo(String city, String district, String type);
     public double amountTotal();
-    public List<OwnerEstateDTO> listUsersEstate();
-    public List<UserEstateDTO> listINNERJOIN(String d);
+    public List<Object[]> listUsersEstate();
+    public List<Object[]> EstateDistrict(String d);
     public List<Object[]> AboveAverageRents();
 
     List<Object[]> findAvgPriceByCityAndType();

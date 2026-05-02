@@ -72,12 +72,12 @@ public class EstateServiceImplements implements IEstate {
     }
 
     @Override
-    public List<OwnerEstateDTO> listUsersEstate() {
+    public List<Object[]> listUsersEstate() {
         return eR.listUserEstate();
     }
 
     @Override
-    public List<UserEstateDTO> listINNERJOIN(String d) {
+    public List<Object[]> EstateDistrict(String d) {
         return eR.listUserEstateDistrict(d);
     }
 

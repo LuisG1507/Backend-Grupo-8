@@ -29,12 +29,11 @@ public class EstateController {
         eI.Register(e);
     }
 
-    @GetMapping
+    @GetMapping("/listAll")
     public ResponseEntity<?> listarTodo(){
         ModelMapper m = new ModelMapper();
-        List<EstateDTO> list=eI.listar().stream().map(y->m.map(y,EstateDTO.class))
+        List<EstateDTO> list = eI.listar().stream().map(y->m.map(y,EstateDTO.class))
                 .collect(Collectors.toList());
-
         if(list.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay valores en esta tabla");
         }else {
@@ -91,13 +90,38 @@ public class EstateController {
     }
 
     @GetMapping("/owners-estates")
-    public List<OwnerEstateDTO> listUsersEst(){
-        return eI.listUsersEstate();
+    public ResponseEntity<List<OwnerEstateDTO>> listUsersEst() {
+        List<Object[]> results = eI.listUsersEstate();
+        List<OwnerEstateDTO> lista = new ArrayList<>();
+
+        for (Object[] row : results) {
+            OwnerEstateDTO dto = new OwnerEstateDTO();
+            dto.setName((String) row[0]);
+            dto.setLastname((String) row[1]);
+            dto.setRooms(((Number) row[2]).intValue());
+            dto.setMonthlyPrice(((Number) row[3]).doubleValue());
+            lista.add(dto);
+        }
+
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/user-estate/{district}")
-    public List<UserEstateDTO> listUsersEst(@PathVariable String district){
-        return eI.listINNERJOIN(district);
+    public ResponseEntity<List<EstateUsersDTO>> ListaUser(@PathVariable String district) {
+        List<Object[]> results = eI.EstateDistrict(district);
+        List<EstateUsersDTO> lista = new ArrayList<>();
+
+        for (Object[] row : results) {
+            EstateUsersDTO dto = new EstateUsersDTO();
+            dto.setName((String) row[0]);
+            dto.setLastname((String) row[1]);
+            dto.setCity((String) row[2]);
+            dto.setDistrict((String) row[3]);
+            dto.setMonthlyPrice(((Number) row[4]).doubleValue());
+            lista.add(dto);
+        }
+
+        return ResponseEntity.ok(lista);
     }
 
     //Listas tipo Object[]

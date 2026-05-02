@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.userDTOS.*;
-import pe.edu.pe.smartrent_backend.Entities.Users;
+import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
 import java.time.LocalDate;
@@ -165,8 +165,8 @@ UserController {
         for (Object[] row : resultados) {
             UserEnabledByRoleDTO dto = new UserEnabledByRoleDTO();
             dto.setRole(row[0].toString());
-            dto.setEnabled(((Number) row[1]).longValue());
-            dto.setDisabled(((Number) row[2]).longValue());
+            dto.setEnabled(((Number) row[1]).intValue());
+            dto.setDisabled(((Number) row[2]).intValue());
             lista.add(dto);
         }
         return ResponseEntity.ok(lista);

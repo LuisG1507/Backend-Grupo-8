@@ -10,7 +10,7 @@ import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserEnabledByRoleDTO;
 import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserMonthlyGrowthDTO;
 import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserUnverifiedWithBackgroundDTO;
 import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserVerificationStatsDTO;
-import pe.edu.pe.smartrent_backend.Entities.Users;
+import pe.edu.pe.smartrent_backend.Entities.User;
 
 import java.time.LocalDate;
 import java.util.List;
