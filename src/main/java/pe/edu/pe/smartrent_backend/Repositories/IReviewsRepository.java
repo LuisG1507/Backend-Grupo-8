@@ -45,4 +45,8 @@ public interface IReviewsRepository extends JpaRepository<Reviews,Integer> {
             "    ROUND(AVG(calification)::numeric, 2) AS promedio_global\n" +
             "FROM reviews", nativeQuery = true)
     List<Object[]> findRatingDistribution();
+
+    //
+    @Query("SELECT r FROM Reviews r WHERE r.calification >= :minRating")
+    List<Reviews> findByMinRating(@Param("minRating") Double minRating);
 }
