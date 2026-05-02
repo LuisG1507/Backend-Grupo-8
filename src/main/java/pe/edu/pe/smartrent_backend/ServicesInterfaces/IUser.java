@@ -12,21 +12,21 @@ import java.util.List;
 
 public interface IUser {
 
-    public void Register(Users user); //Registrar
+    public void Register(User user); //Registrar
 
-    public void Update(Users user); //Modificar
+    public void Update(User user); //Modificar
 
-    public Users listId(Integer id); //ListarId
+    public User listId(Integer id); //ListarId
 
-    public List<Users> list(); //Listartodo
+    public List<User> list(); //Listartodo
 
     public void Delete(Integer id);
 
-    public Users BuscarPorDNI(Integer id); //Filtro Simple para buscar por DNI
+    public User BuscarPorDNI(Integer id); //Filtro Simple para buscar por DNI
 
-    public List<Users> fyndByStatus(); //ListarVerificados
+    public List<User> fyndByStatus(); //ListarVerificados
 
-    public List<Users> userByRangeDate(LocalDate f1, LocalDate f2);
+    public List<User> userByRangeDate(LocalDate f1, LocalDate f2);
 
     public List<Object[]> RankingUsuariosIncidencias();
 

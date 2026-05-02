@@ -1,11 +1,8 @@
 package pe.edu.pe.smartrent_backend.DTOS.userDTOS;
 
-import pe.edu.pe.smartrent_backend.Entities.Roles;
-
 import java.time.LocalDate;
-import java.util.List;
 
-public class UsersSinContraseniaDTO {
+public class UserSinContraseniaDTO {
     private String name;
     private String lastName;
     private Integer dni;

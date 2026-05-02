@@ -8,6 +8,8 @@ import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.ContractLessorContractRateD
 import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.ContractLessorIncomeDTO;
 import pe.edu.pe.smartrent_backend.Entities.Contract;
 
+import java.util.List;
+import java.util.Optional;
 
 public interface IContractService {
     public List<Contract> list();

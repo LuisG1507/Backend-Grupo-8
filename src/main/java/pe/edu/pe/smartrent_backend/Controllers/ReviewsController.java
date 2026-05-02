@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.Reviews;
-import pe.edu.pe.smartrent_backend.Entities.Users;
+import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IReviewsService;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class ReviewsController {
         ModelMapper m = new ModelMapper();
         Reviews r = m.map(rD, Reviews.class);
 
-        Users u = new Users();
+        User u = new User();
         u.setIdUser(rD.getIdUser());
         r.setUser(u);
 
@@ -68,7 +68,7 @@ public class ReviewsController {
         exist.setComment(rC.getComment());
         exist.setCreationDate(rC.getCreationDate());
 
-        Users u = new Users();
+        User u = new User();
         u.setIdUser(rC.getIdUser());
         exist.setUser(u);
 

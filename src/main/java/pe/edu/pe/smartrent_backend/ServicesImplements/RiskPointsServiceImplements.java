@@ -40,4 +40,29 @@ public class RiskPointsServiceImplements implements IRiskPointsService {
     public void update(RiskPoints riskPoint) {
         rP.save(riskPoint);
     }
+
+
+    //Toma decisiones
+
+    @Override
+    public List<Object[]> RPDecision1() {
+        return rP.RPD1();
+    }
+
+    @Override
+    public List<Object[]> RPDecision2() {
+        return rP.RPD2();
+    }
+
+    @Override
+    public List<Object[]> RPDecision3() {
+        return rP.RPD3();
+    }
+
+    @Override
+    public List<Object[]> RPDecision4() {
+        return rP.RPD4();
+    }
+
+
 }

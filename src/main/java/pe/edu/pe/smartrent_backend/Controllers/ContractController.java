@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Contract;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
-import pe.edu.pe.smartrent_backend.Entities.Users;
+import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.Repositories.IEstateRepository;
 import pe.edu.pe.smartrent_backend.Repositories.IUserRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IContractService;
@@ -54,8 +54,8 @@ public class ContractController {
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody ContractDTO dto) {
         Optional<Estate> estateOpt = eR.findById(dto.getIdEstate());
-        Optional<Users> lessorOpt = uR.findById(dto.getIdLessor());
-        Optional<Users> lesseeOpt = uR.findById(dto.getIdLessee());
+        Optional<User> lessorOpt = uR.findById(dto.getIdLessor());
+        Optional<User> lesseeOpt = uR.findById(dto.getIdLessee());
 
         if (estateOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("The estate does not exist");
@@ -124,8 +124,8 @@ public class ContractController {
         }
 
         Optional<Estate> estateOpt = eR.findById(dto.getIdEstate());
-        Optional<Users> lessorOpt = uR.findById(dto.getIdLessor());
-        Optional<Users> lesseeOpt = uR.findById(dto.getIdLessee());
+        Optional<User> lessorOpt = uR.findById(dto.getIdLessor());
+        Optional<User> lesseeOpt = uR.findById(dto.getIdLessee());
 
         if (estateOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("The estate does not exist");

@@ -30,7 +30,7 @@ public class RiskReport {
 
     @ManyToOne
     @JoinColumn(name = "idUser")
-    private Users user;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "idEstate")
@@ -39,7 +39,7 @@ public class RiskReport {
     public RiskReport() {
     }
 
-    public RiskReport(Integer idRiskReport, String type, LocalDate creationDate, String riskLevel, String description, String details, Users user, Estate estate) {
+    public RiskReport(Integer idRiskReport, String type, LocalDate creationDate, String riskLevel, String description, String details, User user, Estate estate) {
         this.idRiskReport = idRiskReport;
         this.type = type;
         this.creationDate = creationDate;
@@ -98,11 +98,11 @@ public class RiskReport {
         this.details = details;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
