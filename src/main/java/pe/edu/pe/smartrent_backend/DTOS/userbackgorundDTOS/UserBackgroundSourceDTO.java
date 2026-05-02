@@ -2,7 +2,7 @@ package pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS;
 
 public class UserBackgroundSourceDTO {
     private String source;
-    private Long totalReported;
+    private Integer totalReported;
 
     public String getSource() {
         return source;
@@ -12,11 +12,11 @@ public class UserBackgroundSourceDTO {
         this.source = source;
     }
 
-    public Long getTotalReported() {
+    public Integer getTotalReported() {
         return totalReported;
     }
 
-    public void setTotalReported(Long totalReported) {
+    public void setTotalReported(Integer totalReported) {
         this.totalReported = totalReported;
     }
 }

@@ -1,9 +1,6 @@
 package pe.edu.pe.smartrent_backend.DTOS.userDTOS;
 
-import pe.edu.pe.smartrent_backend.Entities.Roles;
-
 import java.time.LocalDate;
-import java.util.List;
 
 public class UserDTO {
 
@@ -18,7 +15,6 @@ public class UserDTO {
     private LocalDate createdDate;
     private LocalDate updateDate;
     private Boolean enabled;
-    private List<Roles> roles;
 
     public String getName() {
         return name;
@@ -108,11 +104,5 @@ public class UserDTO {
         this.enabled = enabled;
     }
 
-    public List<Roles> getRoles() {
-        return roles;
-    }
 
-    public void setRoles(List<Roles> roles) {
-        this.roles = roles;
-    }
 }

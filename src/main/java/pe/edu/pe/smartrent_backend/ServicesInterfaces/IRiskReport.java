@@ -1,7 +1,6 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
 
 import pe.edu.pe.smartrent_backend.Entities.RiskReport;
-import pe.edu.pe.smartrent_backend.Entities.Users;
 
 import java.util.List;
 
@@ -15,6 +14,15 @@ public interface IRiskReport {
 
     public List<RiskReport> list(); //Listartodo
 
-    public void Delete(Integer id);
+    public void Delete(Integer id); //Eliminar
+
+
+    //QUERY TOMA DECISION
+
+    public List<Object[]> RRDecision1(); // Inmuebles con más reportes de riesgo
+    public List<Object[]> RRDecision2(); // Distribución de reportes por nivel de riesgo con porcentaje
+    public List<Object[]> RRDecision3(); // Usuarios que más reportes han generado
+    public List<Object[]> RRDecision4(); //Inmuebles con nivel de riesgo ALTO que aún tienen contrato activo (situación crítica)
+
 
 }

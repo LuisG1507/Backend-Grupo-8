@@ -2,8 +2,8 @@ package pe.edu.pe.smartrent_backend.DTOS.userDTOS;
 
 public class UserEnabledByRoleDTO {
     private String role;
-    private Long enabled;
-    private Long disabled;
+    private int enabled;
+    private int disabled;
 
     public String getRole() {
         return role;
@@ -13,19 +13,19 @@ public class UserEnabledByRoleDTO {
         this.role = role;
     }
 
-    public Long getEnabled() {
+    public int getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Long enabled) {
+    public void setEnabled(int enabled) {
         this.enabled = enabled;
     }
 
-    public Long getDisabled() {
+    public int getDisabled() {
         return disabled;
     }
 
-    public void setDisabled(Long disabled) {
+    public void setDisabled(int disabled) {
         this.disabled = disabled;
     }
 }

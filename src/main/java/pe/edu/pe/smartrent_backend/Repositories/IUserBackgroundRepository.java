@@ -16,11 +16,11 @@ public interface IUserBackgroundRepository extends JpaRepository<UsersBackground
 
     @Query(value = "SELECT type,\n" +
             "       COUNT(*) AS total,\n" +
-            "       ROUND(COUNT() * 100.0 / (SELECT COUNT() FROM users_background), 2) AS porcentaje\n" +
+            "       ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM users_background), 2) AS porcentaje\n" +
             "FROM users_background\n" +
             "GROUP BY type\n" +
             "ORDER BY total DESC", nativeQuery = true)
-    List<UserBackgroundTypeFrequencyDTO> userBackgroundType();
+    List<Object[]> userBackgroundType();
 
     @Query(value = "SELECT u.name, u.last_name, COUNT(ub.id_background) AS total_antecedentes\n" +
             "FROM users_background ub\n" +
@@ -32,19 +32,19 @@ public interface IUserBackgroundRepository extends JpaRepository<UsersBackground
             "    ) sub\n" +
             ")\n" +
             "ORDER BY total_antecedentes DESC", nativeQuery = true)
-    List<UserBackgroundAverageDTO> findHighRiskUsers();
+    List<Object[]> findHighRiskUsers();
 
     @Query(value = "SELECT source, COUNT(*) AS total_reportados\n" +
             "FROM users_background\n" +
             "GROUP BY source\n" +
             "ORDER BY total_reportados DESC", nativeQuery = true)
-    List<UserBackgroundSourceDTO> findMostReportingSources();
+    List<Object[]> findMostReportingSources();
 
-    @Query(value = "SELECT DATE_TRUNC('month', registration_date) AS mes,\n" +
-            "       COUNT(*) AS total_antecedentes\n" +
+    @Query(value = "SELECT TO_CHAR(registration_date, 'YYYY-MM') AS mes, \n" +
+            "       COUNT(*) AS total\n" +
             "FROM users_background\n" +
             "GROUP BY mes\n" +
             "ORDER BY mes DESC", nativeQuery = true)
-    List<UserBackgroundMonthlyDTO> findMonthlyTrend();
+    List<Object[]> findMonthlyTrend();
 
 }

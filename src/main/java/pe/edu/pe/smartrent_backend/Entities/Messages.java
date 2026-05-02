@@ -28,12 +28,12 @@ public class Messages {
 
     @ManyToOne
     @JoinColumn(name = "idUser")
-    private Users user;
+    private User user;
 
     public Messages() {
     }
 
-    public Messages(Integer idMessage, String content, String status, LocalDate dateSent, Conversation conversation, Users user) {
+    public Messages(Integer idMessage, String content, String status, LocalDate dateSent, Conversation conversation, User user) {
         this.idMessage = idMessage;
         this.content = content;
         this.status = status;
@@ -82,11 +82,11 @@ public class Messages {
         this.conversation = conversation;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }

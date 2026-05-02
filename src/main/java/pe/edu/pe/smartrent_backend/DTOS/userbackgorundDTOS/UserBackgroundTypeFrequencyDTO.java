@@ -2,7 +2,7 @@ package pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS;
 
 public class UserBackgroundTypeFrequencyDTO {
     private String type;
-    private Long total;
+    private int total;
     private Double percentage;
 
     public String getType() {
@@ -13,11 +13,11 @@ public class UserBackgroundTypeFrequencyDTO {
         this.type = type;
     }
 
-    public Long getTotal() {
+    public int getTotal() {
         return total;
     }
 
-    public void setTotal(Long total) {
+    public void setTotal(int total) {
         this.total = total;
     }
 

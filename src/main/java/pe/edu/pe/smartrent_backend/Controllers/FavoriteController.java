@@ -9,7 +9,7 @@ import pe.edu.pe.smartrent_backend.DTOS.favoriteDTOS.*;
 import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Models3DDTO;
 import pe.edu.pe.smartrent_backend.Entities.Favorite;
 import pe.edu.pe.smartrent_backend.Entities.Models3D;
-import pe.edu.pe.smartrent_backend.Entities.Users;
+import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IFavorite;
 
 import java.util.ArrayList;

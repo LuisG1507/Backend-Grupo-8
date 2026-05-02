@@ -44,23 +44,27 @@ public class UserBackgroundServicesImplements implements IUserBackground {
         ubR.deleteById(id);
     }
 
+    //UserBackgroundTypeFrequencyDTO
     @Override
-    public List<UserBackgroundTypeFrequencyDTO> findMostFrequentTypes() {
+    public List<Object[]> findMostFrequentTypes() {
         return ubR.userBackgroundType();
     }
 
+    //UserBackgroundAverageDTO
     @Override
-    public List<UserBackgroundAverageDTO> findHighRiskUsers() {
+    public List<Object[]> findHighRiskUsers() {
         return ubR.findHighRiskUsers();
     }
 
+    //UserBackgroundSourceDTO
     @Override
-    public List<UserBackgroundSourceDTO> findMostReportingSources() {
+    public List<Object[]> findMostReportingSources() {
         return ubR.findMostReportingSources();
     }
 
+    //UserBackgroundMonthlyDTO
     @Override
-    public List<UserBackgroundMonthlyDTO> findMonthlyTrend() {
+    public List<Object[]> findMonthlyTrend() {
         return ubR.findMonthlyTrend();
     }
 }

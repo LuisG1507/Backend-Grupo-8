@@ -1,8 +1,5 @@
 package pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS;
 
-import pe.edu.pe.smartrent_backend.Entities.Estate;
-import pe.edu.pe.smartrent_backend.Entities.Users;
-
 import java.time.LocalDate;
 
 public class RiskReportDTO {
