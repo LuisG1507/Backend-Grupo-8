@@ -1,5 +1,5 @@
 package pe.edu.pe.smartrent_backend.Controllers;
-//
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
