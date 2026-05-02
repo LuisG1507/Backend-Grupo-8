@@ -8,12 +8,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.MessagesCompleteDTO;
 import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.MessagesDTO;
-import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.MessagesUserQueryDTO;
-import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsCompleteDTO;
-import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsDTO;
+import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.MessagesDateActivityDTO;
+import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import pe.edu.pe.smartrent_backend.Entities.Messages;
-import pe.edu.pe.smartrent_backend.Entities.Notifications;
+import pe.edu.pe.smartrent_backend.Entities.User;
+import pe.edu.pe.smartrent_backend.ServicesInterfaces.IConversationService;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IMessages;
+import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,11 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/Messages")
 public class MessagesController {
+
+    @Autowired
+    private IUser uS; // Agrega el servicio de usuarios
+    @Autowired
+    private IConversationService cS;
     @Autowired
     private IMessages mS;
 
@@ -36,30 +42,35 @@ public class MessagesController {
     }
 
     @PutMapping("/actualizar")
-        @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> actualizar(@RequestBody MessagesCompleteDTO dto) {
         Optional<Messages> existente = mS.listId(dto.getIdMessage());
+
         if (existente.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Mensaje no encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Mensaje no encontrado");
         }
-        // Validación de campos (siguiendo el ejemplo de Project de la profe)
+        // Validación de contenido
         if (dto.getContent() == null || dto.getContent().isEmpty()) {
-            return ResponseEntity.badRequest()
-                    .body("El contenido del mensaje no puede estar vacío");
+            return ResponseEntity.badRequest().body("El contenido no puede estar vacío");
         }
         Messages m = existente.get();
         m.setContent(dto.getContent());
         m.setStatus(dto.getStatus());
         m.setDateSent(dto.getDateSent());
-        m.setConversation(dto.getConversation());
-        m.setUser(dto.getUser());
+        // USANDO LOS SERVICIOS INYECTADOS
+        // Buscamos al usuario y lo asignamos (asumiendo que listId devuelve la entidad)
+        User usuario = uS.listId(dto.getIdUser());
+        m.setUser(usuario);
+
+        // Buscamos la conversación y la asignamos
+        Conversation conv = cS.listId(dto.getIdConversation());
+        m.setConversation(conv);
         mS.Update(m);
         return ResponseEntity.ok("Mensaje actualizado correctamente");
     }
 
     @GetMapping("/listar")
-        @PreAuthorize("hasAuthority('ARRENDATARIO')")
+        @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<MessagesDTO>>listar(){
         ModelMapper m= new ModelMapper();
         List<MessagesDTO>lista=mS.list().stream().map(y ->m.map(y, MessagesDTO.class)).collect(Collectors.toList());
@@ -104,20 +115,11 @@ public class MessagesController {
     }
 
     //QueryTomaDecision
-    @GetMapping("/urgentes-usuario")
-        @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<MessagesUserQueryDTO>> listarUrgentes() {
-        ModelMapper m = new ModelMapper();
-        List<MessagesUserQueryDTO> lista = mS.findUrgentMessagesWithUserJPQL().stream()
-                .map(y -> {
-                    MessagesUserQueryDTO dto = m.map(y, MessagesUserQueryDTO.class);
-                    dto.setUserName(y.getUser().getName()); // Mapeo manual del nombre del usuario
-                    return dto;
-                })
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(lista);
+    @GetMapping("/reporteActividadFechas")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<MessagesDateActivityDTO>> reporteActividadFechas() {
+        return ResponseEntity.ok(mS.findMessagesActivityByDate());
     }
-
 
 
 }

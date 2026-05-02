@@ -8,9 +8,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsCompleteDTO;
 import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsDTO;
-import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsTypeQueryDTO;
+import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsTypeDTO;
 import pe.edu.pe.smartrent_backend.Entities.Notifications;
+import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.INotifications;
+import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +22,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/Notifications")
 public class NotificationsController {
     @Autowired
+    private IUser uS;
+    @Autowired
     private INotifications nS;
 
-    @PostMapping("/web")
+    @PostMapping("/registrar")
         @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<NotificationsCompleteDTO> registrar(@RequestBody NotificationsCompleteDTO dto) {
         ModelMapper m = new ModelMapper();
@@ -32,7 +36,7 @@ public class NotificationsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/listar")
         @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<NotificationsDTO>>listar(){
         ModelMapper m= new ModelMapper();
@@ -54,27 +58,34 @@ public class NotificationsController {
     }
 
     @PutMapping("/actualizar")
-        @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> actualizar(@RequestBody NotificationsCompleteDTO dto) {
+        // 1. Buscar la notificación existente
         Optional<Notifications> existente = nS.listId(dto.getIdNotification());
+
         if (existente.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Mensaje no encontrado");
+                    .body("Notificación no encontrada");
         }
-        // Validación de campos (siguiendo el ejemplo de Project de la profe)
+        // 2. Validación de campos
         if (dto.getMessage() == null || dto.getMessage().isEmpty()) {
             return ResponseEntity.badRequest()
                     .body("El contenido del mensaje no puede estar vacío");
         }
-        Notifications m = existente.get();
-        m.setTitle(dto.getTitle());
-        m.setMessage(dto.getMessage());
-        m.setType(dto.getType());
-        m.setRead(dto.getRead());
-        m.setCreatedDate(dto.getCreatedDate());
-        m.setUser(dto.getUser());
-        nS.Update(m);
-        return ResponseEntity.ok("Mensaje actualizado correctamente");
+        Notifications n = existente.get();
+        // 3. Actualizar datos básicos
+        n.setTitle(dto.getTitle());
+        n.setMessage(dto.getMessage());
+        n.setType(dto.getType());
+        n.setRead(dto.getRead());
+        n.setCreatedDate(dto.getCreatedDate());
+        // 4. Resolver la relación con User
+        // Usamos el ID que viene en el DTO para obtener el objeto User completo
+        User usuario = uS.listId(dto.getIdUser());
+        n.setUser(usuario);
+        // 5. Guardar cambios
+        nS.Update(n);
+        return ResponseEntity.ok("Notificación actualizada correctamente");
     }
 
     @GetMapping("/{id}")
@@ -104,14 +115,10 @@ public class NotificationsController {
     }
 
     //QueryToma
-    @GetMapping("/alertas-seguridad")
-        @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<NotificationsTypeQueryDTO>> listarAlertasSeguridad() {
-        ModelMapper m = new ModelMapper();
-        List<NotificationsTypeQueryDTO> lista = nS.findRecentSecurityAlertsJPQL().stream()
-                .map(y -> m.map(y, NotificationsTypeQueryDTO.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(lista);
+    @GetMapping("/reporte-tipos")
+    @PreAuthorize("hasAnyAuthority('ADMIN')") // Ajusta según tus permisos
+    public List<NotificationsTypeDTO> reporteTipos() {
+        return nS.getCountByType();
     }
 
 

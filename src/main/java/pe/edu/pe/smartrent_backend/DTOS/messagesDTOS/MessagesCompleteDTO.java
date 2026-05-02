@@ -10,12 +10,10 @@ public class MessagesCompleteDTO {
     private String content;
     private String status;
     private LocalDate dateSent;
-    private Conversation conversation;
-    private User user;
-
+    private Integer idConversation;
+    private Integer idUser;
 
     public Integer getIdMessage() {
-
         return idMessage;
     }
 
@@ -47,19 +45,19 @@ public class MessagesCompleteDTO {
         this.dateSent = dateSent;
     }
 
-    public Conversation getConversation() {
-        return conversation;
+    public Integer getIdConversation() {
+        return idConversation;
     }
 
-    public void setConversation(Conversation conversation) {
-        this.conversation = conversation;
+    public void setIdConversation(Integer idConversation) {
+        this.idConversation = idConversation;
     }
 
-    public User getUser() {
-        return user;
+    public Integer getIdUser() {
+        return idUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setIdUser(Integer idUser) {
+        this.idUser = idUser;
     }
 }

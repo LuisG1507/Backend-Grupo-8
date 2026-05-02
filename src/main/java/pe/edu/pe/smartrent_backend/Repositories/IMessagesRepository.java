@@ -13,8 +13,8 @@ public interface IMessagesRepository extends JpaRepository <Messages, Integer> {
     //QuerySimple
     List<Messages> findByStatus(String status);
 
-    //QueryTomaDecisiones
-    @Query("SELECT m FROM Messages m JOIN m.user u WHERE m.status = 'LEIDO'")
-    List<Messages> findUrgentMessagesWithUserJPQL();
+    //QueryTomaDecisiones NUEVO
+    @Query("SELECT m.dateSent, COUNT(m.idMessage) FROM Messages m GROUP BY m.dateSent ORDER BY m.dateSent DESC")
+    List<Object[]> findMessagesActivityByDate();
 
 }

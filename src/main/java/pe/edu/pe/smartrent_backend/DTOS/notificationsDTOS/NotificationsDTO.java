@@ -11,7 +11,7 @@ public class NotificationsDTO {
     private String type;
     private Boolean read;
     private LocalDate createdDate;
-    private User user;
+    private Integer idUser;
 
     public String getTitle() {
         return title;
@@ -53,11 +53,11 @@ public class NotificationsDTO {
         this.createdDate = createdDate;
     }
 
-    public User getUser() {
-        return user;
+    public Integer getIdUser() {
+        return idUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setIdUser(Integer idUser) {
+        this.idUser = idUser;
     }
 }

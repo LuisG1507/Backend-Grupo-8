@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsTypeDTO;
 import pe.edu.pe.smartrent_backend.Entities.Notifications;
 
 import java.time.LocalDate;
@@ -15,7 +16,6 @@ public interface INotificationsRepository extends JpaRepository <Notifications, 
     List<Notifications> findByReadFalse();
 
     //QueryTomaa
-    @Query("SELECT n FROM Notifications n WHERE n.type = 'SEGURIDAD' AND n.createdDate >= :fechaLimite")
-    List<Notifications> findRecentSecurityAlertsJPQL(@Param("fechaLimite") LocalDate fechaLimite);
-
+    @Query("SELECT n.type, COUNT(n.idNotification) FROM Notifications n GROUP BY n.type")
+    List<Object[]> getCountByTypeRaw();
 }

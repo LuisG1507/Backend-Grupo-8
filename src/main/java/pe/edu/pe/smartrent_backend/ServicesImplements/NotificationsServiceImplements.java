@@ -2,11 +2,13 @@ package pe.edu.pe.smartrent_backend.ServicesImplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsTypeDTO;
 import pe.edu.pe.smartrent_backend.Entities.Notifications;
 import pe.edu.pe.smartrent_backend.Repositories.INotificationsRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.INotifications;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +47,18 @@ public class NotificationsServiceImplements implements INotifications {
     }
 
     @Override
-    public List<Notifications> findRecentSecurityAlertsJPQL(){
-        return nR.findRecentSecurityAlertsJPQL(LocalDate.now().minusDays(7));
+    public List<NotificationsTypeDTO> getCountByType() {
+        List<Object[]> lista = nR.getCountByTypeRaw();
+        List<NotificationsTypeDTO> listaDTO = new ArrayList<>();
+
+        for (Object[] columna : lista) {
+            NotificationsTypeDTO dto = new NotificationsTypeDTO();
+            dto.setType((String) columna[0]);
+            dto.setQuantity((Long) columna[1]);
+            listaDTO.add(dto);
+        }
+        return listaDTO;
     }
+
+
 }

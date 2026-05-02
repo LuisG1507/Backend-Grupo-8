@@ -2,8 +2,11 @@ package pe.edu.pe.smartrent_backend.ServicesImplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.MessagesDateActivityDTO;
 import pe.edu.pe.smartrent_backend.Entities.Messages;
+import pe.edu.pe.smartrent_backend.Repositories.IConversationRepository;
 import pe.edu.pe.smartrent_backend.Repositories.IMessagesRepository;
+import pe.edu.pe.smartrent_backend.Repositories.IUserRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IMessages;
 
 import java.util.List;
@@ -37,9 +40,21 @@ public class MessagesServiceImplements implements IMessages {
     public List<Messages> findByStatus(String status) {
         return mR.findByStatus(status);
     }
+
     @Override
-    public List<Messages> findUrgentMessagesWithUserJPQL() {
-        return mR.findUrgentMessagesWithUserJPQL();
+    public List<MessagesDateActivityDTO> findMessagesActivityByDate() {
+        List<Object[]> filaLista = mR.findMessagesActivityByDate();
+        List<MessagesDateActivityDTO> dtoLista = new java.util.ArrayList<>();
+
+        for (Object[] columna : filaLista) {
+            MessagesDateActivityDTO dto = new MessagesDateActivityDTO();
+            dto.setFecha(columna[0].toString());
+            dto.setCantidadMensajes((Long) columna[1]);
+            dtoLista.add(dto);
+        }
+        return dtoLista;
+
     }
+
 
 }
