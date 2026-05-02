@@ -39,10 +39,10 @@ public class ReviewsServiceImplements implements IReviewsService {
     public void update(Reviews review) {
         rR.save(review);
     }
-
+//
     @Override
     public List<Reviews> listByMinRating(Double minRating) {
-        return List.of();
+        return rR.findByMinRating(minRating);
     }
 
     @Override
