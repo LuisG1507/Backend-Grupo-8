@@ -139,8 +139,18 @@ UserController {
 
     // Usuarios no verificados con antecedentes registrados (alto riesgo)
     @GetMapping("/unverified-with-backgrounds")
-    public ResponseEntity<?> unverifiedWithBackgrounds() {
-        return ResponseEntity.ok(uS.findUnverifiedUsersWithBackgrounds());
+    public List<UserUnverifiedWithBackgroundDTO> reporteDecision5() {
+        List<Object[]> resultados = uS.findUnverifiedUsersWithBackgrounds();
+        List<UserUnverifiedWithBackgroundDTO> lista = new ArrayList<>();
+
+        for (Object[] row : resultados) {
+            UserUnverifiedWithBackgroundDTO dto = new UserUnverifiedWithBackgroundDTO();
+            dto.setName((String) row[0]);
+            dto.setLastName((String) row[1]);
+            dto.setTotalBackgrounds(((Number) row[2]).longValue());
+            lista.add(dto);
+        }
+        return lista;
     }
 
     // Crecimiento de usuarios registrados por mes
@@ -159,17 +169,18 @@ UserController {
 
     // Usuarios habilitados vs deshabilitados por rol
     @GetMapping("/enabled-by-role")
-    public ResponseEntity<?> enabledByRole() {
+    public List<UserEnabledByRoleDTO> enabledByRole() {
         List<Object[]> resultados = uS.findEnabledUsersByRole();
         List<UserEnabledByRoleDTO> lista = new ArrayList<>();
+
         for (Object[] row : resultados) {
             UserEnabledByRoleDTO dto = new UserEnabledByRoleDTO();
-            dto.setRole(row[0].toString());
-            dto.setEnabled(((Number) row[1]).longValue());
-            dto.setDisabled(((Number) row[2]).longValue());
+            dto.setRole((String) row[0]);
+            dto.setEnabled(((Number) row[1]).intValue());
+            dto.setDisabled(((Number) row[2]).intValue());
             lista.add(dto);
         }
-        return ResponseEntity.ok(lista);
+        return lista;
     }
 
 }

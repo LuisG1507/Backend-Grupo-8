@@ -27,7 +27,7 @@ public interface IUser {
     public List<Object[]> RankingUsuariosIncidencias();
 
     List<Object[]> findVerificationStats();
-    List<UserUnverifiedWithBackgroundDTO> findUnverifiedUsersWithBackgrounds();
+    List<Object[]> findUnverifiedUsersWithBackgrounds();
     List<Object[]> findMonthlyGrowth();
     List<Object[]> findEnabledUsersByRole();
 }

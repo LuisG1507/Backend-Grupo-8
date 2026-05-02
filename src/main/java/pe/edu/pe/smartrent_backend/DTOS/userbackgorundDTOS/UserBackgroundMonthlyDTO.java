@@ -1,8 +1,10 @@
 package pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS;
 
+import java.time.LocalDateTime;
+
 public class UserBackgroundMonthlyDTO {
     private String month;
-    private Long totalBackground;
+    private int totalBackground;
 
     public String getMonth() {
         return month;
@@ -12,11 +14,11 @@ public class UserBackgroundMonthlyDTO {
         this.month = month;
     }
 
-    public Long getTotalBackground() {
+    public int getTotalBackground() {
         return totalBackground;
     }
 
-    public void setTotalBackground(Long totalBackground) {
+    public void setTotalBackground(int totalBackground) {
         this.totalBackground = totalBackground;
     }
 }
