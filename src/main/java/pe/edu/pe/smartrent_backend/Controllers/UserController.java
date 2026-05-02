@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserDTO;
-import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserIncidentsRankingDTO;
-import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserSinContraseniaDTO;
-import pe.edu.pe.smartrent_backend.Entities.User;
+import pe.edu.pe.smartrent_backend.DTOS.userDTOS.*;
+import pe.edu.pe.smartrent_backend.Entities.Users;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
 import java.time.LocalDate;
@@ -124,5 +122,54 @@ UserController {
         return lista;
     }
 
+    // Usuarios verificados vs no verificados con porcentaje
+    @GetMapping("/verification-stats")
+    public ResponseEntity<?> verificationStats() {
+        List<Object[]> resultados = uS.findVerificationStats();
+        List<UserVerificationStatsDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            UserVerificationStatsDTO dto = new UserVerificationStatsDTO();
+            dto.setVerified(((Number) row[0]).longValue());
+            dto.setNotVerified(((Number) row[1]).longValue());
+            dto.setVerifiedPercentage(((Number) row[2]).doubleValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok( lista);
+    }
+
+    // Usuarios no verificados con antecedentes registrados (alto riesgo)
+    @GetMapping("/unverified-with-backgrounds")
+    public ResponseEntity<?> unverifiedWithBackgrounds() {
+        return ResponseEntity.ok(uS.findUnverifiedUsersWithBackgrounds());
+    }
+
+    // Crecimiento de usuarios registrados por mes
+    @GetMapping("/monthly-growth")
+    public ResponseEntity<?> monthlyGrowth() {
+        List<Object[]> resultados = uS.findMonthlyGrowth();
+        List<UserMonthlyGrowthDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            UserMonthlyGrowthDTO dto = new UserMonthlyGrowthDTO();
+            dto.setMonth(row[0].toString());
+            dto.setNewUsers(((Number) row[1]).longValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
+
+    // Usuarios habilitados vs deshabilitados por rol
+    @GetMapping("/enabled-by-role")
+    public ResponseEntity<?> enabledByRole() {
+        List<Object[]> resultados = uS.findEnabledUsersByRole();
+        List<UserEnabledByRoleDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            UserEnabledByRoleDTO dto = new UserEnabledByRoleDTO();
+            dto.setRole(row[0].toString());
+            dto.setEnabled(((Number) row[1]).longValue());
+            dto.setDisabled(((Number) row[2]).longValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
 
 }

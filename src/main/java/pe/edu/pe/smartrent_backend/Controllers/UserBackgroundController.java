@@ -6,8 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS.UserBackgroundDTO;
-import pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS.UserBackgroundGETDTO;
+import pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.UsersBackground;
 import pe.edu.pe.smartrent_backend.Repositories.IUserBackgroundRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUserBackground;
@@ -21,7 +20,6 @@ public class UserBackgroundController {
 
     @Autowired
     private IUserBackground ubS;
-
 
 
     //Registrar
@@ -74,6 +72,26 @@ public class UserBackgroundController {
         return ResponseEntity.ok("Registro con ID " + id + " eliminado correctamente.");
     }
 
+
+    @GetMapping("/frequency-type")
+    public List<UserBackgroundTypeFrequencyDTO> frequencyList() {
+        return ubS.findMostFrequentTypes();
+    }
+
+    @GetMapping("/high-risk")
+    public List<UserBackgroundAverageDTO> userBackgroundAverage() {
+        return ubS.findHighRiskUsers();
+    }
+
+    @GetMapping("/sources-reports")
+    public List<UserBackgroundSourceDTO> userBackgroundSource() {
+        return ubS.findMostReportingSources();
+    }
+
+    @GetMapping("/monthly-trend")
+    public List<UserBackgroundMonthlyDTO> monthlyList() {
+        return ubS.findMonthlyTrend();
+    }
 
 
 

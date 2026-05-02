@@ -1,5 +1,9 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
 
+import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Models3DActiveByCityDTO;
+import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Models3DCriticalRiskDTO;
+import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Models3DNoModelEstateDTO;
+import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Models3DStateRateDTO;
 import pe.edu.pe.smartrent_backend.Entities.Models3D;
 
 import java.util.List;
@@ -16,5 +20,10 @@ public interface IModels3D {
     List<Models3D> buscarPorFecha(String fecha);
     List<Object[]> modelosConUbicacion();
     List<Object[]> inmueblesConModelo();
+
+    List<Object[]> findEstatesWithoutModel();
+    List<Object[]> findCitiesWithMostActiveModels();
+    List<Object[]> findStateRate();
+    List<Object[]> findEstatesWithCriticalRiskPoints();
 
 }

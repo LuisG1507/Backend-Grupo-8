@@ -2,6 +2,10 @@ package pe.edu.pe.smartrent_backend.ServicesImplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.MessagesInactiveUserDTO;
+import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.MessagesStatusDistributionDTO;
+import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.MessagesUrgentConversationDTO;
+import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.MessagesUrgentUserDTO;
 import pe.edu.pe.smartrent_backend.Entities.Messages;
 import pe.edu.pe.smartrent_backend.Repositories.IMessagesRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IMessages;
@@ -33,6 +37,27 @@ public class MessagesServiceImplements implements IMessages {
     public void Delete(Integer id) {
         mR.deleteById(id);
     }
+
+    @Override
+    public List<Object[]> findUsersWithMostUrgentMessages() {
+        return mR.findUsersWithMostUrgentMessages();
+    }
+
+    @Override
+    public List<Object[]> findMessageDistributionByStatus() {
+        return mR.findMessageDistributionByStatus();
+    }
+
+    @Override
+    public List<Object[]> findConversationsWithMostUrgentMessages() {
+        return mR.findConversationsWithMostUrgentMessages();
+    }
+
+    @Override
+    public List<Object[]> findUsersWithNoMessages() {
+        return mR.findUsersWithNoMessages();
+    }
+
     @Override
     public List<Messages> findByStatus(String status) {
         return mR.findByStatus(status);
