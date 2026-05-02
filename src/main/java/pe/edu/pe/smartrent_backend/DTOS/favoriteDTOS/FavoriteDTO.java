@@ -4,15 +4,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
-import pe.edu.pe.smartrent_backend.Entities.Users;
+import pe.edu.pe.smartrent_backend.Entities.User;
 
 import java.time.LocalDate;
 
 public class FavoriteDTO {
     private LocalDate creationDate;
-    private Users user;
+    private User user;
     private Estate estate;
-
 
     public LocalDate getCreationDate() {
         return creationDate;
@@ -22,11 +21,11 @@ public class FavoriteDTO {
         this.creationDate = creationDate;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
