@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.userDTOS.*;
-import pe.edu.pe.smartrent_backend.Entities.User;
+import pe.edu.pe.smartrent_backend.Entities.Users;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
 import java.time.LocalDate;
@@ -139,18 +139,8 @@ UserController {
 
     // Usuarios no verificados con antecedentes registrados (alto riesgo)
     @GetMapping("/unverified-with-backgrounds")
-    public List<UserUnverifiedWithBackgroundDTO> reporteDecision5() {
-        List<Object[]> resultados = uS.findUnverifiedUsersWithBackgrounds();
-        List<UserUnverifiedWithBackgroundDTO> lista = new ArrayList<>();
-
-        for (Object[] row : resultados) {
-            UserUnverifiedWithBackgroundDTO dto = new UserUnverifiedWithBackgroundDTO();
-            dto.setName((String) row[0]);
-            dto.setLastName((String) row[1]);
-            dto.setTotalBackgrounds(((Number) row[2]).longValue());
-            lista.add(dto);
-        }
-        return lista;
+    public ResponseEntity<?> unverifiedWithBackgrounds() {
+        return ResponseEntity.ok(uS.findUnverifiedUsersWithBackgrounds());
     }
 
     // Crecimiento de usuarios registrados por mes
@@ -169,18 +159,17 @@ UserController {
 
     // Usuarios habilitados vs deshabilitados por rol
     @GetMapping("/enabled-by-role")
-    public List<UserEnabledByRoleDTO> enabledByRole() {
+    public ResponseEntity<?> enabledByRole() {
         List<Object[]> resultados = uS.findEnabledUsersByRole();
         List<UserEnabledByRoleDTO> lista = new ArrayList<>();
-
         for (Object[] row : resultados) {
             UserEnabledByRoleDTO dto = new UserEnabledByRoleDTO();
-            dto.setRole((String) row[0]);
-            dto.setEnabled(((Number) row[1]).intValue());
-            dto.setDisabled(((Number) row[2]).intValue());
+            dto.setRole(row[0].toString());
+            dto.setEnabled(((Number) row[1]).longValue());
+            dto.setDisabled(((Number) row[2]).longValue());
             lista.add(dto);
         }
-        return lista;
+        return ResponseEntity.ok(lista);
     }
 
 }
