@@ -1,6 +1,6 @@
 package pe.edu.pe.smartrent_backend.DTOS.estateDTOS;
 
-public class UserEstateDTO {
+public class EstateUsersDTO {
     private String name;
     private String lastname;
     private String city;

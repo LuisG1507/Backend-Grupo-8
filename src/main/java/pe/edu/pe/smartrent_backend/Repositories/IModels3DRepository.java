@@ -4,12 +4,10 @@ package pe.edu.pe.smartrent_backend.Repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Models3DActiveByCityDTO;
-import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Models3DCriticalRiskDTO;
-import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Models3DNoModelEstateDTO;
-import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Models3DStateRateDTO;
+import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.*;
 import pe.edu.pe.smartrent_backend.Entities.Models3D;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -17,8 +15,8 @@ public interface IModels3DRepository extends JpaRepository<Models3D, Integer> {
 
     List<Models3D> findByState(String state);
 
-    @Query(value = "SELECT * FROM models3d WHERE create_date > :fecha", nativeQuery = true)
-    List<Models3D> buscarPorFecha(String fecha);
+    @Query(value = "SELECT * FROM models3d WHERE create_date = :fecha", nativeQuery = true)
+    List<Models3D> buscarPorFecha(LocalDate fecha);
 
     @Query("SELECT m.fileURL,m.state,e.city,e.district " +
             "FROM Models3D m INNER JOIN m.estate e")

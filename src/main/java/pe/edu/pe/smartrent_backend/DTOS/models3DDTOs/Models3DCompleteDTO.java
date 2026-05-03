@@ -9,7 +9,7 @@ public class Models3DCompleteDTO {
     private String fileURL;
     private String state;
     private LocalDate createDate;
-    private Estate estate;
+    private int idEstate;
 
     public Integer getIdModels3D() {
         return idModels3D;
@@ -43,11 +43,11 @@ public class Models3DCompleteDTO {
         this.createDate = createDate;
     }
 
-    public Estate getEstate() {
-        return estate;
+    public int getIdEstate() {
+        return idEstate;
     }
 
-    public void setEstate(Estate estate) {
-        this.estate = estate;
+    public void setIdEstate(int idEstate) {
+        this.idEstate = idEstate;
     }
 }
