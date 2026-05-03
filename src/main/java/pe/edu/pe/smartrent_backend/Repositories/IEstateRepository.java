@@ -25,12 +25,12 @@ public interface IEstateRepository extends JpaRepository<Estate, Integer> {
             "FROM estate e\n" +
             "INNER JOIN users u ON e.id_user = u.id_user\n" +
             "WHERE e.rooms >= 3\n", nativeQuery = true)
-    List<OwnerEstateDTO> listUserEstate();
+    List<Object[]> listUserEstate();
 
     @Query(value = "SELECT  u.name, u.last_name, e.city, e.district, e.monthly_price FROM estate e\n" +
             "LEFT JOIN users u ON e.id_user = u.id_user\n" +
             "WHERE e.district = :dist ", nativeQuery = true)
-    List<UserEstateDTO> listUserEstateDistrict(String dist);
+    List<Object[]> listUserEstateDistrict(String dist);
 
     @Query(value = "SELECT \n" +
             "    e.title,\n" +

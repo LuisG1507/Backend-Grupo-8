@@ -18,7 +18,7 @@ public class EstateDTO {
     private Integer bathrooms;
     private Double areaM2;
     private LocalDate creationDate;
-    private User user;
+    private int idUser;
 
     public String getTitle() {
         return title;
@@ -116,11 +116,11 @@ public class EstateDTO {
         this.creationDate = creationDate;
     }
 
-    public User getUsers() {
-        return user;
+    public int getIdUser() {
+        return idUser;
     }
 
-    public void setUsers(User user) {
-        this.user = user;
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
     }
 }

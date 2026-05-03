@@ -7,9 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.*;
+import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.Models3D;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IModels3D;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,37 +24,47 @@ public class Models3DController {
     @Autowired
     private IModels3D mI;
 
-    @PostMapping
-    private void registrar(@RequestBody Models3DDTO mD) {
+    @PostMapping("/Register")
+    private ResponseEntity<?> registrar(@RequestBody Models3DDTO mD) {
         ModelMapper m = new ModelMapper();
-        Models3D mL = m.map(mD, Models3D.class);
-        mI.registrar(mL);
+        try {
+            Models3D mL = m.map(mD, Models3D.class);
+            mI.registrar(mL);
+            return ResponseEntity.ok("Registrado correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al registrar: " + e.getMessage());
+        }
     }
 
-    @PutMapping
+    @PutMapping("/Update")
     public ResponseEntity<String> actualizar(@RequestBody Models3DCompleteDTO model3D){
         Optional<Models3D> exist = mI.listarId(model3D.getIdModels3D());
-        if(exist.isEmpty()){
+        if (exist.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El valor no existe");
         }
+
         Models3D m = exist.get();
         m.setState(model3D.getState());
         m.setFileURL(model3D.getFileURL());
         m.setCreateDate(model3D.getCreateDate());
-        m.setEstate(model3D.getEstate());
+
+        Estate auxEstate = new Estate();
+        auxEstate.setIdEstate(model3D.getIdEstate());
+
+        m.setEstate(auxEstate);
 
         mI.actualizar(m);
-
-        return ResponseEntity.ok("Su valor ha sido actualizado");
+        return ResponseEntity.ok("Actualizado correctamente");
     }
 
-    @GetMapping
+    @GetMapping("/ListModels3D")
     public ResponseEntity<?> ListarModels(){
         ModelMapper m = new ModelMapper();
         List<Models3DDTO> list = mI.Listar().stream().map(y->m.map(y,Models3DDTO.class))
                 .collect(Collectors.toList());
         if(list.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay listas en este objeto");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay datos en este objeto");
         }else{
             return ResponseEntity.ok(list);
         }
@@ -70,23 +82,67 @@ public class Models3DController {
     }
 
     @GetMapping("/estado/{state}")
-    public List<Models3D> buscarEstado(@PathVariable String state){
-        return mI.buscarPorEstado(state);
+    public List<Models3DCompleteDTO> buscarEstado(@PathVariable String state){
+        ModelMapper m = new ModelMapper();
+        List<Models3D> entidades = mI.buscarPorEstado(state);
+        return entidades.stream()
+                .map(entity -> {
+                    Models3DCompleteDTO dto = m.map(entity, Models3DCompleteDTO.class);
+                    if (entity.getEstate() != null) {
+                        dto.setIdEstate(entity.getEstate().getIdEstate());
+                    }
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/fecha/{date}")
-    public List<Models3D> buscarFecha(@PathVariable String date){
-        return mI.buscarPorFecha(date);
+    public List<Models3DCompleteDTO> buscarFecha(@PathVariable String date){
+        ModelMapper m = new ModelMapper();
+        LocalDate fechaBusqueda = LocalDate.parse(date);
+        List<Models3D> entidades = mI.buscarPorFecha(fechaBusqueda);
+        return entidades.stream()
+                .map(entity -> {
+                    Models3DCompleteDTO dto = m.map(entity, Models3DCompleteDTO.class);
+                    if (entity.getEstate() != null) {
+                        dto.setIdEstate(entity.getEstate().getIdEstate());
+                    }
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/ubicacion")
-    public List<Object[]> ubicacion(){
-        return mI.modelosConUbicacion();
+    public List<Model3DLocation> ubicacion(){
+        List<Object[]> list = mI.modelosConUbicacion();
+        List<Model3DLocation> listLoc = new ArrayList<>();
+        for(Object[] row : list){
+            Model3DLocation dt = new Model3DLocation();
+            dt.setFileURL((String) row[0]);
+            dt.setState((String) row[1]);
+            dt.setCity((String) row[2]);
+            dt.setDistrict((String) row[3]);
+
+            listLoc.add(dt);
+        }
+        return listLoc;
     }
 
     @GetMapping("/estateModels")
-    public List<Object[]> estateModel(){
-        return mI.inmueblesConModelo();
+    public List<ModelEstateDTO> estateModel(){
+        List<Object[]> resultados = mI.inmueblesConModelo();
+
+        List<ModelEstateDTO> listaMapeada = new ArrayList<>();
+
+        for (Object[] fila : resultados) {
+            ModelEstateDTO dto = new ModelEstateDTO();
+
+            dto.setCity((String) fila[0]);      // e.city
+            dto.setDistrict((String) fila[1]);  // e.district
+            dto.setFileURL((String) fila[2]);   // m.fileURL
+            listaMapeada.add(dto);
+        }
+        return listaMapeada;
     }
 
     //Inmuebles sin modelo 3D (sin presentación visual)
