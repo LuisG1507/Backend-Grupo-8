@@ -55,14 +55,32 @@ public class FavoriteController {
 
     @GetMapping
     public ResponseEntity<?> ListFavorite(){
-        ModelMapper m = new ModelMapper();
-        List<FavoriteDTO> list = fC.list().stream().map(y->m.map(y,FavoriteDTO.class))
-                .collect(Collectors.toList());
-        if(list.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay listas en este objeto");
-        }else{
-            return ResponseEntity.ok(list);
+        List<Favorite> favorites = fC.list();
+
+        if(favorites.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No hay listas en este objeto");
         }
+
+        List<FavoriteDTOInfinite> list = favorites.stream().map(fav -> {
+            FavoriteDTOInfinite dto = new FavoriteDTOInfinite();
+            dto.setCreationDate(fav.getCreationDate());
+
+            FavoriteDTOInfinite.UserBasicDTO userDTO = new FavoriteDTOInfinite.UserBasicDTO();
+            userDTO.setIdUser(fav.getUser().getIdUser());
+            userDTO.setUsername(fav.getUser().getUsername());
+            dto.setUser(userDTO);
+
+            FavoriteDTOInfinite.EstateBasicDTO estateDTO = new FavoriteDTOInfinite.EstateBasicDTO();
+            estateDTO.setIdEstate(fav.getEstate().getIdEstate());
+            estateDTO.setTitle(fav.getEstate().getTitle());
+            estateDTO.setLocation(fav.getEstate().getAdress());
+            dto.setEstate(estateDTO);
+
+            return dto;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(list);
     }
 
     @DeleteMapping("/{id}")

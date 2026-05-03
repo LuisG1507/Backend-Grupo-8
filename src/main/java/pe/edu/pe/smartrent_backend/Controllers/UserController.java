@@ -137,10 +137,23 @@ UserController {
         return ResponseEntity.ok( lista);
     }
 
-    // Usuarios no verificados con antecedentes registrados (alto riesgo)
+    // Usuarios no verificados con antecedentes registrados
     @GetMapping("/unverified-with-backgrounds")
     public ResponseEntity<?> unverifiedWithBackgrounds() {
-        return ResponseEntity.ok(uS.findUnverifiedUsersWithBackgrounds());
+        List<Object[]> resultados = uS.findUnverifiedUsersWithBackgrounds();
+
+        List<UserUnverifiedWithBackgroundDTO> lista = new ArrayList<>();
+
+        for (Object[] row : resultados) {
+            UserUnverifiedWithBackgroundDTO dto = new UserUnverifiedWithBackgroundDTO();
+
+            dto.setName((String) row[0]);
+            dto.setLastName((String) row[1]);
+            dto.setTotalBackgrounds(((Number) row[2]).intValue());
+            lista.add(dto);
+        }
+
+        return ResponseEntity.ok(lista);
     }
 
     // Crecimiento de usuarios registrados por mes
@@ -164,7 +177,7 @@ UserController {
         List<UserEnabledByRoleDTO> lista = new ArrayList<>();
         for (Object[] row : resultados) {
             UserEnabledByRoleDTO dto = new UserEnabledByRoleDTO();
-            dto.setRole(row[0].toString());
+            dto.setRole((String) row[0]);
             dto.setEnabled(((Number) row[1]).intValue());
             dto.setDisabled(((Number) row[2]).intValue());
             lista.add(dto);

@@ -4,13 +4,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.*;
-import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsCompleteDTO;
-import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsDTO;
 import pe.edu.pe.smartrent_backend.Entities.Messages;
-import pe.edu.pe.smartrent_backend.Entities.Notifications;
+import pe.edu.pe.smartrent_backend.ServicesInterfaces.IConversationService;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IMessages;
+import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,47 +21,47 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/Messages")
 public class MessagesController {
+
+    @Autowired
+    private IUser uS;
+    @Autowired
+    private IConversationService cS;
     @Autowired
     private IMessages mS;
 
     @PostMapping("/registrar")
-    public ResponseEntity<MessagesCompleteDTO> registrar(@RequestBody MessagesCompleteDTO dto) {
+//    @PreAuthorize("hasAuthority('ADMIN')")
+    public void registrar(@RequestBody MessagesCompleteDTO dto) {
         ModelMapper m = new ModelMapper();
-        Messages n = m.map(dto, Messages.class);
-        Messages cur = mS.Registrar(n);
-        MessagesCompleteDTO responseDTO = m.map(cur, MessagesCompleteDTO.class);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        Messages msg = m.map(dto, Messages.class);
+        mS.Registrar(msg);
     }
 
-    @PutMapping("/actualizar")
-    public ResponseEntity<String> actualizar(@RequestBody MessagesCompleteDTO dto) {
-        Optional<Messages> existente = mS.listId(dto.getIdMessage());
-        if (existente.isEmpty()) {
+    @PutMapping("/actualizar/{id}")
+//    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> actualizar(@PathVariable int id, @RequestBody MessagesCompleteDTO dto) {
+        ModelMapper m = new ModelMapper();
+        Messages msg = m.map(dto, Messages.class);
+        msg.setIdMessage(id);
+
+        Messages existente = mS.listId(id).orElse(null);
+        if (existente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Mensaje no encontrado");
+                    .body("No se puede modificar. No existe un registro con el ID: " + id);
         }
-        // Validación de campos (siguiendo el ejemplo de Project de la profe)
-        if (dto.getContent() == null || dto.getContent().isEmpty()) {
-            return ResponseEntity.badRequest()
-                    .body("El contenido del mensaje no puede estar vacío");
-        }
-        Messages m = existente.get();
-        m.setContent(dto.getContent());
-        m.setStatus(dto.getStatus());
-        m.setDateSent(dto.getDateSent());
-        m.setConversation(dto.getConversation());
-        m.setUser(dto.getUser());
-        mS.Update(m);
-        return ResponseEntity.ok("Mensaje actualizado correctamente");
+
+        mS.Update(msg);
+        return ResponseEntity.ok("Registro con ID " + id + " modificado correctamente.");
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<MessagesDTO>>listar(){
+    public ResponseEntity<List<MessagesDTOInfinite>>listar(){
         ModelMapper m= new ModelMapper();
-        List<MessagesDTO>lista=mS.list().stream().map(y ->m.map(y, MessagesDTO.class)).collect(Collectors.toList());
+        List<MessagesDTOInfinite>lista=mS.list().stream().map(y ->m.map(y, MessagesDTOInfinite.class)).collect(Collectors.toList());
         return ResponseEntity.ok(lista);
     }
     @DeleteMapping("/{id}")
+//        @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         Optional<Messages> message = mS.listId(id);
         if (message.isPresent()) {
@@ -74,11 +74,29 @@ public class MessagesController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable int id) {
-        ModelMapper m = new ModelMapper();
-        Optional<Messages> project = mS.listId(id);
+        Optional<Messages> message = mS.listId(id);
 
-        if (project.isPresent()) {
-            MessagesDTO dto = m.map(project.get(), MessagesDTO.class);
+        if (message.isPresent()) {
+            Messages m = message.get();
+
+            MessagesDTOInfinite dto = new MessagesDTOInfinite();
+            dto.setContent(m.getContent());
+            dto.setStatus(m.getStatus());
+            dto.setDateSent(m.getDateSent());
+
+            MessagesDTOInfinite.UserBasicDTO userDTO = new MessagesDTOInfinite.UserBasicDTO();
+            userDTO.setIdUser(m.getUser().getIdUser());
+            userDTO.setName(m.getUser().getName());
+            userDTO.setLastName(m.getUser().getLastName());
+            userDTO.setUsername(m.getUser().getUsername());
+            userDTO.setProfilePhoto(m.getUser().getProfilePhoto());
+            userDTO.setPhoneNumber(m.getUser().getPhoneNumber());
+            dto.setUser(userDTO);
+
+            MessagesDTOInfinite.ConversationBasicDTO convDTO = new MessagesDTOInfinite.ConversationBasicDTO();
+            convDTO.setIdConversation(m.getConversation().getIdConversation());
+            dto.setConversation(convDTO);
+
             return ResponseEntity.ok(dto);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -88,27 +106,17 @@ public class MessagesController {
 
     //QuerySimple
     @GetMapping("/buscar-por-estado")
-    public ResponseEntity<List<MessagesDTO>> buscarPorEstado(@RequestParam String status) {
+//        @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<MessagesDTOInfinite>> buscarPorEstado(@RequestParam String status) {
         ModelMapper m = new ModelMapper();
-        List<MessagesDTO> lista = mS.findByStatus(status).stream()
-                .map(y -> m.map(y, MessagesDTO.class))
+        List<MessagesDTOInfinite> lista = mS.findByStatus(status).stream()
+                .map(y -> m.map(y, MessagesDTOInfinite.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(lista);
     }
 
     //QueryTomaDecision
-    @GetMapping("/urgentes-usuario")
-    public ResponseEntity<List<MessagesUserQueryDTO>> listarUrgentes() {
-        ModelMapper m = new ModelMapper();
-        List<MessagesUserQueryDTO> lista = mS.findUrgentMessagesWithUserJPQL().stream()
-                .map(y -> {
-                    MessagesUserQueryDTO dto = m.map(y, MessagesUserQueryDTO.class);
-                    dto.setUserName(y.getUser().getName()); // Mapeo manual del nombre del usuario
-                    return dto;
-                })
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(lista);
-    }
+
 
     // Usuarios con más mensajes urgentes (mayor riesgo operativo)
     @GetMapping("/urgent-users")
@@ -170,6 +178,5 @@ public class MessagesController {
         }
         return ResponseEntity.ok(lista);
     }
-
 
 }

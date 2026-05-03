@@ -13,7 +13,7 @@ import java.util.List;
 public class ReviewsServiceImplements implements IReviewsService {
 
     @Autowired
-    private IReviewsRepository rR; // <-- AQUÍ estaba el error, debe ser IReviewsRepository
+    private IReviewsRepository rR; //
 
     @Override
     public void insert(Reviews review) {
@@ -38,11 +38,6 @@ public class ReviewsServiceImplements implements IReviewsService {
     @Override
     public void update(Reviews review) {
         rR.save(review);
-    }
-
-    @Override
-    public List<Reviews> listByMinRating(Double minRating) {
-        return List.of();
     }
 
     @Override

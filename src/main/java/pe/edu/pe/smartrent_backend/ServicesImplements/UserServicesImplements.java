@@ -1,6 +1,7 @@
 package pe.edu.pe.smartrent_backend.ServicesImplements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.ObjectError;
 import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserEnabledByRoleDTO;
 import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserMonthlyGrowthDTO;
 import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserUnverifiedWithBackgroundDTO;
@@ -72,7 +73,7 @@ public class UserServicesImplements implements IUser {
     }
 
     @Override
-    public List<UserUnverifiedWithBackgroundDTO> findUnverifiedUsersWithBackgrounds() {
+    public List<Object[]> findUnverifiedUsersWithBackgrounds() {
         return uR.findUnverifiedUsersWithBackgrounds();
     }
 

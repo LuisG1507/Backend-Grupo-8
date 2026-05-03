@@ -2,6 +2,7 @@ package pe.edu.pe.smartrent_backend.Controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,23 +52,32 @@ public class RoleController {
         }).collect(Collectors.toList());
     }
 
-    //Modificar
+
     @PutMapping("/{id}")
-    public ResponseEntity<String> modificar(@PathVariable int id, @RequestBody RoleDTOudl dto) {
-        ModelMapper m = new ModelMapper();
-        Role p = m.map(dto, Role.class);
-        p.setId(id);
+    public ResponseEntity<String> modificar(@PathVariable int id, @RequestBody RoleDTO dto) {
+        try {
+            if (dto.getRol() == null || dto.getRol().trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .body("El campo 'rol' no puede estar vacío");
+            }
 
+            ModelMapper m = new ModelMapper();
+            Role p = m.map(dto, Role.class);
+            p.setId(id);
 
-        Role existente = rS.listId(id);
-        if (existente == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No se puede modificar. No existe un registro con el ID: " + id);
+            Role existente = rS.listId(id);
+            if (existente == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No se puede modificar. No existe un registro con el ID: " + id);
+            }
+
+            rS.Update(p);
+            return ResponseEntity.ok("Registro con ID " + id + " modificado correctamente.");
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.badRequest()
+                    .body("El rol '" + dto.getRol() +
+                            "' ya existe para este usuario");
         }
-
-
-        rS.Update(p);
-        return ResponseEntity.ok("Registro con ID " + id + " modificado correctamente.");
     }
 
     //Eliminar

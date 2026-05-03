@@ -69,7 +69,7 @@ public class ReviewsController {
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<String> actualizar(@PathVariable int id, @RequestBody ReviewsCompleteDTO rC) {
 
-        Reviews exist = rI.listId(id); // ← Usa el id del PathVariable, no del DTO
+        Reviews exist = rI.listId(id);
         if (exist == null) {
             return new ResponseEntity<>("La reseña no fue encontrada", HttpStatus.NOT_FOUND);
         }
@@ -98,19 +98,6 @@ public class ReviewsController {
         } else {
             return new ResponseEntity<>("No se ha encontrado el valor ingresado", HttpStatus.NOT_FOUND);
         }
-    }
-
-    @GetMapping("/filtro-calificacion/{minRating}")
-    public List<ReviewsDTO> filtrar(@PathVariable Double minRating) {
-        return rI.listByMinRating(minRating).stream().map(r -> {
-            ReviewsDTO dto = new ReviewsDTO();
-            dto.setCalification(r.getCalification());
-            dto.setComment(r.getComment());
-            dto.setCreationDate(r.getCreationDate());
-            dto.setIdUser(r.getUser().getIdUser());
-            dto.setIdEstate(r.getEstate().getIdEstate());
-            return dto;
-        }).collect(Collectors.toList());
     }
 
     // 1. Inmuebles con calificación por debajo del promedio general

@@ -61,7 +61,7 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
             "WHERE u.status_verification = false\n" +
             "GROUP BY u.id_user, u.name, u.last_name\n" +
             "ORDER BY total_antecedentes DESC", nativeQuery = true)
-    List<UserUnverifiedWithBackgroundDTO> findUnverifiedUsersWithBackgrounds();
+    List<Object[]> findUnverifiedUsersWithBackgrounds();
 
     @Query(value = "SELECT DATE_TRUNC('month', created_date) AS mes,\n" +
             "       COUNT(*) AS nuevos_usuarios\n" +
@@ -70,13 +70,12 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
             "ORDER BY mes DESC", nativeQuery = true)
     List<Object[]> findMonthlyGrowth();
 
-    @Query(value = "SELECT r.type, \n" +
+    @Query(value = "SELECT r.rol,\n" +
             "       SUM(CASE WHEN u.enabled = true THEN 1 ELSE 0 END) AS habilitados,\n" +
             "       SUM(CASE WHEN u.enabled = false THEN 1 ELSE 0 END) AS deshabilitados\n" +
             "FROM users u\n" +
-            "INNER JOIN user_rol ur ON u.id_user = ur.user_id\n" +
-            "INNER JOIN roles r ON ur.role_id = r.id\n" +
-            "GROUP BY r.type", nativeQuery = true)
+            "INNER JOIN roles r ON u.id_user = r.user_id\n" +
+            "GROUP BY r.rol", nativeQuery = true)
     List<Object[]> findEnabledUsersByRole();
 
 
