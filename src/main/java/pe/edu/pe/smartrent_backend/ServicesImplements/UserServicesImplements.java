@@ -7,6 +7,7 @@ import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserMonthlyGrowthDTO;
 import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserUnverifiedWithBackgroundDTO;
 import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserVerificationStatsDTO;
 import pe.edu.pe.smartrent_backend.Entities.User;
+import pe.edu.pe.smartrent_backend.Repositories.IRoleRepository;
 import pe.edu.pe.smartrent_backend.Repositories.IUserRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
@@ -19,6 +20,9 @@ public class UserServicesImplements implements IUser {
 
     @Autowired
     private IUserRepository uR;
+
+    @Autowired
+    private IRoleRepository rR;
 
 
     @Override
@@ -43,6 +47,9 @@ public class UserServicesImplements implements IUser {
 
     @Override
     public void Delete(Integer id) {
+        User user = uR.findById(id).orElseThrow();
+        user.getRoles().clear();
+        uR.save(user);
         uR.deleteById(id);
     }
 

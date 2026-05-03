@@ -13,7 +13,7 @@ import java.util.List;
 public class ReviewsServiceImplements implements IReviewsService {
 
     @Autowired
-    private IReviewsRepository rR; //
+    private IReviewsRepository rR; // <-- AQUÍ estaba el error, debe ser IReviewsRepository
 
     @Override
     public void insert(Reviews review) {
