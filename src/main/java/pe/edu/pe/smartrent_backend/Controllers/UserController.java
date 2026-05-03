@@ -32,13 +32,9 @@ UserController {
         uS.Register(p);
     }
 
-    //Modificar
     @PutMapping("/{id}")
     public ResponseEntity<String> modificar(@PathVariable int id, @RequestBody UserDTO dto) {
         ModelMapper m = new ModelMapper();
-        User p = m.map(dto, User.class);
-        p.setIdUser(id);
-
 
         User existente = uS.listId(id);
         if (existente == null) {
@@ -46,6 +42,18 @@ UserController {
                     .body("No se puede modificar. No existe un registro con el ID: " + id);
         }
 
+        User p = m.map(dto, User.class);
+        p.setIdUser(id);
+
+        // 3. RECONECTAR LOS ROLES (Paso crítico)
+        // Si el DTO trajo roles, debemos asegurar que cada rol reconozca a 'p' como su dueño
+        if (p.getRoles() != null && !p.getRoles().isEmpty()) {
+            p.getRoles().forEach(role -> role.setUser(p));
+        } else {
+            // Si el DTO no trajo roles, le devolvemos los que ya tenía en la BD
+            // para que Hibernate no intente borrarlos o ponerles null
+            p.setRoles(existente.getRoles());
+        }
 
         uS.Update(p);
         return ResponseEntity.ok("Registro con ID " + id + " modificado correctamente.");
@@ -170,11 +178,11 @@ UserController {
         return ResponseEntity.ok(lista);
     }
 
-    // Usuarios habilitados vs deshabilitados por rol
     @GetMapping("/enabled-by-role")
-    public ResponseEntity<?> enabledByRole() {
+    public List<UserEnabledByRoleDTO> reporteUsuariosHabilitadosPorRol() {
         List<Object[]> resultados = uS.findEnabledUsersByRole();
         List<UserEnabledByRoleDTO> lista = new ArrayList<>();
+
         for (Object[] row : resultados) {
             UserEnabledByRoleDTO dto = new UserEnabledByRoleDTO();
             dto.setRole((String) row[0]);
@@ -182,7 +190,7 @@ UserController {
             dto.setDisabled(((Number) row[2]).intValue());
             lista.add(dto);
         }
-        return ResponseEntity.ok(lista);
+        return lista;
     }
 
 }

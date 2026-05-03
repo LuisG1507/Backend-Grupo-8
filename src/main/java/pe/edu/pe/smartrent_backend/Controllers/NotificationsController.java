@@ -165,13 +165,20 @@ public class NotificationsController {
     public ResponseEntity<?> securityAlerts() {
         List<Object[]> resultados = nS.findDaysWithMostSecurityAlerts();
         List<NotificationSecurityAlertDTO> lista = new ArrayList<>();
+
         for (Object[] row : resultados) {
             NotificationSecurityAlertDTO dto = new NotificationSecurityAlertDTO();
-            dto.setCreatedDate((LocalDate) row[0]); // directo, ya es LocalDate
-            dto.setTotalAlerts(((Number) row[1]).longValue());
+
+            if (row[0] instanceof java.sql.Date) {
+                dto.setCreatedDate(((java.sql.Date) row[0]).toLocalDate());
+            } else {
+                dto.setCreatedDate((LocalDate) row[0]);
+            }
+
+            dto.setTotalAlerts(((Number) row[1]).intValue());
+
             lista.add(dto);
         }
         return ResponseEntity.ok(lista);
     }
-
 }

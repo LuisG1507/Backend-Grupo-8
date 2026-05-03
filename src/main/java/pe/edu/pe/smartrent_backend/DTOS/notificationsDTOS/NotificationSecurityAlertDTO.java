@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class NotificationSecurityAlertDTO {
 
     private LocalDate createdDate;
-    private Long totalAlerts;
+    private int totalAlerts;
 
     public LocalDate getCreatedDate() {
         return createdDate;
@@ -15,11 +15,11 @@ public class NotificationSecurityAlertDTO {
         this.createdDate = createdDate;
     }
 
-    public Long getTotalAlerts() {
+    public int getTotalAlerts() {
         return totalAlerts;
     }
 
-    public void setTotalAlerts(Long totalAlerts) {
+    public void setTotalAlerts(int totalAlerts) {
         this.totalAlerts = totalAlerts;
     }
 }
