@@ -17,8 +17,8 @@ public interface IUserBackground {
     public void Delete(Integer id); //Eliminar
 
 
-    List<Object[]> findMostFrequentTypes();
-    List<Object[]> findHighRiskUsers();
-    List<Object[]> findMostReportingSources();
-    List<Object[]> findMonthlyTrend();
+   public List<Object[]> findMostFrequentTypes();
+   public List<Object[]> findHighRiskUsers();
+   public List<Object[]> findMostReportingSources();
+   public List<Object[]> findMonthlyTrend();
 }

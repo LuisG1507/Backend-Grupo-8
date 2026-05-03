@@ -9,6 +9,7 @@ import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IConversationService;
+import pe.edu.pe.smartrent_backend.ServicesInterfaces.IMessages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,9 @@ public class ConversationController {
 
     @Autowired
     private IConversationService cI;
+
+    @Autowired
+    private IMessages mS;
 
     @PostMapping
     public ResponseEntity<String> registrar(@RequestBody ConversationDTO cD) {
@@ -83,15 +87,18 @@ public class ConversationController {
         return new ResponseEntity<>("Se ha actualizado de forma correcta", HttpStatus.OK);
     }
 
+    //Delete
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminar(@PathVariable Integer id) {
         Conversation exist = cI.listId(id);
-        if (exist != null && exist.getIdConversation() != null) {
-            cI.delete(id);
-            return new ResponseEntity<>("El valor ha sido eliminado", HttpStatus.OK);
-        } else {
+
+        if (exist == null || exist.getIdConversation() == null) {
             return new ResponseEntity<>("No se ha encontrado el valor ingresado", HttpStatus.NOT_FOUND);
         }
+        mS.deleteByConversation(id);
+        cI.delete(id);
+
+        return new ResponseEntity<>("La conversación y sus mensajes han sido eliminados", HttpStatus.OK);
     }
 
     //Listas tipo Object[]

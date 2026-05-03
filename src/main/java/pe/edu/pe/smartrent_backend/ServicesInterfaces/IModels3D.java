@@ -14,14 +14,13 @@ public interface IModels3D {
     public void actualizar(Models3D models3D);
     public List<Models3D> Listar();
     public void eliminar(Integer id);
-    List<Models3D> buscarPorEstado(String state);
-    List<Models3D> buscarPorFecha(LocalDate fecha);
-    List<Object[]> modelosConUbicacion();
-    List<Object[]> inmueblesConModelo();
-
-    List<Object[]> findEstatesWithoutModel();
-    List<Object[]> findCitiesWithMostActiveModels();
-    List<Object[]> findStateRate();
-    List<Object[]> findEstatesWithCriticalRiskPoints();
+    public List<Models3D> buscarPorEstado(String state);
+    public List<Models3D> buscarPorFecha(LocalDate fecha);
+    public List<Object[]> modelosConUbicacion();
+    public List<Object[]> inmueblesConModelo();
+    public List<Object[]> findEstatesWithoutModel();
+    public List<Object[]> findCitiesWithMostActiveModels();
+    public List<Object[]> findStateRate();
+    public List<Object[]> findEstatesWithCriticalRiskPoints();
 
 }

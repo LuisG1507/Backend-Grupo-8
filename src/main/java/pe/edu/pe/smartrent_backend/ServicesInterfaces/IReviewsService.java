@@ -10,9 +10,8 @@ public interface IReviewsService {
     public void delete(Integer id);
     public Reviews listId(Integer id);
     public void update(Reviews review);
-    public List<Reviews> listByMinRating(Double minRating);
-    List<Object[]> findEstatesBelowAverageRating();
-    List<Object[]> findLessorsWithBestRating();
-    List<Object[]> findEstatesWithNoReviews();
-    List<Object[]> findRatingDistribution();
+    public List<Object[]> findEstatesBelowAverageRating();
+    public List<Object[]> findLessorsWithBestRating();
+    public List<Object[]> findEstatesWithNoReviews();
+    public List<Object[]> findRatingDistribution();
 }

@@ -18,9 +18,6 @@ public interface IMessagesRepository extends JpaRepository <Messages, Integer> {
     List<Messages> findByStatus(String status);
 
     //QueryTomaDecisiones
-    @Query("SELECT m FROM Messages m JOIN m.user u WHERE m.status = 'URGENTE'")
-    List<Messages> findUrgentMessagesWithUserJPQL();
-
     @Query(value = "SELECT u.name, u.last_name, COUNT(m.id_message) AS mensajes_urgentes\n" +
             "FROM messages m\n" +
             "INNER JOIN users u ON m.id_user = u.id_user\n" +
@@ -57,6 +54,6 @@ public interface IMessagesRepository extends JpaRepository <Messages, Integer> {
     List<Object[]> findUsersWithNoMessages();
 
 
-
+    List<Messages> findByConversation_IdConversation(Integer conversationId);
 
 }

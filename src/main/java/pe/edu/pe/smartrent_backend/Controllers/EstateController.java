@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
+import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IEstate;
+import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +24,35 @@ public class EstateController {
     @Autowired
     private IEstate eI;
 
+    @Autowired
+    private IUser uS;
+
     @PostMapping
-    private void registrar(@RequestBody EstateDTO eD){
-        ModelMapper m = new ModelMapper();
-        Estate e = m.map(eD,Estate.class);
+    public ResponseEntity<?> registrar(@RequestBody EstateCreateDTO eD){
+        User user = uS.listId(eD.getIdUser());
+
+        if(user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Usuario no encontrado");
+        }
+
+        Estate e = new Estate();
+        e.setTitle(eD.getTitle());
+        e.setDescription(eD.getDescription());
+        e.setAdress(eD.getAdress());
+        e.setDistrict(eD.getDistrict());
+        e.setCity(eD.getCity());
+        e.setMonthlyPrice(eD.getMonthlyPrice());
+        e.setType(eD.getType());
+        e.setState(eD.getState());
+        e.setRooms(eD.getRooms());
+        e.setBathrooms(eD.getBathrooms());
+        e.setAreaM2(eD.getAreaM2());
+        e.setCreationDate(eD.getCreationDate());
+        e.setUsers(user);
+
         eI.Register(e);
+        return ResponseEntity.ok("Estate registrado correctamente");
     }
 
     @GetMapping("/listAll")
@@ -79,9 +105,46 @@ public class EstateController {
         }
     }
 
-    @GetMapping("/filtro/{f1}/{f2}/{t1}")
-    public List<Estate> filtroEstate(@PathVariable String f1, @PathVariable String f2, @PathVariable String t1){
-        return eI.filtrarInmueblesPorCiudadDistritoTipo(f1, f2, t1);
+    @GetMapping("/filtro/{Ciudad}/{Distrito}/{Tipo}")
+    public ResponseEntity<?> filtroEstate(
+            @PathVariable String Ciudad,
+            @PathVariable String Distrito,
+            @PathVariable String Tipo){
+
+        List<Estate> estates = eI.filtrarInmueblesPorCiudadDistritoTipo(Ciudad, Distrito, Tipo);
+
+        if(estates.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No hay inmuebles con ese filtro");
+        }
+
+        List<EstateFilterDTO> list = estates.stream().map(e -> {
+            EstateFilterDTO dto = new EstateFilterDTO();
+            dto.setIdEstate(e.getIdEstate());
+            dto.setTitle(e.getTitle());
+            dto.setDescription(e.getDescription());
+            dto.setAdress(e.getAdress());
+            dto.setDistrict(e.getDistrict());
+            dto.setCity(e.getCity());
+            dto.setMonthlyPrice(e.getMonthlyPrice());
+            dto.setType(e.getType());
+            dto.setState(e.getState());
+            dto.setRooms(e.getRooms());
+            dto.setBathrooms(e.getBathrooms());
+            dto.setAreaM2(e.getAreaM2());
+            dto.setCreationDate(e.getCreationDate());
+
+            EstateFilterDTO.UserBasicDTO userDTO = new EstateFilterDTO.UserBasicDTO();
+            userDTO.setIdUser(e.getUsers().getIdUser());
+            userDTO.setName(e.getUsers().getName());
+            userDTO.setLastName(e.getUsers().getLastName());
+            userDTO.setUsername(e.getUsers().getUsername());
+            dto.setUser(userDTO);
+
+            return dto;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("/amountT")

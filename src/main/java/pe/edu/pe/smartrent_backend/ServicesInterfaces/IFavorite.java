@@ -18,8 +18,8 @@ public interface IFavorite {
     public List<Favorite> list();
     public void Delete(Integer id);
 
-    List<Object[]> findMostFavoritedEstates();
-    List<Object[]> findFavoritedEstatesWithoutContract();
-    List<Object[]> findMostActiveUsers();
-    List<Object[]> findMonthlyTrend();
+    public List<Object[]> findMostFavoritedEstates();
+    public List<Object[]> findFavoritedEstatesWithoutContract();
+    public List<Object[]> findMostActiveUsers();
+    public List<Object[]> findMonthlyTrend();
 }
