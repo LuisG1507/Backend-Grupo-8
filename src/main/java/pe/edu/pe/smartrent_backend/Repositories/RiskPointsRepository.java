@@ -8,7 +8,7 @@ import pe.edu.pe.smartrent_backend.Entities.RiskPoints;
 import java.util.List;
 
 @Repository
-public interface IRiskPointsRepository extends JpaRepository<RiskPoints, Integer> {
+public interface RiskPointsRepository extends JpaRepository<RiskPoints, Integer> {
 
     //Modelos 3D con mayor cantidad de puntos de riesgo registrados
     @Query(value = "SELECT m.id_models3d, e.title, e.city, COUNT(rp.id_risk_points) AS total_puntos\n" +

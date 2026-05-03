@@ -2,16 +2,13 @@ package pe.edu.pe.smartrent_backend.Repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationsTypeDTO;
 import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationReadRateDTO;
 import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationSecurityAlertDTO;
 import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationTypeMonthlyDTO;
 import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.NotificationUnreadUserDTO;
 import pe.edu.pe.smartrent_backend.Entities.Notifications;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -19,9 +16,6 @@ public interface INotificationsRepository extends JpaRepository <Notifications, 
    //QuerySimple
     List<Notifications> findByReadFalse();
 
-    //QueryTomaa
-    @Query("SELECT n.type, COUNT(n.idNotification) FROM Notifications n GROUP BY n.type")
-    List<Object[]> getCountByTypeRaw();
 
     @Query("SELECT n FROM Notifications n WHERE n.type = 'SEGURIDAD' AND n.createdDate >= LOCAL DATE - 7 day")
     List<Notifications> findRecentSecurityAlertsJPQL();
