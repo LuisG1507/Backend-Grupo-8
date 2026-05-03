@@ -2,10 +2,12 @@ package pe.edu.pe.smartrent_backend.ServicesImplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.*;
 import pe.edu.pe.smartrent_backend.Entities.Models3D;
 import pe.edu.pe.smartrent_backend.Repositories.IModels3DRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IModels3D;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +48,7 @@ public class Models3DServiceImplements implements IModels3D {
     }
 
     @Override
-    public List<Models3D> buscarPorFecha(String fecha) {
+    public List<Models3D> buscarPorFecha(LocalDate fecha) {
         return mR.buscarPorFecha(fecha);
     }
 
@@ -58,5 +60,25 @@ public class Models3DServiceImplements implements IModels3D {
     @Override
     public List<Object[]> inmueblesConModelo() {
         return mR.inmueblesConModelo();
+    }
+
+    @Override
+    public List<Object[]> findEstatesWithoutModel() {
+        return mR.findEstatesWithoutModel();
+    }
+
+    @Override
+    public List<Object[]> findCitiesWithMostActiveModels() {
+        return mR.findCitiesWithMostActiveModels();
+    }
+
+    @Override
+    public List<Object[]> findStateRate() {
+        return mR.findStateRate();
+    }
+
+    @Override
+    public List<Object[]> findEstatesWithCriticalRiskPoints() {
+        return mR.findEstatesWithCriticalRiskPoints();
     }
 }

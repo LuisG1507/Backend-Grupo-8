@@ -2,16 +2,8 @@ package pe.edu.pe.smartrent_backend.DTOS.models3DDTOs;
 
 public class ModelEstateDTO {
     private String fileURL;
-    private String state;
     private String city;
     private String district;
-
-    public ModelEstateDTO(String fileURL, String state, String city, String district) {
-        this.fileURL = fileURL;
-        this.state = state;
-        this.city = city;
-        this.district = district;
-    }
 
     public String getFileURL() {
         return fileURL;
@@ -19,14 +11,6 @@ public class ModelEstateDTO {
 
     public void setFileURL(String fileURL) {
         this.fileURL = fileURL;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 
     public String getCity() {

@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserDTO;
-import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserIncidentsRankingDTO;
-import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserSinContraseniaDTO;
+import pe.edu.pe.smartrent_backend.DTOS.userDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
@@ -19,7 +17,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/Users")
-public class UserController {
+public class
+UserController {
 
     @Autowired
     private IUser uS;
@@ -33,13 +32,9 @@ public class UserController {
         uS.Register(p);
     }
 
-    //Modificar
     @PutMapping("/{id}")
     public ResponseEntity<String> modificar(@PathVariable int id, @RequestBody UserDTO dto) {
         ModelMapper m = new ModelMapper();
-        User p = m.map(dto, User.class);
-        p.setIdUser(id);
-
 
         User existente = uS.listId(id);
         if (existente == null) {
@@ -47,6 +42,18 @@ public class UserController {
                     .body("No se puede modificar. No existe un registro con el ID: " + id);
         }
 
+        User p = m.map(dto, User.class);
+        p.setIdUser(id);
+
+        // 3. RECONECTAR LOS ROLES (Paso crítico)
+        // Si el DTO trajo roles, debemos asegurar que cada rol reconozca a 'p' como su dueño
+        if (p.getRoles() != null && !p.getRoles().isEmpty()) {
+            p.getRoles().forEach(role -> role.setUser(p));
+        } else {
+            // Si el DTO no trajo roles, le devolvemos los que ya tenía en la BD
+            // para que Hibernate no intente borrarlos o ponerles null
+            p.setRoles(existente.getRoles());
+        }
 
         uS.Update(p);
         return ResponseEntity.ok("Registro con ID " + id + " modificado correctamente.");
@@ -123,5 +130,79 @@ public class UserController {
         return lista;
     }
 
+    // Usuarios verificados vs no verificados con porcentaje
+    @GetMapping("/verification-stats")
+    public ResponseEntity<?> verificationStats() {
+        List<Object[]> resultados = uS.findVerificationStats();
+        List<UserVerificationStatsDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            UserVerificationStatsDTO dto = new UserVerificationStatsDTO();
+            dto.setVerified(((Number) row[0]).longValue());
+            dto.setNotVerified(((Number) row[1]).longValue());
+            dto.setVerifiedPercentage(((Number) row[2]).doubleValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok( lista);
+    }
+
+    // Usuarios no verificados con antecedentes registrados (alto riesgo)
+    @GetMapping("/unverified-backgrounds")
+    public List<UserUnverifiedWithBackgroundDTO> reporteUsuariosNoVerificadosConAntecedentes() {
+        // 1. Llamar al Service que ejecuta la query nativa
+        List<Object[]> resultados = uS.findUnverifiedUsersWithBackgrounds();
+        List<UserUnverifiedWithBackgroundDTO> lista = new ArrayList<>();
+
+        // 2. Recorrer los resultados y mapear manualmente al DTO
+        for (Object[] row : resultados) {
+            UserUnverifiedWithBackgroundDTO dto = new UserUnverifiedWithBackgroundDTO();
+
+            dto.setName((String) row[0]);     // u.name
+            dto.setLastName((String) row[1]); // u.last_name
+
+            // 3. Casstear el conteo (COUNT) de forma segura usando Number
+            if (row[2] != null) {
+                dto.setTotalBackgrounds(((Number) row[2]).intValue());
+            }
+
+            lista.add(dto);
+        }
+        return lista;
+    }
+
+    // Crecimiento de usuarios registrados por mes
+    @GetMapping("/monthly-growth")
+    public ResponseEntity<?> monthlyGrowth() {
+        List<Object[]> resultados = uS.findMonthlyGrowth();
+        List<UserMonthlyGrowthDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            UserMonthlyGrowthDTO dto = new UserMonthlyGrowthDTO();
+            dto.setMonth(row[0].toString());
+            dto.setNewUsers(((Number) row[1]).longValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/enabled-by-role")
+    public List<UserEnabledByRoleDTO> reporteUsuariosHabilitadosPorRol() {
+        List<Object[]> resultados = uS.findEnabledUsersByRole();
+        List<UserEnabledByRoleDTO> lista = new ArrayList<>();
+
+        for (Object[] row : resultados) {
+            UserEnabledByRoleDTO dto = new UserEnabledByRoleDTO();
+
+            dto.setRole((String) row[0]); // r.rol
+
+            if (row[1] != null) {
+                dto.setEnabled(((Number) row[1]).intValue());
+            }
+            if (row[2] != null) {
+                dto.setDisabled(((Number) row[2]).intValue());
+            }
+
+            lista.add(dto);
+        }
+        return lista;
+    }
 
 }

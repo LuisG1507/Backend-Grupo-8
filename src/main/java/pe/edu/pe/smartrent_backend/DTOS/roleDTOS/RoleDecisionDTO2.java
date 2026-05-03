@@ -4,7 +4,7 @@ public class RoleDecisionDTO2 {
 
     private String name;
     private String last_name;
-    private String cantidad_roles;
+    private int cantidad_roles;
 
     public String getName() {
         return name;
@@ -22,11 +22,11 @@ public class RoleDecisionDTO2 {
         this.last_name = last_name;
     }
 
-    public String getCantidad_roles() {
+    public int getCantidad_roles() {
         return cantidad_roles;
     }
 
-    public void setCantidad_roles(String cantidad_roles) {
+    public void setCantidad_roles(int cantidad_roles) {
         this.cantidad_roles = cantidad_roles;
     }
 }

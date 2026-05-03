@@ -1,11 +1,12 @@
 package pe.edu.pe.smartrent_backend.ServicesImplements;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.pe.smartrent_backend.Entities.Role;
 import pe.edu.pe.smartrent_backend.Repositories.IRoleRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IRole;
-import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
+
 
 import java.util.List;
 
@@ -36,8 +37,9 @@ public class RoleServicesImplements implements IRole {
     }
 
     @Override
+    @Transactional
     public void Delete(Integer id) {
-        rR.deleteById(id);
+        rR.deleteRoleDirecto(id);  // ← Cambia deleteById por este
     }
 
 

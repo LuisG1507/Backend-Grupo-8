@@ -2,7 +2,7 @@ package pe.edu.pe.smartrent_backend.ServicesImplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.EstateAverageRatingDTO;
+import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Reviews;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IReviewsService;
 import pe.edu.pe.smartrent_backend.Repositories.IReviewsRepository; // <-- IMPORTANTE
@@ -39,14 +39,30 @@ public class ReviewsServiceImplements implements IReviewsService {
     public void update(Reviews review) {
         rR.save(review);
     }
-
+//
     @Override
     public List<Reviews> listByMinRating(Double minRating) {
         return rR.findByMinRating(minRating);
     }
 
     @Override
-    public List<EstateAverageRatingDTO> getAverageRatingPerEstate() {
-        return rR.getAverageRatingPerEstate();
+    public List<Object[]> findEstatesBelowAverageRating() {
+        return rR.findEstatesBelowAverageRating();
     }
+
+    @Override
+    public List<Object[]> findLessorsWithBestRating() {
+        return rR.findLessorsWithBestRating();
+    }
+
+    @Override
+    public List<Object[]> findEstatesWithNoReviews() {
+        return rR.findEstatesWithNoReviews();
+    }
+
+    @Override
+    public List<Object[]> findRatingDistribution() {
+        return rR.findRatingDistribution();
+    }
+
 }

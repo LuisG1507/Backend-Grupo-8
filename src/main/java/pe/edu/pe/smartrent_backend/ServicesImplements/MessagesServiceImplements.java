@@ -36,6 +36,27 @@ public class MessagesServiceImplements implements IMessages {
     public void Delete(Integer id) {
         mR.deleteById(id);
     }
+
+    @Override
+    public List<Object[]> findUsersWithMostUrgentMessages() {
+        return mR.findUsersWithMostUrgentMessages();
+    }
+
+    @Override
+    public List<Object[]> findMessageDistributionByStatus() {
+        return mR.findMessageDistributionByStatus();
+    }
+
+    @Override
+    public List<Object[]> findConversationsWithMostUrgentMessages() {
+        return mR.findConversationsWithMostUrgentMessages();
+    }
+
+    @Override
+    public List<Object[]> findUsersWithNoMessages() {
+        return mR.findUsersWithNoMessages();
+    }
+
     @Override
     public List<Messages> findByStatus(String status) {
         return mR.findByStatus(status);

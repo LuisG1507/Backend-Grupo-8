@@ -2,7 +2,7 @@ package pe.edu.pe.smartrent_backend.ServicesImplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.EstateConversationCountDTO;
+import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IConversationService;
 import pe.edu.pe.smartrent_backend.Repositories.IConversationRepository;
@@ -43,5 +43,25 @@ public class ConversationServiceImplements implements IConversationService {
     @Override
     public List<Object[]> getConversationCountPerEstate() {
         return cR.getConversationCountPerEstate();
+    }
+
+    @Override
+    public List<Object[]> findEstatesWithConversationsButNoContract() {
+        return cR.findEstatesWithConversationsButNoContract();
+    }
+
+    @Override
+    public List<Object[]> findMostActiveInitiators() {
+        return cR.findMostActiveInitiators();
+    }
+
+    @Override
+    public List<Object[]> findEstatesWithNoConversations() {
+        return cR.findEstatesWithNoConversations();
+    }
+
+    @Override
+    public List<Object[]> findAverageConversationsPerEstateByCity() {
+        return cR.findAverageConversationsPerEstateByCity();
     }
 }

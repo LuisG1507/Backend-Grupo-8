@@ -10,7 +10,9 @@ import pe.edu.pe.smartrent_backend.DTOS.roleDTOS.RoleDTOudl;
 import pe.edu.pe.smartrent_backend.DTOS.roleDTOS.RoleDecisionDTO1;
 import pe.edu.pe.smartrent_backend.DTOS.roleDTOS.RoleDecisionDTO2;
 import pe.edu.pe.smartrent_backend.Entities.Role;
+import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IRole;
+import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +25,21 @@ public class RoleController {
     @Autowired
     private IRole rS;
 
-    //Registrar
+    @Autowired
+    private IUser uS;
+
     @PostMapping
-    public void registrar(@RequestBody RoleDTOudl dto) {
-        ModelMapper m = new ModelMapper();
-        Role p = m.map(dto, Role.class);
-        rS.Register(p);
+    public ResponseEntity<String> registrar(@RequestBody RoleDTO dto) {
+        User u = uS.listId(dto.getIdUser()); // ← Busca el User real de la BD
+        if (u == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No existe un usuario con ID: " + dto.getIdUser());
+        }
+        Role r = new Role();
+        r.setRol(dto.getRol());
+        r.setUser(u); // ← Ahora sí es un objeto gestionado por JPA ✅
+        rS.Register(r);
+        return ResponseEntity.ok("Rol registrado correctamente.");
     }
 
     //Listar
@@ -118,7 +129,7 @@ public class RoleController {
             RoleDecisionDTO2 dto = new RoleDecisionDTO2();
             dto.setName((String) row[0]);
             dto.setLast_name((String) row[1]);
-            dto.setCantidad_roles((String) row[2]);
+            dto.setCantidad_roles(((Number) row[2]).intValue());
             lista.add(dto);
         }
         return lista;

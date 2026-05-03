@@ -8,7 +8,7 @@ public class Models3DDTO {
     private String fileURL;
     private String state;
     private LocalDate createDate;
-    private Estate estate;
+    private int idEstate;
 
 
     public String getFileURL() {
@@ -35,12 +35,11 @@ public class Models3DDTO {
         this.createDate = createDate;
     }
 
-    public Estate getEstate() {
-        return estate;
+    public int getIdEstate() {
+        return idEstate;
     }
 
-    public void setEstate(Estate estate) {
-        this.estate = estate;
+    public void setIdEstate(int idEstate) {
+        this.idEstate = idEstate;
     }
-
 }
