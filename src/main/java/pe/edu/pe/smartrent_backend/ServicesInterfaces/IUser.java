@@ -30,8 +30,8 @@ public interface IUser {
 
     public List<Object[]> RankingUsuariosIncidencias();
 
-    List<Object[]> findVerificationStats();
-    List<Object[]> findUnverifiedUsersWithBackgrounds();
-    List<Object[]> findMonthlyGrowth();
-    List<Object[]> findEnabledUsersByRole();
+    public List<Object[]> findVerificationStats();
+    public List<Object[]> findMonthlyGrowth();
+    public List<Object[]> findEnabledUsersByRole();
+    public List<Object[]> findUnverifiedUsersWithBackgrounds();
 }

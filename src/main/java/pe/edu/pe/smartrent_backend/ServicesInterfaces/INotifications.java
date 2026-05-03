@@ -11,6 +11,9 @@ public interface INotifications {
     public Notifications Registrar (Notifications notifications);
     //ActualizarN
     public void Update (Notifications notifications);
+
+    public Notifications listIde(Integer id);
+
     //Listar
     public List<Notifications > list();
     //Listar por Id
@@ -20,10 +23,11 @@ public interface INotifications {
     //QuerySimple
     public List<Notifications> buscarNoLeidos();
     //Query
-    public List<Notifications> findRecentSecurityAlertsJPQL();
 
-    List<Object[]> findReadRateByType();
-    List<Object[]> findUsersWithMostUnreadNotifications();
-    List<Object[]> findMostGeneratedTypesLastMonth();
-    List<Object[]> findDaysWithMostSecurityAlerts();
+    public List<NotificationsTypeDTO> getCountByType();
+
+    public List<Object[]> findReadRateByType();
+    public List<Object[]> findUsersWithMostUnreadNotifications();
+    public List<Object[]> findMostGeneratedTypesLastMonth();
+    public List<Object[]> findDaysWithMostSecurityAlerts();
 }

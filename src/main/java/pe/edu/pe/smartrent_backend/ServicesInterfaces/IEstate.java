@@ -19,10 +19,10 @@ public interface IEstate {
     public List<Object[]> EstateDistrict(String d);
     public List<Object[]> AboveAverageRents();
 
-    List<Object[]> findAvgPriceByCityAndType();
-    List<Object[]> findBestPricePerRoom();
-    List<Object[]> findDistrictsWithMostAvailableEstates();
-    List<Object[]> findDistributionByTypeAndPriceRange();
+    public List<Object[]> findAvgPriceByCityAndType();
+    public List<Object[]> findBestPricePerRoom();
+    public List<Object[]> findDistrictsWithMostAvailableEstates();
+    public List<Object[]> findDistributionByTypeAndPriceRange();
 
 
 

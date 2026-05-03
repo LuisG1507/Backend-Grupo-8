@@ -1,9 +1,6 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
 
-import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.MessagesInactiveUserDTO;
-import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.MessagesStatusDistributionDTO;
-import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.MessagesUrgentConversationDTO;
-import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.MessagesUrgentUserDTO;
+import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Messages;
 
 import java.util.List;
@@ -20,14 +17,14 @@ public interface IMessages {
     public Optional<Messages> listId(int id);
     //Eliminar
     public void Delete (Integer id);
+    public void deleteByConversation(Integer conversationId);
 
     public List<Messages>findByStatus(String status);
+
+
     //QueryToma
-    public List<Messages>findUrgentMessagesWithUserJPQL();
-
-    List<Object[]> findUsersWithMostUrgentMessages();
-    List<Object[]> findMessageDistributionByStatus();
-    List<Object[]> findConversationsWithMostUrgentMessages();
-    List<Object[]> findUsersWithNoMessages();
-
+    public List<Object[]> findUsersWithMostUrgentMessages();
+    public List<Object[]> findMessageDistributionByStatus();
+    public List<Object[]> findConversationsWithMostUrgentMessages();
+    public List<Object[]> findUsersWithNoMessages();
 }

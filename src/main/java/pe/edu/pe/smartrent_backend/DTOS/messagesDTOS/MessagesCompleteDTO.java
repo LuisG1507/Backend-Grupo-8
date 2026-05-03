@@ -1,8 +1,5 @@
 package pe.edu.pe.smartrent_backend.DTOS.messagesDTOS;
 
-import pe.edu.pe.smartrent_backend.Entities.Conversation;
-import pe.edu.pe.smartrent_backend.Entities.User;
-
 import java.time.LocalDate;
 
 public class MessagesCompleteDTO {
@@ -10,56 +7,24 @@ public class MessagesCompleteDTO {
     private String content;
     private String status;
     private LocalDate dateSent;
-    private Conversation conversation;
-    private User user;
+    private Integer idConversation;
+    private Integer idUser;
 
+    public Integer getIdMessage() { return idMessage; }
+    public void setIdMessage(Integer idMessage) { this.idMessage = idMessage; }
 
-    public Integer getIdMessage() {
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
 
-        return idMessage;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public void setIdMessage(Integer idMessage) {
-        this.idMessage = idMessage;
-    }
+    public LocalDate getDateSent() { return dateSent; }
+    public void setDateSent(LocalDate dateSent) { this.dateSent = dateSent; }
 
-    public String getContent() {
-        return content;
-    }
+    public Integer getIdConversation() { return idConversation; }
+    public void setIdConversation(Integer idConversation) { this.idConversation = idConversation; }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDate getDateSent() {
-        return dateSent;
-    }
-
-    public void setDateSent(LocalDate dateSent) {
-        this.dateSent = dateSent;
-    }
-
-    public Conversation getConversation() {
-        return conversation;
-    }
-
-    public void setConversation(Conversation conversation) {
-        this.conversation = conversation;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+    public Integer getIdUser() { return idUser; }
+    public void setIdUser(Integer idUser) { this.idUser = idUser; }
 }

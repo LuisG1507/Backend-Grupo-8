@@ -145,28 +145,23 @@ UserController {
         return ResponseEntity.ok( lista);
     }
 
-    // Usuarios no verificados con antecedentes registrados (alto riesgo)
-    @GetMapping("/unverified-backgrounds")
-    public List<UserUnverifiedWithBackgroundDTO> reporteUsuariosNoVerificadosConAntecedentes() {
-        // 1. Llamar al Service que ejecuta la query nativa
+    // Usuarios no verificados con antecedentes registrados
+    @GetMapping("/unverified-with-backgrounds")
+    public ResponseEntity<?> unverifiedWithBackgrounds() {
         List<Object[]> resultados = uS.findUnverifiedUsersWithBackgrounds();
+
         List<UserUnverifiedWithBackgroundDTO> lista = new ArrayList<>();
 
-        // 2. Recorrer los resultados y mapear manualmente al DTO
         for (Object[] row : resultados) {
             UserUnverifiedWithBackgroundDTO dto = new UserUnverifiedWithBackgroundDTO();
 
-            dto.setName((String) row[0]);     // u.name
-            dto.setLastName((String) row[1]); // u.last_name
-
-            // 3. Casstear el conteo (COUNT) de forma segura usando Number
-            if (row[2] != null) {
-                dto.setTotalBackgrounds(((Number) row[2]).intValue());
-            }
-
+            dto.setName((String) row[0]);
+            dto.setLastName((String) row[1]);
+            dto.setTotalBackgrounds(((Number) row[2]).intValue());
             lista.add(dto);
         }
-        return lista;
+
+        return ResponseEntity.ok(lista);
     }
 
     // Crecimiento de usuarios registrados por mes
@@ -190,16 +185,9 @@ UserController {
 
         for (Object[] row : resultados) {
             UserEnabledByRoleDTO dto = new UserEnabledByRoleDTO();
-
-            dto.setRole((String) row[0]); // r.rol
-
-            if (row[1] != null) {
-                dto.setEnabled(((Number) row[1]).intValue());
-            }
-            if (row[2] != null) {
-                dto.setDisabled(((Number) row[2]).intValue());
-            }
-
+            dto.setRole((String) row[0]);
+            dto.setEnabled(((Number) row[1]).intValue());
+            dto.setDisabled(((Number) row[2]).intValue());
             lista.add(dto);
         }
         return lista;

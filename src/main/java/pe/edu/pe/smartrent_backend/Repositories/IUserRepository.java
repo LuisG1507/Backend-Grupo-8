@@ -70,7 +70,7 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
             "ORDER BY mes DESC", nativeQuery = true)
     List<Object[]> findMonthlyGrowth();
 
-    @Query(value = "SELECT r.rol, \n" +
+    @Query(value = "SELECT r.rol,\n" +
             "       SUM(CASE WHEN u.enabled = true THEN 1 ELSE 0 END) AS habilitados,\n" +
             "       SUM(CASE WHEN u.enabled = false THEN 1 ELSE 0 END) AS deshabilitados\n" +
             "FROM users u\n" +
