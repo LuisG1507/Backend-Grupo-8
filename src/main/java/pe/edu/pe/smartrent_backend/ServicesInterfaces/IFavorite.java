@@ -1,12 +1,5 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
-
-import pe.edu.pe.smartrent_backend.DTOS.favoriteDTOS.FavoriteEstateDTO;
-import pe.edu.pe.smartrent_backend.DTOS.favoriteDTOS.FavoriteMonthlyTrendDTO;
-import pe.edu.pe.smartrent_backend.DTOS.favoriteDTOS.FavoriteNoContractDTO;
-import pe.edu.pe.smartrent_backend.DTOS.favoriteDTOS.FavoriteUsersDTO;
 import pe.edu.pe.smartrent_backend.Entities.Favorite;
-import pe.edu.pe.smartrent_backend.Entities.User;
-
 import java.util.List;
 import java.util.Optional;
 

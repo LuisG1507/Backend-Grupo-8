@@ -1,7 +1,5 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
-
 import pe.edu.pe.smartrent_backend.Entities.RiskReport;
-
 import java.util.List;
 
 public interface IRiskReport {

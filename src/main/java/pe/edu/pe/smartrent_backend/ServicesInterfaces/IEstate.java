@@ -1,9 +1,5 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
-
-
-import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
-
 import java.util.List;
 import java.util.Optional;
 

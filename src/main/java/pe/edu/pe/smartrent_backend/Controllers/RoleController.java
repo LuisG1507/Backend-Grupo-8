@@ -31,14 +31,14 @@ public class RoleController {
 
     @PostMapping
     public ResponseEntity<String> registrar(@RequestBody RoleDTO dto) {
-        User u = uS.listId(dto.getIdUser()); // ← Busca el User real de la BD
+        User u = uS.listId(dto.getIdUser());
         if (u == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("No existe un usuario con ID: " + dto.getIdUser());
         }
         Role r = new Role();
         r.setRol(dto.getRol());
-        r.setUser(u); // ← Ahora sí es un objeto gestionado por JPA ✅
+        r.setUser(u);
         rS.Register(r);
         return ResponseEntity.ok("Rol registrado correctamente.");
     }
