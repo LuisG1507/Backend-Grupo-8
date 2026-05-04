@@ -30,7 +30,7 @@ public class MessagesController {
     private IMessages mS;
 
     @PostMapping("/registrar")
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public void registrar(@RequestBody MessagesCompleteDTO dto) {
         ModelMapper m = new ModelMapper();
         Messages msg = m.map(dto, Messages.class);
@@ -38,7 +38,7 @@ public class MessagesController {
     }
 
     @PutMapping("/actualizar/{id}")
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> actualizar(@PathVariable int id, @RequestBody MessagesCompleteDTO dto) {
         ModelMapper m = new ModelMapper();
         Messages msg = m.map(dto, Messages.class);
@@ -55,13 +55,14 @@ public class MessagesController {
     }
 
     @GetMapping("/listar")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<List<MessagesDTOInfinite>>listar(){
         ModelMapper m= new ModelMapper();
         List<MessagesDTOInfinite>lista=mS.list().stream().map(y ->m.map(y, MessagesDTOInfinite.class)).collect(Collectors.toList());
         return ResponseEntity.ok(lista);
     }
     @DeleteMapping("/{id}")
-//        @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         Optional<Messages> message = mS.listId(id);
         if (message.isPresent()) {
@@ -73,6 +74,7 @@ public class MessagesController {
         }
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> buscarPorId(@PathVariable int id) {
         Optional<Messages> message = mS.listId(id);
 
@@ -106,7 +108,7 @@ public class MessagesController {
 
     //QuerySimple
     @GetMapping("/buscar-por-estado")
-//        @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<MessagesDTOInfinite>> buscarPorEstado(@RequestParam String status) {
         ModelMapper m = new ModelMapper();
         List<MessagesDTOInfinite> lista = mS.findByStatus(status).stream()
@@ -120,6 +122,7 @@ public class MessagesController {
 
     // Usuarios con más mensajes urgentes (mayor riesgo operativo)
     @GetMapping("/urgent-users")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<?> urgentUsers() {
         List<Object[]> resultados = mS.findUsersWithMostUrgentMessages();
         List<MessagesUrgentUserDTO> lista = new ArrayList<>();
@@ -135,6 +138,7 @@ public class MessagesController {
 
     //Distribución de mensajes por status con porcentaje
     @GetMapping("/status-distribution")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> statusDistribution() {
         List<Object[]> resultados = mS.findMessageDistributionByStatus();
         List<MessagesStatusDistributionDTO> lista = new ArrayList<>();
@@ -150,6 +154,7 @@ public class MessagesController {
 
     //Conversaciones con mayor concentración de mensajes urgentes
     @GetMapping("/urgent-conversations")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<?> urgentConversations() {
         List<Object[]> resultados = mS.findConversationsWithMostUrgentMessages();
         List<MessagesUrgentConversationDTO> lista = new ArrayList<>();
@@ -165,6 +170,7 @@ public class MessagesController {
 
     // Usuarios sin ningún mensaje enviado (posiblemente inactivos)
     @GetMapping("/inactive-users")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> inactiveUsers() {
         List<Object[]> resultados = mS.findUsersWithNoMessages();
         List<MessagesInactiveUserDTO> lista = new ArrayList<>();
