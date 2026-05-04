@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.*;
@@ -32,6 +33,7 @@ public class ReviewsController {
     private IEstate eS;
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<String> registrar(@RequestBody ReviewsDTO rD) {
         ModelMapper m = new ModelMapper();
         Reviews r = m.map(rD, Reviews.class);
@@ -49,6 +51,7 @@ public class ReviewsController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> listarTodo() {
         ModelMapper m = new ModelMapper();
         List<ReviewsCompleteDTO> list = rI.list().stream().map(y -> {
@@ -67,6 +70,7 @@ public class ReviewsController {
     }
 
     @PutMapping("/actualizar/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> actualizar(@PathVariable int id, @RequestBody ReviewsCompleteDTO rC) {
 
         Reviews exist = rI.listId(id);
@@ -90,6 +94,7 @@ public class ReviewsController {
         return new ResponseEntity<>("Se ha actualizado de forma correcta", HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable Integer id) {
         Reviews exist = rI.listId(id);
         if (exist != null && exist.getIdReview() != null) {
@@ -102,6 +107,7 @@ public class ReviewsController {
 
     // 1. Inmuebles con calificación por debajo del promedio general
     @GetMapping("/below-average")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> belowAverage() {
         List<Object[]> resultados = rI.findEstatesBelowAverageRating();
         List<ReviewsBelowAverageDTO> lista = new ArrayList<>();
@@ -117,6 +123,7 @@ public class ReviewsController {
 
     // Arrendadores con mejor calificación promedio en sus inmuebles
     @GetMapping("/best-lessors")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> bestLessors() {
         List<Object[]> resultados = rI.findLessorsWithBestRating();
         List<ReviewsLessorRatingDTO> lista = new ArrayList<>();
@@ -133,6 +140,7 @@ public class ReviewsController {
 
     // Inmuebles sin ninguna reseña (sin retroalimentación)
     @GetMapping("/no-reviews")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> noReviews() {
         List<Object[]> resultados = rI.findEstatesWithNoReviews();
         List<ReviewsNoReviewEstateDTO> lista = new ArrayList<>();
@@ -148,7 +156,10 @@ public class ReviewsController {
     }
 
     //Distribución de calificaciones en la plataforma
+
+
     @GetMapping("/rating-distribution")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> ratingDistribution() {
         List<Object[]> resultados = rI.findRatingDistribution();
         List<ReviewsRatingDistributionDTO> lista = new ArrayList<>();
