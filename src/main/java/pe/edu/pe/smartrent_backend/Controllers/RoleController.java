@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.roleDTOS.RoleDTO;
 import pe.edu.pe.smartrent_backend.DTOS.roleDTOS.RoleDTOudl;
@@ -30,6 +31,7 @@ public class RoleController {
     private IUser uS;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> registrar(@RequestBody RoleDTO dto) {
         User u = uS.listId(dto.getIdUser());
         if (u == null) {
@@ -45,6 +47,7 @@ public class RoleController {
 
     //Listar
     @GetMapping("/ListarRoles")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<RoleDTO> listar() {
         return rS.list().stream().map(x -> {
             ModelMapper m = new ModelMapper();
@@ -54,6 +57,7 @@ public class RoleController {
 
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> modificar(@PathVariable int id, @RequestBody RoleDTO dto) {
         try {
             if (dto.getRol() == null || dto.getRol().trim().isEmpty()) {
@@ -82,6 +86,7 @@ public class RoleController {
 
     //Eliminar
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable("id") Integer id) {
         Role p = rS.listId(id);
         if (p == null) {
@@ -95,6 +100,7 @@ public class RoleController {
 
     //Listar por ID
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {
         Role p = rS.listId(id);
         if (p == null) {
@@ -114,6 +120,7 @@ public class RoleController {
 
     //Distribución de roles en la plataforma con porcentaje
     @GetMapping("/decision-01")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<RoleDecisionDTO1> reporteDecision1() {
         List<Object[]> resultados = rS.RDecision1();
         List<RoleDecisionDTO1> lista = new ArrayList<>();
@@ -131,6 +138,7 @@ public class RoleController {
 
     //Usuarios con más de un rol asignado
     @GetMapping("/decision-02")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<RoleDecisionDTO2> reporteDecision2() {
         List<Object[]> resultados = rS.RDecision2();
         List<RoleDecisionDTO2> lista = new ArrayList<>();
@@ -144,7 +152,4 @@ public class RoleController {
         }
         return lista;
     }
-
-
-
 }
