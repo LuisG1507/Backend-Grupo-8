@@ -28,6 +28,7 @@ public class FavoriteController {
 
     //Register
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> Register(@RequestBody FavoriteDTO fD){
         try{
             ModelMapper m = new ModelMapper();
@@ -40,6 +41,7 @@ public class FavoriteController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> Update(@RequestBody FavoriteCompleteDTO fD){
         Optional<Favorite> exist = fC.listId(fD.getIdFavorite());
         if(exist.isEmpty()){
@@ -55,6 +57,7 @@ public class FavoriteController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> ListFavorite(){
         List<Favorite> favorites = fC.list();
 
@@ -85,6 +88,7 @@ public class FavoriteController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Integer id){
         Optional<Favorite> exist = fC.listId(id);
         if(exist.isPresent()){
@@ -96,6 +100,7 @@ public class FavoriteController {
     }
 
     @GetMapping("/most-demanded")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<List<FavoriteEstateDTO>> getMostDemanded() {
         List<Object[]> resultados = fC.findMostFavoritedEstates();
         List<FavoriteEstateDTO> lista = new ArrayList<>();
@@ -112,6 +117,7 @@ public class FavoriteController {
     }
 
     @GetMapping("/unconverted-demand")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<List<FavoriteNoContractDTO>> getUnconvertedDemand() {
         List<Object[]> resultados = fC.findFavoritedEstatesWithoutContract();
         List<FavoriteNoContractDTO> lista = new ArrayList<>();
@@ -126,6 +132,7 @@ public class FavoriteController {
     }
 
     @GetMapping("/most-active-users")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<List<FavoriteUsersDTO>> getMostActiveUsers() {
         List<Object[]> resultados = fC.findMostActiveUsers();
         List<FavoriteUsersDTO> lista = new ArrayList<>();
@@ -140,6 +147,7 @@ public class FavoriteController {
     }
 
     @GetMapping("/monthly-trends")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<List<FavoriteMonthlyTrendDTO>> getMonthlyTrends() {
         List<Object[]> resultados = fC.findMonthlyTrend();
         List<FavoriteMonthlyTrendDTO> lista = new ArrayList<>();
