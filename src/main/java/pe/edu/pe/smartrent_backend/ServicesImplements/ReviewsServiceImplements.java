@@ -13,7 +13,7 @@ import java.util.List;
 public class ReviewsServiceImplements implements IReviewsService {
 
     @Autowired
-    private IReviewsRepository rR;
+    private IReviewsRepository rR; //
 
     @Override
     public void insert(Reviews review) {
