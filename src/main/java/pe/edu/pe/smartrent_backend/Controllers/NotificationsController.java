@@ -56,7 +56,7 @@ public class NotificationsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Mensaje no encontrado");
         }
-        // Validación de campos (siguiendo el ejemplo de Project de la profe)
+
         if (dto.getMessage() == null || dto.getMessage().isEmpty()) {
             return ResponseEntity.badRequest()
                     .body("El contenido del mensaje no puede estar vacío");

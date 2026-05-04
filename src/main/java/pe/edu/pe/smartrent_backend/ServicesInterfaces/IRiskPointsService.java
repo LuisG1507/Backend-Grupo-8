@@ -1,7 +1,4 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import pe.edu.pe.smartrent_backend.Entities.RiskPoints;
 import java.util.List;
 

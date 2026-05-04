@@ -1,8 +1,6 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
-
 import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Notifications;
-
 import java.util.List;
 import java.util.Optional;
 

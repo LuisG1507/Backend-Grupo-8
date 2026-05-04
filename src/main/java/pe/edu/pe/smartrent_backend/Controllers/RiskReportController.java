@@ -4,6 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
@@ -28,9 +30,10 @@ public class RiskReportController {
     private IUser uS;
 
     @Autowired
-    private IEstate eS; // o como tengas tu servicio de Estate
+    private IEstate eS;
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<String> registrar(@RequestBody RiskReportDTO dto) {
 
         User u = uS.listId(dto.getIdUser());
@@ -47,14 +50,15 @@ public class RiskReportController {
         p.setRiskLevel(dto.getRiskLevel());
         p.setDescription(dto.getDescription());
         p.setDetails(dto.getDetails());
-        p.setUser(u);   // ✅ Objeto real de BD
-        p.setEstate(e); // ✅ Objeto real de BD
+        p.setUser(u);
+        p.setEstate(e);
 
         rS.Register(p);
         return ResponseEntity.ok("Reporte de riesgo registrado correctamente.");
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<String> modificar(@PathVariable int id, @RequestBody RiskReportDTO dto) {
 
         RiskReport existente = rS.listId(id);
@@ -85,6 +89,7 @@ public class RiskReportController {
 
     //Listar
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<RiskReportDTO> listar() {
         return rS.list().stream().map(x -> {
             ModelMapper m = new ModelMapper();
@@ -94,6 +99,7 @@ public class RiskReportController {
 
     //Eliminar
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable("id") Integer id) {
         RiskReport p = rS.listId(id);
         if (p == null) {
@@ -112,6 +118,7 @@ public class RiskReportController {
 
     //// Inmuebles con más reportes de riesgo
     @GetMapping("/Decision1")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public List<RiskReportDecisionDTO1> D1() {
         List<Object[]> resultados = rS.RRDecision1();
         List<RiskReportDecisionDTO1> lista = new ArrayList<>();
@@ -128,6 +135,7 @@ public class RiskReportController {
 
     // Distribución de reportes por nivel de riesgo con porcentaje
     @GetMapping("/Decision2")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public List<RiskReportDecisionDTO2> obtenerReporteRiesgos() {
         List<Object[]> resultados = rS.RRDecision2();
         List<RiskReportDecisionDTO2> lista = new ArrayList<>();
@@ -149,6 +157,7 @@ public class RiskReportController {
     // Usuarios que más reportes han generado
 
     @GetMapping("/Decision3")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public List<RiskReportDecisionDTO3> reporteDecision3() {
         List<Object[]> resultados = rS.RRDecision3();
         List<RiskReportDecisionDTO3> lista = new ArrayList<>();
@@ -165,6 +174,7 @@ public class RiskReportController {
 
   //4. Inmuebles con nivel de riesgo ALTO que aún tienen contrato activo (situación crítica)
     @GetMapping("/decision-04")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public List<RiskReportDecisionDTO4> reporteDecision4() {
         List<Object[]> resultados = rS.RRDecision4();
         List<RiskReportDecisionDTO4> lista = new ArrayList<>();

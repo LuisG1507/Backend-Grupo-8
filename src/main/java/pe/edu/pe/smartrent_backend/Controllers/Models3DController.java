@@ -137,9 +137,9 @@ public class Models3DController {
         for (Object[] fila : resultados) {
             ModelEstateDTO dto = new ModelEstateDTO();
 
-            dto.setCity((String) fila[0]);      // e.city
-            dto.setDistrict((String) fila[1]);  // e.district
-            dto.setFileURL((String) fila[2]);   // m.fileURL
+            dto.setCity((String) fila[0]);
+            dto.setDistrict((String) fila[1]);
+            dto.setFileURL((String) fila[2]);
             listaMapeada.add(dto);
         }
         return listaMapeada;

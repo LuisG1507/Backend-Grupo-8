@@ -1,6 +1,4 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
-
-import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import java.util.List;
 

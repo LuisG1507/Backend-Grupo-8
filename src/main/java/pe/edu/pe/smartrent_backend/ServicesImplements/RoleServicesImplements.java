@@ -39,7 +39,7 @@ public class RoleServicesImplements implements IRole {
     @Override
     @Transactional
     public void Delete(Integer id) {
-        rR.deleteRoleDirecto(id);  // ← Cambia deleteById por este
+        rR.deleteRoleDirecto(id);
     }
 
 

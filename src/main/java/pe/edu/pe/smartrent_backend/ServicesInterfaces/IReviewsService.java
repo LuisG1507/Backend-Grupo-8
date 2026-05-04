@@ -1,6 +1,4 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
-
-import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Reviews;
 import java.util.List;
 

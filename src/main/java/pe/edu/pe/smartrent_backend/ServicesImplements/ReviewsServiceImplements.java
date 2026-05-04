@@ -39,7 +39,7 @@ public class ReviewsServiceImplements implements IReviewsService {
     public void update(Reviews review) {
         rR.save(review);
     }
-//
+
     @Override
     public List<Object[]> findEstatesBelowAverageRating() {
         return rR.findEstatesBelowAverageRating();
