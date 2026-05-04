@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS.*;
@@ -25,6 +26,7 @@ public class UserBackgroundController {
 
     //Registrar
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public void registrar(@RequestBody UserBackgroundDTO dto) {
         ModelMapper m = new ModelMapper();
         UsersBackground p = m.map(dto, UsersBackground.class);
@@ -34,15 +36,17 @@ public class UserBackgroundController {
 
     //Listar
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public List<UserBackgroundGETDTO> listar() {
         return ubS.list().stream().map(x -> {
             ModelMapper m = new ModelMapper();
             return m.map(x, UserBackgroundGETDTO.class);
         }).collect(Collectors.toList());
     }
-
+//    @PreAuthorize("hasAuthority('ADMIN')")
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<String> modificar(@PathVariable int id, @RequestBody UserBackgroundDTO dto) {
         ModelMapper m = new ModelMapper();
         UsersBackground p = m.map(dto, UsersBackground.class);
@@ -63,6 +67,7 @@ public class UserBackgroundController {
 
     //Eliminar
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<String> eliminar(@PathVariable("id") Integer id) {
         UsersBackground p = ubS.listId(id);
         if (p == null) {
@@ -75,6 +80,7 @@ public class UserBackgroundController {
 
 
     @GetMapping("/frequency-type")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public List<UserBackgroundTypeFrequencyDTO> reporteDecision1() {
         List<Object[]> resultados = ubS.findMostFrequentTypes();
         List<UserBackgroundTypeFrequencyDTO> lista = new ArrayList<>();
@@ -90,6 +96,7 @@ public class UserBackgroundController {
     }
 
     @GetMapping("/high-risk")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public List<UserBackgroundAverageDTO> userBackgroundAverage() {
         List<Object[]> resultados = ubS.findHighRiskUsers();
         List<UserBackgroundAverageDTO> lista = new ArrayList<>();
@@ -105,6 +112,7 @@ public class UserBackgroundController {
     }
 
     @GetMapping("/sources-reports")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public List<UserBackgroundSourceDTO> userBackgroundSource() {
         List<Object[]> resultados = ubS.findMostReportingSources();
         List<UserBackgroundSourceDTO> lista = new ArrayList<>();
@@ -119,6 +127,7 @@ public class UserBackgroundController {
     }
 
     @GetMapping("/monthly-trend")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public List<UserBackgroundMonthlyDTO> monthlyList() {
         List<Object[]> resultados = ubS.findMonthlyTrend();
         List<UserBackgroundMonthlyDTO> lista = new ArrayList<>();

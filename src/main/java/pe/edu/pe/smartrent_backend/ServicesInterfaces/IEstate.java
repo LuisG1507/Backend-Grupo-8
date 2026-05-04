@@ -1,9 +1,5 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
-
-
-import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -19,10 +15,10 @@ public interface IEstate {
     public List<Object[]> EstateDistrict(String d);
     public List<Object[]> AboveAverageRents();
 
-    List<Object[]> findAvgPriceByCityAndType();
-    List<Object[]> findBestPricePerRoom();
-    List<Object[]> findDistrictsWithMostAvailableEstates();
-    List<Object[]> findDistributionByTypeAndPriceRange();
+    public List<Object[]> findAvgPriceByCityAndType();
+    public List<Object[]> findBestPricePerRoom();
+    public List<Object[]> findDistrictsWithMostAvailableEstates();
+    public List<Object[]> findDistributionByTypeAndPriceRange();
 
 
 

@@ -2,10 +2,6 @@ package pe.edu.pe.smartrent_backend.ServicesImplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.ContractEstateRotationDTO;
-import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.ContractExpiringDTO;
-import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.ContractLessorContractRateDTO;
-import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.ContractLessorIncomeDTO;
 import pe.edu.pe.smartrent_backend.Entities.Contract;
 import pe.edu.pe.smartrent_backend.Repositories.IContractRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IContractService;

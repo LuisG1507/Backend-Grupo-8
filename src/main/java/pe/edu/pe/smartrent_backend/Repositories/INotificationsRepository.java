@@ -20,6 +20,10 @@ public interface INotificationsRepository extends JpaRepository <Notifications, 
     @Query("SELECT n FROM Notifications n WHERE n.type = 'SEGURIDAD' AND n.createdDate >= LOCAL DATE - 7 day")
     List<Notifications> findRecentSecurityAlertsJPQL();
 
+    @Query("SELECT n.type, COUNT(n.idNotification) FROM Notifications n GROUP BY n.type")
+    List<Object[]> getCountByTypeRaw();
+
+
     @Query(value = "SELECT type,\n" +
             "       COUNT(*) AS total,\n" +
             "       SUM(CASE WHEN read = true THEN 1 ELSE 0 END) AS leidas,\n" +
@@ -44,12 +48,15 @@ public interface INotificationsRepository extends JpaRepository <Notifications, 
             "ORDER BY total DESC", nativeQuery = true)
     List<Object[]> findMostGeneratedTypesLastMonth();
 
-    @Query(value = "SELECT created_date, COUNT(*) AS total_alertas\n" +
-            "FROM notification\n" +
-            "WHERE type = 'SEGURIDAD'\n" +
-            "GROUP BY created_date\n" +
-            "ORDER BY total_alertas DESC", nativeQuery = true)
+    @Query(value = "SELECT created_date, COUNT(*) as total " +
+            "FROM notification " +
+            "WHERE UPPER(type) = 'SEGURIDAD' " +
+            "GROUP BY created_date " +
+            "ORDER BY total DESC", nativeQuery = true)
     List<Object[]> findDaysWithMostSecurityAlerts();
+
+
+
 
 
 }

@@ -3,12 +3,14 @@ package pe.edu.pe.smartrent_backend.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IConversationService;
+import pe.edu.pe.smartrent_backend.ServicesInterfaces.IMessages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,11 @@ public class ConversationController {
     @Autowired
     private IConversationService cI;
 
+    @Autowired
+    private IMessages mS;
+
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> registrar(@RequestBody ConversationDTO cD) {
         Conversation c = new Conversation();
 
@@ -42,6 +48,7 @@ public class ConversationController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listarTodo() {
         List<ConversationCompleteDTO> list = cI.list().stream().map(y -> {
             ConversationCompleteDTO dto = new ConversationCompleteDTO();
@@ -60,6 +67,7 @@ public class ConversationController {
     }
 
     @PutMapping("/actualizar")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> actualizar(@RequestBody ConversationCompleteDTO cC) {
         Conversation exist = cI.listId(cC.getId());
         if (exist == null || exist.getIdConversation() == null) {
@@ -83,19 +91,24 @@ public class ConversationController {
         return new ResponseEntity<>("Se ha actualizado de forma correcta", HttpStatus.OK);
     }
 
+    //Delete
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable Integer id) {
         Conversation exist = cI.listId(id);
-        if (exist != null && exist.getIdConversation() != null) {
-            cI.delete(id);
-            return new ResponseEntity<>("El valor ha sido eliminado", HttpStatus.OK);
-        } else {
+
+        if (exist == null || exist.getIdConversation() == null) {
             return new ResponseEntity<>("No se ha encontrado el valor ingresado", HttpStatus.NOT_FOUND);
         }
+        mS.deleteByConversation(id);
+        cI.delete(id);
+
+        return new ResponseEntity<>("La conversación y sus mensajes han sido eliminados", HttpStatus.OK);
     }
 
     //Listas tipo Object[]
     @GetMapping("/reporte-popularidad")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<EstateConversationCountDTO> ECD() {
         List<Object[]> resultados = cI.getConversationCountPerEstate();
         List<EstateConversationCountDTO> lista = new ArrayList<>();
@@ -109,6 +122,7 @@ public class ConversationController {
     }
 
     @GetMapping("/unconverted-interest")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> unconvertedInterest() {
         List<Object[]> resultados = cI.findEstatesWithConversationsButNoContract();
         List<ConversationEstateInterestDTO> lista = new ArrayList<>();
@@ -123,6 +137,7 @@ public class ConversationController {
     }
 
     @GetMapping("/most-active-initiators")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> mostActiveInitiators() {
         List<Object[]> resultados = cI.findMostActiveInitiators();
         List<ConversationUserCountDTO> lista = new ArrayList<>();
@@ -137,6 +152,7 @@ public class ConversationController {
     }
 
     @GetMapping("/no-conversations")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> noConversations() {
         List<Object[]> resultados = cI.findEstatesWithNoConversations();
         List<ConversationNoEstateDTO> lista = new ArrayList<>();
@@ -152,6 +168,7 @@ public class ConversationController {
     }
 
     @GetMapping("/average-by-city")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> averageByCity() {
         List<Object[]> resultados = cI.findAverageConversationsPerEstateByCity();
         List<ConversationAverageCityDTO> lista = new ArrayList<>();

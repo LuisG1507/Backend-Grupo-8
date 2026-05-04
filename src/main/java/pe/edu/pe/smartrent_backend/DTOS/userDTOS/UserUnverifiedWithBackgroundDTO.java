@@ -3,7 +3,7 @@ package pe.edu.pe.smartrent_backend.DTOS.userDTOS;
 public class UserUnverifiedWithBackgroundDTO {
     private String name;
     private String lastName;
-    private Long totalBackgrounds;
+    private int totalBackgrounds;
 
     public String getName() {
         return name;
@@ -21,11 +21,11 @@ public class UserUnverifiedWithBackgroundDTO {
         this.lastName = lastName;
     }
 
-    public Long getTotalBackgrounds() {
+    public int getTotalBackgrounds() {
         return totalBackgrounds;
     }
 
-    public void setTotalBackgrounds(Long totalBackgrounds) {
+    public void setTotalBackgrounds(int totalBackgrounds) {
         this.totalBackgrounds = totalBackgrounds;
     }
 }

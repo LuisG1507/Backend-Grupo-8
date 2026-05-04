@@ -2,10 +2,6 @@ package pe.edu.pe.smartrent_backend.ServicesImplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS.UserBackgroundAverageDTO;
-import pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS.UserBackgroundMonthlyDTO;
-import pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS.UserBackgroundSourceDTO;
-import pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS.UserBackgroundTypeFrequencyDTO;
 import pe.edu.pe.smartrent_backend.Entities.UsersBackground;
 import pe.edu.pe.smartrent_backend.Repositories.IUserBackgroundRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUserBackground;

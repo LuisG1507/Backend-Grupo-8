@@ -32,9 +32,9 @@ public class NotificationsController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<NotificationsDTO>> listar() {
+    public ResponseEntity<List<NotificationDTOInfinite>> listar() {
         ModelMapper m = new ModelMapper();
-        List<NotificationsDTO> lista = nS.list().stream().map(y -> m.map(y, NotificationsDTO.class)).collect(Collectors.toList());
+        List<NotificationDTOInfinite> lista = nS.list().stream().map(y -> m.map(y, NotificationDTOInfinite.class)).collect(Collectors.toList());
         return ResponseEntity.ok(lista);
     }
 
@@ -56,7 +56,7 @@ public class NotificationsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Mensaje no encontrado");
         }
-        // Validación de campos (siguiendo el ejemplo de Project de la profe)
+
         if (dto.getMessage() == null || dto.getMessage().isEmpty()) {
             return ResponseEntity.badRequest()
                     .body("El contenido del mensaje no puede estar vacío");
@@ -71,14 +71,30 @@ public class NotificationsController {
         nS.Update(m);
         return ResponseEntity.ok("Mensaje actualizado correctamente");
     }
-
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable int id) {
-        ModelMapper m = new ModelMapper();
+    public ResponseEntity<?> buscarPorIde(@PathVariable int id) {
         Optional<Notifications> notification = nS.listId(id);
 
         if (notification.isPresent()) {
-            NotificationsCompleteDTO dto = m.map(notification.get(), NotificationsCompleteDTO.class);
+            Notifications n = notification.get();
+
+            NotificationDTOInfinite dto = new NotificationDTOInfinite();
+            dto.setTitle(n.getTitle());
+            dto.setMessage(n.getMessage());
+            dto.setType(n.getType());
+            dto.setRead(n.getRead());
+            dto.setCreatedDate(n.getCreatedDate());
+
+            NotificationDTOInfinite.UserBasicDTO userDTO = new NotificationDTOInfinite.UserBasicDTO();
+            userDTO.setIdUser(n.getUser().getIdUser());
+            userDTO.setName(n.getUser().getName());
+            userDTO.setLastName(n.getUser().getLastName());
+            userDTO.setUsername(n.getUser().getUsername());
+            userDTO.setProfilePhoto(n.getUser().getProfilePhoto());
+            userDTO.setPhoneNumber(n.getUser().getPhoneNumber());
+
+            dto.setUser(userDTO);
+
             return ResponseEntity.ok(dto);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -88,23 +104,15 @@ public class NotificationsController {
 
     //QuerySimple
     @GetMapping("/no-leidas")
-    public ResponseEntity<List<NotificationsDTO>> listarNoLeidas() {
+    public ResponseEntity<List<NotificationDTOInfinite>> listarNoLeidas() {
         ModelMapper m = new ModelMapper();
-        List<NotificationsDTO> lista = nS.buscarNoLeidos().stream()
-                .map(y -> m.map(y, NotificationsDTO.class))
+        List<NotificationDTOInfinite> lista = nS.buscarNoLeidos().stream()
+                .map(y -> m.map(y, NotificationDTOInfinite.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(lista);
     }
 
     //QueryToma
-    @GetMapping("/alertas-seguridad")
-    public ResponseEntity<List<NotificationsTypeQueryDTO>> listarAlertasSeguridad() {
-        ModelMapper m = new ModelMapper();
-        List<NotificationsTypeQueryDTO> lista = nS.findRecentSecurityAlertsJPQL().stream()
-                .map(y -> m.map(y, NotificationsTypeQueryDTO.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(lista);
-    }
 
 
     //Tasa de lectura por tipo de notificación
@@ -157,13 +165,20 @@ public class NotificationsController {
     public ResponseEntity<?> securityAlerts() {
         List<Object[]> resultados = nS.findDaysWithMostSecurityAlerts();
         List<NotificationSecurityAlertDTO> lista = new ArrayList<>();
+
         for (Object[] row : resultados) {
             NotificationSecurityAlertDTO dto = new NotificationSecurityAlertDTO();
-            dto.setCreatedDate((LocalDate) row[0]); // directo, ya es LocalDate
-            dto.setTotalAlerts(((Number) row[1]).longValue());
+
+            if (row[0] instanceof java.sql.Date) {
+                dto.setCreatedDate(((java.sql.Date) row[0]).toLocalDate());
+            } else {
+                dto.setCreatedDate((LocalDate) row[0]);
+            }
+
+            dto.setTotalAlerts(((Number) row[1]).intValue());
+
             lista.add(dto);
         }
         return ResponseEntity.ok(lista);
     }
-
 }
