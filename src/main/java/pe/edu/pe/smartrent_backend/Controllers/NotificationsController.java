@@ -24,7 +24,7 @@ public class NotificationsController {
     private INotifications nS;
 
     @PostMapping("/web")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<NotificationsCompleteDTO> registrar(@RequestBody NotificationsCompleteDTO dto) {
         ModelMapper m = new ModelMapper();
         Notifications n = m.map(dto, Notifications.class);
@@ -42,7 +42,7 @@ public class NotificationsController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         Optional<Notifications> notifications = nS.listId(id);
         if (notifications.isPresent()) {
@@ -54,7 +54,7 @@ public class NotificationsController {
     }
 
     @PutMapping("/actualizar")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> actualizar(@RequestBody NotificationsCompleteDTO dto) {
         Optional<Notifications> existente = nS.listId(dto.getIdNotification());
         if (existente.isEmpty()) {
@@ -77,7 +77,7 @@ public class NotificationsController {
         return ResponseEntity.ok("Mensaje actualizado correctamente");
     }
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> buscarPorIde(@PathVariable int id) {
         Optional<Notifications> notification = nS.listId(id);
 
@@ -172,7 +172,7 @@ public class NotificationsController {
 
     //Días con mayor generación de alertas de seguridad
     @GetMapping("/security-alerts")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> securityAlerts() {
         List<Object[]> resultados = nS.findDaysWithMostSecurityAlerts();
         List<NotificationSecurityAlertDTO> lista = new ArrayList<>();

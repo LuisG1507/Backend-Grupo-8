@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.*;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
@@ -25,6 +26,7 @@ public class Models3DController {
     private IModels3D mI;
 
     @PostMapping("/Register")
+    @PreAuthorize("hasAuthority('ARRENDADOR')")
     private ResponseEntity<?> registrar(@RequestBody Models3DDTO mD) {
         ModelMapper m = new ModelMapper();
         try {
@@ -38,6 +40,7 @@ public class Models3DController {
     }
 
     @PutMapping("/Update")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
     public ResponseEntity<String> actualizar(@RequestBody Models3DCompleteDTO model3D){
         Optional<Models3D> exist = mI.listarId(model3D.getIdModels3D());
         if (exist.isEmpty()) {
@@ -59,6 +62,7 @@ public class Models3DController {
     }
 
     @GetMapping("/ListModels3D")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> ListarModels(){
         ModelMapper m = new ModelMapper();
         List<Models3DDTO> list = mI.Listar().stream().map(y->m.map(y,Models3DDTO.class))
@@ -71,6 +75,7 @@ public class Models3DController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
     public ResponseEntity<?> eliminar(@PathVariable Integer id){
         Optional<Models3D> exist = mI.listarId(id);
         if(exist.isPresent()){
@@ -82,6 +87,7 @@ public class Models3DController {
     }
 
     @GetMapping("/estado/{state}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public List<Models3DCompleteDTO> buscarEstado(@PathVariable String state){
         ModelMapper m = new ModelMapper();
         List<Models3D> entidades = mI.buscarPorEstado(state);
@@ -97,6 +103,7 @@ public class Models3DController {
     }
 
     @GetMapping("/fecha/{date}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public List<Models3DCompleteDTO> buscarFecha(@PathVariable String date){
         ModelMapper m = new ModelMapper();
         LocalDate fechaBusqueda = LocalDate.parse(date);
@@ -113,6 +120,7 @@ public class Models3DController {
     }
 
     @GetMapping("/ubicacion")
+    @PreAuthorize("hasAuthority('ARRENDATARIO')")
     public List<Model3DLocation> ubicacion(){
         List<Object[]> list = mI.modelosConUbicacion();
         List<Model3DLocation> listLoc = new ArrayList<>();
@@ -129,6 +137,7 @@ public class Models3DController {
     }
 
     @GetMapping("/estateModels")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public List<ModelEstateDTO> estateModel(){
         List<Object[]> resultados = mI.inmueblesConModelo();
 
@@ -147,6 +156,7 @@ public class Models3DController {
 
     //Inmuebles sin modelo 3D (sin presentación visual)
     @GetMapping("/no-model-estates")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> noModelEstates() {
         List<Object[]> resultados = mI.findEstatesWithoutModel();
         List<Models3DNoModelEstateDTO> lista = new ArrayList<>();
@@ -163,6 +173,7 @@ public class Models3DController {
 
     //Ciudades con mayor cantidad de modelos 3D activos
     @GetMapping("/active-by-city")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> activeByCity() {
         List<Object[]> resultados = mI.findCitiesWithMostActiveModels();
         List<Models3DActiveByCityDTO> lista = new ArrayList<>();
@@ -178,6 +189,7 @@ public class Models3DController {
 
     // Tasa de modelos activos vs inactivos con porcentaje
     @GetMapping("/state-rate")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> stateRate() {
         List<Object[]> resultados = mI.findStateRate();
         List<Models3DStateRateDTO> lista = new ArrayList<>();
@@ -193,6 +205,7 @@ public class Models3DController {
 
     // Inmuebles con modelo 3D activo que además tienen puntos de riesgo críticos
     @GetMapping("/critical-risk")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> criticalRisk() {
         List<Object[]> resultados = mI.findEstatesWithCriticalRiskPoints();
         List<Models3DCriticalRiskDTO> lista = new ArrayList<>();
