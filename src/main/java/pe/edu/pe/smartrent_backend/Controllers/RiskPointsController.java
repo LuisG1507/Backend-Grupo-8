@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.riskpointsDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Models3D;
@@ -22,6 +23,7 @@ public class RiskPointsController {
     private IRiskPointsService rP;
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<String> registrar(@RequestBody RiskPointsDTO rD) {
         ModelMapper m = new ModelMapper();
         RiskPoints r = m.map(rD, RiskPoints.class);
@@ -35,6 +37,7 @@ public class RiskPointsController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> listarTodo() {
         ModelMapper m = new ModelMapper();
         List<RiskPointsCompleteDTO> list = rP.list().stream().map(y -> {
@@ -55,6 +58,7 @@ public class RiskPointsController {
 
     //Modelos 3D con mayor cantidad de puntos de riesgo registrados
     @GetMapping("/decision-01")
+    @PreAuthorize("hasAnyAuthority('ARRENDATARIO')")
     public List<RiskPointsDecisionDTO1> reporteDecision1() {
         List<Object[]> resultados = rP.RPDecision1();
         List<RiskPointsDecisionDTO1> lista = new ArrayList<>();
@@ -73,6 +77,7 @@ public class RiskPointsController {
 
     //Distribución de puntos de riesgo por severidad con porcentaje
     @GetMapping("/decision-02")
+    @PreAuthorize("hasAnyAuthority('ARRENDATARIO')")
     public List<RiskPointsDecisionDTO2> reporteDecision2() {
         List<Object[]> resultados = rP.RPDecision2();
         List<RiskPointsDecisionDTO2> lista = new ArrayList<>();
@@ -90,6 +95,7 @@ public class RiskPointsController {
 
     // Inmuebles con más puntos de severidad crítica (prioridad de intervención)
     @GetMapping("/decision-03")
+    @PreAuthorize("hasAnyAuthority('ARRENDATARIO')")
     public List<RiskPointsDecisionDTO3> reporteDecision3() {
         List<Object[]> resultados = rP.RPDecision3();
         List<RiskPointsDecisionDTO3> lista = new ArrayList<>();
@@ -107,6 +113,7 @@ public class RiskPointsController {
 
     // Modelos 3D sin ningún punto de riesgo registrado
     @GetMapping("/decision-04")
+    @PreAuthorize("hasAnyAuthority('ARRENDATARIO')")
     public List<RiskPointsDecisionDTO4> reporteDecision4() {
         List<Object[]> resultados = rP.RPDecision4();
         List<RiskPointsDecisionDTO4> lista = new ArrayList<>();

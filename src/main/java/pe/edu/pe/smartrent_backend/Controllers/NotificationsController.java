@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Conversation;
@@ -23,6 +24,7 @@ public class NotificationsController {
     private INotifications nS;
 
     @PostMapping("/web")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<NotificationsCompleteDTO> registrar(@RequestBody NotificationsCompleteDTO dto) {
         ModelMapper m = new ModelMapper();
         Notifications n = m.map(dto, Notifications.class);
@@ -32,6 +34,7 @@ public class NotificationsController {
     }
 
     @GetMapping("/list")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<List<NotificationDTOInfinite>> listar() {
         ModelMapper m = new ModelMapper();
         List<NotificationDTOInfinite> lista = nS.list().stream().map(y -> m.map(y, NotificationDTOInfinite.class)).collect(Collectors.toList());
@@ -39,6 +42,7 @@ public class NotificationsController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         Optional<Notifications> notifications = nS.listId(id);
         if (notifications.isPresent()) {
@@ -50,6 +54,7 @@ public class NotificationsController {
     }
 
     @PutMapping("/actualizar")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<String> actualizar(@RequestBody NotificationsCompleteDTO dto) {
         Optional<Notifications> existente = nS.listId(dto.getIdNotification());
         if (existente.isEmpty()) {
@@ -72,6 +77,7 @@ public class NotificationsController {
         return ResponseEntity.ok("Mensaje actualizado correctamente");
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> buscarPorIde(@PathVariable int id) {
         Optional<Notifications> notification = nS.listId(id);
 
@@ -104,6 +110,7 @@ public class NotificationsController {
 
     //QuerySimple
     @GetMapping("/no-leidas")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<List<NotificationDTOInfinite>> listarNoLeidas() {
         ModelMapper m = new ModelMapper();
         List<NotificationDTOInfinite> lista = nS.buscarNoLeidos().stream()
@@ -117,6 +124,7 @@ public class NotificationsController {
 
     //Tasa de lectura por tipo de notificación
     @GetMapping("/read-rate")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<?> readRate() {
         List<Object[]> resultados = nS.findReadRateByType();
         List<NotificationReadRateDTO> lista = new ArrayList<>();
@@ -133,6 +141,7 @@ public class NotificationsController {
 
     //Usuarios con más notificaciones no leídas (requieren atención inmediata)
     @GetMapping("/unread-users")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<?> unreadUsers() {
         List<Object[]> resultados = nS.findUsersWithMostUnreadNotifications();
         List<NotificationUnreadUserDTO> lista = new ArrayList<>();
@@ -148,6 +157,7 @@ public class NotificationsController {
 
     //Tipos de notificación más generados en el último mes
     @GetMapping("/monthly-types")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<?> monthlyTypes() {
         List<Object[]> resultados = nS.findMostGeneratedTypesLastMonth();
         List<NotificationTypeMonthlyDTO> lista = new ArrayList<>();
@@ -162,6 +172,7 @@ public class NotificationsController {
 
     //Días con mayor generación de alertas de seguridad
     @GetMapping("/security-alerts")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> securityAlerts() {
         List<Object[]> resultados = nS.findDaysWithMostSecurityAlerts();
         List<NotificationSecurityAlertDTO> lista = new ArrayList<>();
