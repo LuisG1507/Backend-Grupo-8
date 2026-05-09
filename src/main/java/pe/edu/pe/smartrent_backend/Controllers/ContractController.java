@@ -233,4 +233,7 @@ public class ContractController {
         }
         return ResponseEntity.ok(lista);
     }
+
+
+    //Luciana
 }
