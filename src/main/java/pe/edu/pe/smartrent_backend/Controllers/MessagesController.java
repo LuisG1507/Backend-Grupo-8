@@ -55,14 +55,14 @@ public class MessagesController {
     }
 
     @GetMapping("/listar")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<MessagesDTOInfinite>>listar(){
         ModelMapper m= new ModelMapper();
         List<MessagesDTOInfinite>lista=mS.list().stream().map(y ->m.map(y, MessagesDTOInfinite.class)).collect(Collectors.toList());
         return ResponseEntity.ok(lista);
     }
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         Optional<Messages> message = mS.listId(id);
         if (message.isPresent()) {
@@ -74,7 +74,7 @@ public class MessagesController {
         }
     }
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> buscarPorId(@PathVariable int id) {
         Optional<Messages> message = mS.listId(id);
 
@@ -138,7 +138,7 @@ public class MessagesController {
 
     //Distribución de mensajes por status con porcentaje
     @GetMapping("/status-distribution")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> statusDistribution() {
         List<Object[]> resultados = mS.findMessageDistributionByStatus();
         List<MessagesStatusDistributionDTO> lista = new ArrayList<>();
@@ -170,7 +170,7 @@ public class MessagesController {
 
     // Usuarios sin ningún mensaje enviado (posiblemente inactivos)
     @GetMapping("/inactive-users")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> inactiveUsers() {
         List<Object[]> resultados = mS.findUsersWithNoMessages();
         List<MessagesInactiveUserDTO> lista = new ArrayList<>();
