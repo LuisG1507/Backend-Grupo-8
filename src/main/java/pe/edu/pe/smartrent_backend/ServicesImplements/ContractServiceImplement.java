@@ -59,4 +59,16 @@ public class ContractServiceImplement implements IContractService {
     public List<Object[]> findContractsExpiringSoon() {
         return cR.findContractsExpiringSoon();
     }
+
+    //Luciana
+    @Override
+    public List<Object[]> findRevenueByDistrict() {
+        return cR.findRevenueByDistrict();
+    }
+
+    @Override
+    public List<Object[]> findAverageContractDurationByLessor() {
+        return cR.findAverageContractDurationByLessor();
+    }
+
 }
