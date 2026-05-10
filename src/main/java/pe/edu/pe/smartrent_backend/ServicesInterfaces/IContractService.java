@@ -22,4 +22,8 @@ public interface IContractService {
     public List<Object[]> findEstatesWithHighestRotation();
 
     public List<Object[]> findContractsExpiringSoon();
+
+    //Luciana
+    List<Object[]> findRevenueByDistrict();
+    List<Object[]> findAverageContractDurationByLessor();
 }
