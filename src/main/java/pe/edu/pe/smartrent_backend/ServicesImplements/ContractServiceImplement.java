@@ -41,21 +41,6 @@ public class ContractServiceImplement implements IContractService {
     }
 
     @Override
-    public List<Object[]> findLessorsAboveAverageIncome() {
-        return cR.findLessorsAboveAverageIncome();
-    }
-
-    @Override
-    public List<Object[]> findContractRatePerLessor() {
-        return cR.findContractRatePerLessor();
-    }
-
-    @Override
-    public List<Object[]> findEstatesWithHighestRotation() {
-        return cR.findEstatesWithHighestRotation();
-    }
-
-    @Override
     public List<Object[]> findContractsExpiringSoon() {
         return cR.findContractsExpiringSoon();
     }
