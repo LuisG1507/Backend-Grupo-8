@@ -40,28 +40,5 @@ public class ConversationServiceImplements implements IConversationService {
         cR.save(conversation);
     }
 
-    @Override
-    public List<Object[]> getConversationCountPerEstate() {
-        return cR.getConversationCountPerEstate();
-    }
 
-    @Override
-    public List<Object[]> findEstatesWithConversationsButNoContract() {
-        return cR.findEstatesWithConversationsButNoContract();
-    }
-
-    @Override
-    public List<Object[]> findMostActiveInitiators() {
-        return cR.findMostActiveInitiators();
-    }
-
-    @Override
-    public List<Object[]> findEstatesWithNoConversations() {
-        return cR.findEstatesWithNoConversations();
-    }
-
-    @Override
-    public List<Object[]> findAverageConversationsPerEstateByCity() {
-        return cR.findAverageConversationsPerEstateByCity();
-    }
 }
