@@ -15,12 +15,6 @@ public interface IContractService {
 
     public void delete(int id);
 
-    public List<Object[]> findLessorsAboveAverageIncome();
-
-    public List<Object[]> findContractRatePerLessor();
-
-    public List<Object[]> findEstatesWithHighestRotation();
-
     public List<Object[]> findContractsExpiringSoon();
 
     //Luciana

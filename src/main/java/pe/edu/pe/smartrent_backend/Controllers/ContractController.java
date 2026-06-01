@@ -170,52 +170,7 @@ public class ContractController {
         }
     }
 
-    @GetMapping("/lessors-above-average")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> lessorsAboveAverage() {
-        List<Object[]> resultados = cS.findLessorsAboveAverageIncome();
-        List<ContractLessorIncomeDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            ContractLessorIncomeDTO dto = new ContractLessorIncomeDTO();
-            dto.setName(row[0].toString());
-            dto.setLastName(row[1].toString());
-            dto.setTotalIncome(((Number) row[2]).doubleValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
-    @GetMapping("/contract-rate")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> contractRate() {
-        List<Object[]> resultados = cS.findContractRatePerLessor();
-        List<ContractLessorContractRateDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            ContractLessorContractRateDTO dto = new ContractLessorContractRateDTO();
-            dto.setName(row[0].toString());
-            dto.setLastName(row[1].toString());
-            dto.setActive(((Number) row[2]).longValue());
-            dto.setInactive(((Number) row[3]).longValue());
-            dto.setTotal(((Number) row[4]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
 
-    @GetMapping("/estate-rotation")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> estateRotation() {
-        List<Object[]> resultados = cS.findEstatesWithHighestRotation();
-        List<ContractEstateRotationDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            ContractEstateRotationDTO dto = new ContractEstateRotationDTO();
-            dto.setTitle(row[0].toString());
-            dto.setCity(row[1].toString());
-            dto.setDistrict(row[2].toString());
-            dto.setTotalContracts(((Number) row[3]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
 
     @GetMapping("/expiring-soon")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
