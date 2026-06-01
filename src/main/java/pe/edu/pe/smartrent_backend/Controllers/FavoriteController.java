@@ -95,65 +95,8 @@ public class FavoriteController {
         }
     }
 
-    @GetMapping("/most-demanded")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
-    public ResponseEntity<List<FavoriteEstateDTO>> getMostDemanded() {
-        List<Object[]> resultados = fC.findMostFavoritedEstates();
-        List<FavoriteEstateDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            FavoriteEstateDTO dto = new FavoriteEstateDTO();
-            dto.setTitle(row[0].toString());
-            dto.setCity(row[1].toString());
-            dto.setDistrict(row[2].toString());
-            dto.setMonthlyPrice(((Number) row[3]).doubleValue());
-            dto.setTimesFavorite(((Number) row[4]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
 
-    @GetMapping("/unconverted-demand")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
-    public ResponseEntity<List<FavoriteNoContractDTO>> getUnconvertedDemand() {
-        List<Object[]> resultados = fC.findFavoritedEstatesWithoutContract();
-        List<FavoriteNoContractDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            FavoriteNoContractDTO dto = new FavoriteNoContractDTO();
-            dto.setTitle(row[0].toString());
-            dto.setCity(row[1].toString());
-            dto.setFavorites(((Number) row[2]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
 
-    @GetMapping("/most-active-users")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
-    public ResponseEntity<List<FavoriteUsersDTO>> getMostActiveUsers() {
-        List<Object[]> resultados = fC.findMostActiveUsers();
-        List<FavoriteUsersDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            FavoriteUsersDTO dto = new FavoriteUsersDTO();
-            dto.setName(row[0].toString());
-            dto.setLastName(row[1].toString());
-            dto.setTotalFavorites(((Number) row[2]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
 
-    @GetMapping("/monthly-trends")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
-    public ResponseEntity<List<FavoriteMonthlyTrendDTO>> getMonthlyTrends() {
-        List<Object[]> resultados = fC.findMonthlyTrend();
-        List<FavoriteMonthlyTrendDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            FavoriteMonthlyTrendDTO dto = new FavoriteMonthlyTrendDTO();
-            dto.setMonth(row[0].toString());
-            dto.setFavoritesAdded(((Number) row[1]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
 
 }

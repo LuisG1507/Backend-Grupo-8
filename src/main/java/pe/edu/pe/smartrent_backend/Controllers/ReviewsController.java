@@ -156,8 +156,6 @@ public class ReviewsController {
     }
 
     //Distribución de calificaciones en la plataforma
-
-
     @GetMapping("/rating-distribution")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> ratingDistribution() {
