@@ -62,10 +62,10 @@ UserController {
     //Listar
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<UserDTO> listar() {
+    public List<UserSinContraseniaDTO> listar() {
         return uS.list().stream().map(x -> {
             ModelMapper m = new ModelMapper();
-            return m.map(x, UserDTO.class);
+            return m.map(x, UserSinContraseniaDTO.class);
         }).collect(Collectors.toList());
     }
 

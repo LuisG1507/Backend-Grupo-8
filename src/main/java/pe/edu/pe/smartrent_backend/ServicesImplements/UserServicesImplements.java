@@ -1,5 +1,6 @@
 package pe.edu.pe.smartrent_backend.ServicesImplements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.Repositories.IRoleRepository;
@@ -22,6 +23,7 @@ public class UserServicesImplements implements IUser {
 
     @Override
     public void Register(User user) {
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         uR.save(user);
     }
 
