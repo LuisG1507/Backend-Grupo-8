@@ -30,14 +30,10 @@ public class FavoriteController {
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> Register(@RequestBody FavoriteDTO fD){
-        try{
             ModelMapper m = new ModelMapper();
             Favorite p = m.map(fD, Favorite.class);
             fC.Register(p);
             return ResponseEntity.ok("Favorite ha sido registrado correctamente");
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("error en el registro, vuelva a intentar");
-        }
     }
 
     @PutMapping

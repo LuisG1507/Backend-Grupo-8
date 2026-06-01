@@ -26,8 +26,7 @@ UserController {
 
 
     //Registrar
-    @PostMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
+    @PostMapping("/Registrar")
     public void registrar(@RequestBody UserDTO dto) {
         ModelMapper m = new ModelMapper();
         User p = m.map(dto, User.class);
