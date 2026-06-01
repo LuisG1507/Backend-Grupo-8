@@ -106,80 +106,10 @@ public class ConversationController {
         return new ResponseEntity<>("La conversación y sus mensajes han sido eliminados", HttpStatus.OK);
     }
 
-    //Listas tipo Object[]
-    @GetMapping("/reporte-popularidad")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public List<EstateConversationCountDTO> ECD() {
-        List<Object[]> resultados = cI.getConversationCountPerEstate();
-        List<EstateConversationCountDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            EstateConversationCountDTO dto = new EstateConversationCountDTO();
-            dto.setEstateTitle(((String) row[0]));
-            dto.setConversationCount(((Number) row[1]).intValue());
-            lista.add(dto);
-        }
-        return lista;
-    }
 
-    @GetMapping("/unconverted-interest")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> unconvertedInterest() {
-        List<Object[]> resultados = cI.findEstatesWithConversationsButNoContract();
-        List<ConversationEstateInterestDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            ConversationEstateInterestDTO dto = new ConversationEstateInterestDTO();
-            dto.setTitle(row[0].toString());
-            dto.setCity(row[1].toString());
-            dto.setTotalConversations(((Number) row[2]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
 
-    @GetMapping("/most-active-initiators")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> mostActiveInitiators() {
-        List<Object[]> resultados = cI.findMostActiveInitiators();
-        List<ConversationUserCountDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            ConversationUserCountDTO dto = new ConversationUserCountDTO();
-            dto.setName(row[0].toString());
-            dto.setLastName(row[1].toString());
-            dto.setTotalConversations(((Number) row[2]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
 
-    @GetMapping("/no-conversations")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> noConversations() {
-        List<Object[]> resultados = cI.findEstatesWithNoConversations();
-        List<ConversationNoEstateDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            ConversationNoEstateDTO dto = new ConversationNoEstateDTO();
-            dto.setIdEstate(((Number) row[0]).intValue());
-            dto.setTitle(row[1].toString());
-            dto.setCity(row[2].toString());
-            dto.setMonthlyPrice(((Number) row[3]).doubleValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
 
-    @GetMapping("/average-by-city")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> averageByCity() {
-        List<Object[]> resultados = cI.findAverageConversationsPerEstateByCity();
-        List<ConversationAverageCityDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            ConversationAverageCityDTO dto = new ConversationAverageCityDTO();
-            dto.setCity(row[0].toString());
-            dto.setTotalConversations(((Number) row[1]).longValue());
-            dto.setTotalEstates(((Number) row[2]).longValue());
-            dto.setAverage(((Number) row[3]).doubleValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
+
+
 }
