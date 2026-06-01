@@ -233,4 +233,36 @@ public class ContractController {
         }
         return ResponseEntity.ok(lista);
     }
+
+    //Luciana
+
+    @GetMapping("/revenue-by-district")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> revenueByDistrict() {
+        List<Object[]> resultados = cS.findRevenueByDistrict();
+        List<ContractRevenueDistrictDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            ContractRevenueDistrictDTO dto = new ContractRevenueDistrictDTO();
+            dto.setDistrict(row[0].toString());
+            dto.setTotalRevenue(((Number) row[1]).doubleValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/average-duration-lessor")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> averageDurationByLessor() {
+        List<Object[]> resultados = cS.findAverageContractDurationByLessor();
+        List<ContractAverageDurationDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            ContractAverageDurationDTO dto = new ContractAverageDurationDTO();
+            dto.setName(row[0].toString());
+            dto.setLastName(row[1].toString());
+            dto.setAverageDays(((Number) row[2]).doubleValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
+
 }
