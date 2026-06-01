@@ -87,15 +87,43 @@ public class RiskReportController {
         return ResponseEntity.ok("Registro con ID " + id + " modificado correctamente.");
     }
 
-    //Listar
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public List<RiskReportDTO> listar() {
-        return rS.list().stream().map(x -> {
+//    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> listar() {
+        List<RiskReportDTO> aux = rS.list().stream().map(x -> {
             ModelMapper m = new ModelMapper();
             return m.map(x, RiskReportDTO.class);
         }).collect(Collectors.toList());
+
+        if (aux.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No hay registros encontrados");
+
+        }
+        return ResponseEntity.ok(aux);
     }
+
+
+    //    @GetMapping
+
+    /// /    @PreAuthorize("hasAuthority('ADMIN')")
+//    public ResponseEntity<?> listar() {
+//        List<RiskReportDTO> listita =  rS.list().stream().map(x -> {
+//            ModelMapper m = new ModelMapper();
+//            return m.map(x, RiskReportDTO.class);
+//        }).collect(Collectors.toList());
+//
+//        if (listita.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                    .body("No se encontraron reportes de riesgo");
+//        }
+//
+//        Map<String, Object> respuesta = new HashMap<>();
+//        respuesta.put("mensaje", "Se encontraron " + listita.size() + " reportes de riesgo");
+//        respuesta.put("datos", listita);
+//        return ResponseEntity.ok(respuesta);
+//    }
+
 
     //Eliminar
     @DeleteMapping("/{id}")
@@ -111,12 +139,11 @@ public class RiskReportController {
     }
 
 
-
 //             ⡏⢱ ⣏⡉ ⡎⠑ ⡇ ⢎⡑ ⡇ ⡎⢱ ⡷⣸ ⣏⡉ ⢎⡑
 //             ⠧⠜ ⠧⠤ ⠣⠔ ⠇ ⠢⠜ ⠇ ⠣⠜ ⠇⠹ ⠧⠤ ⠢⠜
 
 
-    //// Inmuebles con más reportes de riesgo
+    /// / Inmuebles con más reportes de riesgo
     @GetMapping("/Decision1")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public List<RiskReportDecisionDTO1> D1() {
@@ -172,7 +199,7 @@ public class RiskReportController {
         return lista;
     }
 
-  //4. Inmuebles con nivel de riesgo ALTO que aún tienen contrato activo (situación crítica)
+    //4. Inmuebles con nivel de riesgo ALTO que aún tienen contrato activo (situación crítica)
     @GetMapping("/decision-04")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public List<RiskReportDecisionDTO4> reporteDecision4() {
