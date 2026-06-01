@@ -83,7 +83,6 @@ UserController {
     }
 
 
-
     //Listar por DNI
     @GetMapping("/findByDni/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -99,58 +98,6 @@ UserController {
         return ResponseEntity.ok(dto);
     }
 
-
-    //Listar
-    @GetMapping("/findByStatus")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public List<UserSinContraseniaDTO> fyndByStatus() {
-        return uS.fyndByStatus().stream().map(x -> {
-            ModelMapper m = new ModelMapper();
-            return m.map(x, UserSinContraseniaDTO.class);
-        }).collect(Collectors.toList());
-    }
-
-
-    //Listar por fechas
-    @GetMapping("/findByCreatedDate/{f1}/{f2}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public List<UserSinContraseniaDTO> fyndByCreatedDate(@PathVariable("f1") LocalDate f1,
-                                                         @PathVariable("f2") LocalDate f2) {
-        return uS.userByRangeDate(f1,f2).stream().map(x -> {
-            ModelMapper m = new ModelMapper();
-            return m.map(x, UserSinContraseniaDTO.class);
-        }).collect(Collectors.toList());
-    }
-
-    @GetMapping("/RankingIncidents")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
-    public List<UserIncidentsRankingDTO> RankingIncidents() {
-        List<Object[]> resultados = uS.RankingUsuariosIncidencias();
-        List<UserIncidentsRankingDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            UserIncidentsRankingDTO dto = new UserIncidentsRankingDTO();
-            dto.setNombre(((String) row[0]));
-            dto.setCantidad(((Number) row[1]).intValue());
-            lista.add(dto);
-        }
-        return lista;
-    }
-
-    // Usuarios verificados vs no verificados con porcentaje
-    @GetMapping("/verification-stats")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> verificationStats() {
-        List<Object[]> resultados = uS.findVerificationStats();
-        List<UserVerificationStatsDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            UserVerificationStatsDTO dto = new UserVerificationStatsDTO();
-            dto.setVerified(((Number) row[0]).longValue());
-            dto.setNotVerified(((Number) row[1]).longValue());
-            dto.setVerifiedPercentage(((Number) row[2]).doubleValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok( lista);
-    }
 
     // Usuarios no verificados con antecedentes registrados
     @GetMapping("/unverified-with-backgrounds")
@@ -170,37 +117,6 @@ UserController {
         }
 
         return ResponseEntity.ok(lista);
-    }
-
-    // Crecimiento de usuarios registrados por mes
-    @GetMapping("/monthly-growth")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> monthlyGrowth() {
-        List<Object[]> resultados = uS.findMonthlyGrowth();
-        List<UserMonthlyGrowthDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            UserMonthlyGrowthDTO dto = new UserMonthlyGrowthDTO();
-            dto.setMonth(row[0].toString());
-            dto.setNewUsers(((Number) row[1]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
-
-    @GetMapping("/enabled-by-role")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public List<UserEnabledByRoleDTO> reporteUsuariosHabilitadosPorRol() {
-        List<Object[]> resultados = uS.findEnabledUsersByRole();
-        List<UserEnabledByRoleDTO> lista = new ArrayList<>();
-
-        for (Object[] row : resultados) {
-            UserEnabledByRoleDTO dto = new UserEnabledByRoleDTO();
-            dto.setRole((String) row[0]);
-            dto.setEnabled(((Number) row[1]).intValue());
-            dto.setDisabled(((Number) row[2]).intValue());
-            lista.add(dto);
-        }
-        return lista;
     }
 
 }

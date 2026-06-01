@@ -18,14 +18,5 @@ public interface INotifications {
     public Optional<Notifications>listId(int id);
     //Eliminar
     public void Delete (Integer id);
-    //QuerySimple
-    public List<Notifications> buscarNoLeidos();
-    //Query
 
-    public List<NotificationsTypeDTO> getCountByType();
-
-    public List<Object[]> findReadRateByType();
-    public List<Object[]> findUsersWithMostUnreadNotifications();
-    public List<Object[]> findMostGeneratedTypesLastMonth();
-    public List<Object[]> findDaysWithMostSecurityAlerts();
 }

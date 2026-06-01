@@ -1,5 +1,4 @@
 package pe.edu.pe.smartrent_backend.Controllers;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,9 +10,6 @@ import pe.edu.pe.smartrent_backend.Entities.Messages;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IConversationService;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IMessages;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -105,84 +101,4 @@ public class MessagesController {
                     .body("Mensaje no encontrado");
         }
     }
-
-    //QuerySimple
-    @GetMapping("/buscar-por-estado")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<MessagesDTOInfinite>> buscarPorEstado(@RequestParam String status) {
-        ModelMapper m = new ModelMapper();
-        List<MessagesDTOInfinite> lista = mS.findByStatus(status).stream()
-                .map(y -> m.map(y, MessagesDTOInfinite.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(lista);
-    }
-
-    //QueryTomaDecision
-
-
-    // Usuarios con más mensajes urgentes (mayor riesgo operativo)
-    @GetMapping("/urgent-users")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
-    public ResponseEntity<?> urgentUsers() {
-        List<Object[]> resultados = mS.findUsersWithMostUrgentMessages();
-        List<MessagesUrgentUserDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            MessagesUrgentUserDTO dto = new MessagesUrgentUserDTO();
-            dto.setName(row[0].toString());
-            dto.setLastName(row[1].toString());
-            dto.setUrgentMessages(((Number) row[2]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
-
-    //Distribución de mensajes por status con porcentaje
-    @GetMapping("/status-distribution")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> statusDistribution() {
-        List<Object[]> resultados = mS.findMessageDistributionByStatus();
-        List<MessagesStatusDistributionDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            MessagesStatusDistributionDTO dto = new MessagesStatusDistributionDTO();
-            dto.setStatus(row[0].toString());
-            dto.setTotal(((Number) row[1]).longValue());
-            dto.setPercentage(((Number) row[2]).doubleValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
-
-    //Conversaciones con mayor concentración de mensajes urgentes
-    @GetMapping("/urgent-conversations")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
-    public ResponseEntity<?> urgentConversations() {
-        List<Object[]> resultados = mS.findConversationsWithMostUrgentMessages();
-        List<MessagesUrgentConversationDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            MessagesUrgentConversationDTO dto = new MessagesUrgentConversationDTO();
-            dto.setIdConversation(((Number) row[0]).intValue());
-            dto.setEstateTitle(row[1].toString());
-            dto.setUrgentMessages(((Number) row[2]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
-
-    // Usuarios sin ningún mensaje enviado (posiblemente inactivos)
-    @GetMapping("/inactive-users")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> inactiveUsers() {
-        List<Object[]> resultados = mS.findUsersWithNoMessages();
-        List<MessagesInactiveUserDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            MessagesInactiveUserDTO dto = new MessagesInactiveUserDTO();
-            dto.setIdUser(((Number) row[0]).intValue());
-            dto.setName(row[1].toString());
-            dto.setLastName(row[2].toString());
-            dto.setCreatedDate((LocalDate) row[3]);
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
-
 }

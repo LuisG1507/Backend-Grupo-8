@@ -17,12 +17,4 @@ public interface IMessages {
     public void Delete (Integer id);
     public void deleteByConversation(Integer conversationId);
 
-    public List<Messages>findByStatus(String status);
-
-
-    //QueryToma
-    public List<Object[]> findUsersWithMostUrgentMessages();
-    public List<Object[]> findMessageDistributionByStatus();
-    public List<Object[]> findConversationsWithMostUrgentMessages();
-    public List<Object[]> findUsersWithNoMessages();
 }

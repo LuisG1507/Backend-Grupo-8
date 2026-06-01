@@ -54,39 +54,9 @@ public class UserServicesImplements implements IUser {
     }
 
     @Override
-    public List<User> fyndByStatus() {
-        return uR.findByStatusVerification();
-    }
-
-    @Override
-    public List<User> userByRangeDate(LocalDate f1, LocalDate f2) {
-        return uR.findByCreatedDateBetween(f1, f2);
-    }
-
-    @Override
-    public List<Object[]> RankingUsuariosIncidencias() {
-        return uR.rankingDeIncidencias();
-    }
-
-    @Override
-    public List<Object[]> findVerificationStats() {
-
-        return uR.findVerificationStats();
-    }
-
-    @Override
     public List<Object[]> findUnverifiedUsersWithBackgrounds() {
         return uR.findUnverifiedUsersWithBackgrounds();
     }
 
-    @Override
-    public List<Object[]> findMonthlyGrowth() {
-        return uR.findMonthlyGrowth();
-    }
-
-    @Override
-    public List<Object[]> findEnabledUsersByRole() {
-        return uR.findEnabledUsersByRole();
-    }
 }
 

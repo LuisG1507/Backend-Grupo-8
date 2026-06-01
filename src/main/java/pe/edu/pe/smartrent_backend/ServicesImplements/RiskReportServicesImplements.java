@@ -41,27 +41,4 @@ public class RiskReportServicesImplements implements IRiskReport {
         rR.deleteById(id);
     }
 
-
-    //TOMA DECISIONES
-
-    @Override
-    public List<Object[]> RRDecision1() {
-        return rR.RRD1();
-    }
-
-    @Override
-    public List<Object[]> RRDecision2() {
-        return rR.RRD2();
-    }
-
-    @Override
-    public List<Object[]> RRDecision3() {
-        return rR.RRD3();
-    }
-
-    @Override
-    public List<Object[]> RRDecision4() {
-        return rR.RRD4();
-    }
-
 }

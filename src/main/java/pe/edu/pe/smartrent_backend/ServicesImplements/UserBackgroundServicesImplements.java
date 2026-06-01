@@ -52,15 +52,4 @@ public class UserBackgroundServicesImplements implements IUserBackground {
         return ubR.findHighRiskUsers();
     }
 
-    //UserBackgroundSourceDTO
-    @Override
-    public List<Object[]> findMostReportingSources() {
-        return ubR.findMostReportingSources();
-    }
-
-    //UserBackgroundMonthlyDTO
-    @Override
-    public List<Object[]> findMonthlyTrend() {
-        return ubR.findMonthlyTrend();
-    }
 }

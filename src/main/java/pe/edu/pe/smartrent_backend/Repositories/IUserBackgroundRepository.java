@@ -3,10 +3,6 @@ package pe.edu.pe.smartrent_backend.Repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS.UserBackgroundAverageDTO;
-import pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS.UserBackgroundMonthlyDTO;
-import pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS.UserBackgroundSourceDTO;
-import pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS.UserBackgroundTypeFrequencyDTO;
 import pe.edu.pe.smartrent_backend.Entities.UsersBackground;
 
 import java.util.List;
@@ -33,18 +29,4 @@ public interface IUserBackgroundRepository extends JpaRepository<UsersBackground
             ")\n" +
             "ORDER BY total_antecedentes DESC", nativeQuery = true)
     List<Object[]> findHighRiskUsers();
-
-    @Query(value = "SELECT source, COUNT(*) AS total_reportados\n" +
-            "FROM users_background\n" +
-            "GROUP BY source\n" +
-            "ORDER BY total_reportados DESC", nativeQuery = true)
-    List<Object[]> findMostReportingSources();
-
-    @Query(value = "SELECT TO_CHAR(registration_date, 'YYYY-MM') AS mes, \n" +
-            "       COUNT(*) AS total\n" +
-            "FROM users_background\n" +
-            "GROUP BY mes\n" +
-            "ORDER BY mes DESC", nativeQuery = true)
-    List<Object[]> findMonthlyTrend();
-
 }
