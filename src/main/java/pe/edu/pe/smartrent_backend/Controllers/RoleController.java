@@ -112,9 +112,6 @@ public class RoleController {
         RoleDTO dto = m.map(p,RoleDTO .class);
         return ResponseEntity.ok(dto);
     }
-
-
-
 //             ⡏⢱ ⣏⡉ ⡎⠑ ⡇ ⢎⡑ ⡇ ⡎⢱ ⡷⣸ ⣏⡉ ⢎⡑
 //             ⠧⠜ ⠧⠤ ⠣⠔ ⠇ ⠢⠜ ⠇ ⠣⠜ ⠇⠹ ⠧⠤ ⠢⠜
 

@@ -1,11 +1,13 @@
 package pe.edu.pe.smartrent_backend.Controllers;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.*;
+import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.EstateIdDTO;
 import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.User;
@@ -14,6 +16,7 @@ import pe.edu.pe.smartrent_backend.ServicesInterfaces.IMessages;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -104,6 +107,22 @@ public class ConversationController {
         cI.delete(id);
 
         return new ResponseEntity<>("La conversación y sus mensajes han sido eliminados", HttpStatus.OK);
+    }
+
+    //listar por id
+    @GetMapping("/listId/{id}")
+
+    public ResponseEntity<?> listId(@PathVariable int id) {
+        ModelMapper m = new ModelMapper();
+        Conversation conversation = cI.listId(id);
+
+        if (conversation != null) {
+            ConversationIdDTO dto = m.map(conversation, ConversationIdDTO.class);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("La conversacion no existe");
+        }
     }
 
     //Listas tipo Object[]

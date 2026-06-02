@@ -14,7 +14,9 @@ import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/Users")
@@ -61,7 +63,7 @@ UserController {
     }
 
     //Listar
-    @GetMapping
+    @GetMapping("/listar")
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<UserDTO> listar() {
         return uS.list().stream().map(x -> {
@@ -83,12 +85,10 @@ UserController {
         return ResponseEntity.ok("Registro con ID " + id + " eliminado correctamente.");
     }
 
-
-
     //Listar por DNI
     @GetMapping("/findByDni/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {
+    public ResponseEntity<?> listarDni(@PathVariable("id") Integer id) {
         User p = uS.BuscarPorDNI(id);
         if (p == null) {
             return ResponseEntity
@@ -100,6 +100,21 @@ UserController {
         return ResponseEntity.ok(dto);
     }
 
+    //listar por id
+    @GetMapping("/listarporId/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> listId(@PathVariable int id) {
+        ModelMapper m = new ModelMapper();
+        User user = uS.listId(id);
+
+        if (user != null) {
+            UserIdDTO dto = m.map(user, UserIdDTO.class);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Proyecto no encontrado");
+        }
+    }
 
     //Listar
     @GetMapping("/findByStatus")

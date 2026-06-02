@@ -42,6 +42,8 @@ public interface IEstateRepository extends JpaRepository<Estate, Integer> {
             "ORDER BY e.monthly_price DESC;", nativeQuery = true)
     List<Object[]> aar();
 
+
+    //Promedio de precios por Ciudad y Tipo
     @Query(value = "SELECT city, type,\n" +
             "       ROUND(AVG(monthly_price)::numeric, 2) AS precio_promedio,\n" +
             "       COUNT(*) AS cantidad\n" +

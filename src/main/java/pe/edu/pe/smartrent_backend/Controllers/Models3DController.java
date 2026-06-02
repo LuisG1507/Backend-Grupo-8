@@ -8,8 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.*;
+import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.ReviewsIdDTO;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.Models3D;
+import pe.edu.pe.smartrent_backend.Entities.Reviews;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IModels3D;
 
 import java.time.LocalDate;
@@ -83,6 +85,22 @@ public class Models3DController {
             return ResponseEntity.ok("El valor ha sido eliminado");
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe el valor ingresado");
+        }
+    }
+
+    //listar por id
+    @GetMapping("/listId/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> listId(@PathVariable int id) {
+        ModelMapper m = new ModelMapper();
+        Models3D models3D = mI.listId(id);
+
+        if (models3D != null) {
+            Model3DIdDTO dto = m.map(models3D, Model3DIdDTO.class);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Modelos 3D no encontrado");
         }
     }
 

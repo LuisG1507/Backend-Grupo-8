@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.contractDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Contract;
@@ -93,12 +94,13 @@ public class ContractController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable int id) {
+    @GetMapping("ListarId/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> listId(@PathVariable int id) {
         Optional<Contract> contractOpt = cS.listId(id);
 
         if (contractOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Contract not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Contrato no encontrado");
         }
 
         Contract c = contractOpt.get();

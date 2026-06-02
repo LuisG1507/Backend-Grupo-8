@@ -16,7 +16,6 @@ public interface IRole {
 
     public void Delete(Integer id); //Eliminar
 
-
     //Decisiones
 
 

@@ -4,8 +4,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.favoriteDTOS.*;
+import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Model3DIdDTO;
 import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Models3DDTO;
 import pe.edu.pe.smartrent_backend.Entities.Favorite;
 import pe.edu.pe.smartrent_backend.Entities.Models3D;
@@ -91,6 +93,22 @@ public class FavoriteController {
             return ResponseEntity.ok("El valor ha sido eliminado");
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe el valor ingresado");
+        }
+    }
+
+    //listar por id
+    @GetMapping("/listId/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> listId(@PathVariable int id) {
+        ModelMapper m = new ModelMapper();
+        Favorite favorite = fC.ListarId(id);
+
+        if (favorite != null) {
+            FavoriteIdDTO dto = m.map(favorite, FavoriteIdDTO.class);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No existen favoritos");
         }
     }
 
