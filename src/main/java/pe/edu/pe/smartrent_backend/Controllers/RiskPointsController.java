@@ -6,8 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.EstateCompleteDTO;
 import pe.edu.pe.smartrent_backend.DTOS.riskpointsDTOS.*;
 import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.RiskReportIdDTO;
+import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.Models3D;
 import pe.edu.pe.smartrent_backend.Entities.RiskPoints;
 import pe.edu.pe.smartrent_backend.Entities.RiskReport;
@@ -15,6 +17,7 @@ import pe.edu.pe.smartrent_backend.ServicesInterfaces.IRiskPointsService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -67,10 +70,42 @@ public class RiskPointsController {
                     .body("Puntos de riesgo no encontrado");
         }
     }
-    
-//             ⡏⢱ ⣏⡉ ⡎⠑ ⡇ ⢎⡑ ⡇ ⡎⢱ ⡷⣸ ⣏⡉ ⢎⡑
-//             ⠧⠜ ⠧⠤ ⠣⠔ ⠇ ⠢⠜ ⠇ ⠣⠜ ⠇⠹ ⠧⠤ ⠢⠜
+
+    @PutMapping("/actualizar/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
+    public ResponseEntity<String> actualizar(@PathVariable Integer id, @RequestBody RiskPointsIdDTO dto) {
+        RiskPoints exist = rP.listId(id);
+
+        if (exist == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El punto de riesgo no fue encontrado");
+        }
+
+        exist.setDescription(dto.getDescription());
+        exist.setCordX(dto.getCordX());
+        exist.setCordY(dto.getCordY());
+        exist.setCordZ(dto.getCordZ());
+        exist.setSeverity(dto.getSeverity());
+        if (dto.getIdModel3D() != null) {
+            Models3D model = new Models3D();
+            model.setIdModels3D(dto.getIdModel3D().getIdModels3D());
+            exist.setModels3D(model);
+        }
+        rP.update(exist);
+
+        return ResponseEntity.ok("El punto de riesgo se ha actualizado correctamente");
+    }
 
 
+    @DeleteMapping("/eliminar/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
+    public ResponseEntity<String> eliminar(@PathVariable Integer id) {
+        RiskPoints exist = rP.listId(id);
 
+        if (exist == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El punto de riesgo no fue encontrado");
+        }
+
+        rP.delete(id);
+        return ResponseEntity.ok("El punto de riesgo ha sido eliminado correctamente");
+    }
 }
