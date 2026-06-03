@@ -10,14 +10,11 @@ public interface IEstate {
     public List<Estate> listar();
     public void eliminar(Integer id);
     public List<Estate> filtrarInmueblesPorCiudadDistritoTipo(String city, String district, String type);
-    public double amountTotal();
     public List<Object[]> listUsersEstate();
     public List<Object[]> EstateDistrict(String d);
     public List<Object[]> AboveAverageRents();
 
-    public List<Object[]> findAvgPriceByCityAndType();
     public List<Object[]> findBestPricePerRoom();
-    public List<Object[]> findDistrictsWithMostAvailableEstates();
     public List<Object[]> findDistributionByTypeAndPriceRange();
 
 

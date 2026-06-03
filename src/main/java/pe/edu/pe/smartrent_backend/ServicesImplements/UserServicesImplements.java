@@ -1,5 +1,6 @@
 package pe.edu.pe.smartrent_backend.ServicesImplements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.Repositories.IRoleRepository;
@@ -23,6 +24,7 @@ public class UserServicesImplements implements IUser {
 
     @Override
     public void Register(User user) {
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         uR.save(user);
     }
 
@@ -55,39 +57,9 @@ public class UserServicesImplements implements IUser {
     }
 
     @Override
-    public List<User> fyndByStatus() {
-        return uR.findByStatusVerification();
-    }
-
-    @Override
-    public List<User> userByRangeDate(LocalDate f1, LocalDate f2) {
-        return uR.findByCreatedDateBetween(f1, f2);
-    }
-
-    @Override
-    public List<Object[]> RankingUsuariosIncidencias() {
-        return uR.rankingDeIncidencias();
-    }
-
-    @Override
-    public List<Object[]> findVerificationStats() {
-
-        return uR.findVerificationStats();
-    }
-
-    @Override
     public List<Object[]> findUnverifiedUsersWithBackgrounds() {
         return uR.findUnverifiedUsersWithBackgrounds();
     }
 
-    @Override
-    public List<Object[]> findMonthlyGrowth() {
-        return uR.findMonthlyGrowth();
-    }
-
-    @Override
-    public List<Object[]> findEnabledUsersByRole() {
-        return uR.findEnabledUsersByRole();
-    }
 }
 

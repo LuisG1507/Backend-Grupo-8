@@ -29,18 +29,16 @@ public class FavoriteController {
 
     //Register
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> Register(@RequestBody FavoriteDTO fD){
-        try{
             ModelMapper m = new ModelMapper();
             Favorite p = m.map(fD, Favorite.class);
             fC.Register(p);
             return ResponseEntity.ok("Favorite ha sido registrado correctamente");
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("error en el registro, vuelva a intentar");
-        }
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> Update(@RequestBody FavoriteCompleteDTO fD){
         Optional<Favorite> exist = fC.listId(fD.getIdFavorite());
         if(exist.isEmpty()){
@@ -56,6 +54,7 @@ public class FavoriteController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> ListFavorite(){
         List<Favorite> favorites = fC.list();
 
@@ -86,6 +85,7 @@ public class FavoriteController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Integer id){
         Optional<Favorite> exist = fC.listId(id);
         if(exist.isPresent()){
@@ -96,77 +96,8 @@ public class FavoriteController {
         }
     }
 
-    //listar por id
-    @GetMapping("/listId/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> listId(@PathVariable int id) {
-        ModelMapper m = new ModelMapper();
-        Favorite favorite = fC.ListarId(id);
 
-        if (favorite != null) {
-            FavoriteIdDTO dto = m.map(favorite, FavoriteIdDTO.class);
-            return ResponseEntity.ok(dto);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No existen favoritos");
-        }
-    }
 
-    @GetMapping("/most-demanded")
-    public ResponseEntity<List<FavoriteEstateDTO>> getMostDemanded() {
-        List<Object[]> resultados = fC.findMostFavoritedEstates();
-        List<FavoriteEstateDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            FavoriteEstateDTO dto = new FavoriteEstateDTO();
-            dto.setTitle(row[0].toString());
-            dto.setCity(row[1].toString());
-            dto.setDistrict(row[2].toString());
-            dto.setMonthlyPrice(((Number) row[3]).doubleValue());
-            dto.setTimesFavorite(((Number) row[4]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
 
-    @GetMapping("/unconverted-demand")
-    public ResponseEntity<List<FavoriteNoContractDTO>> getUnconvertedDemand() {
-        List<Object[]> resultados = fC.findFavoritedEstatesWithoutContract();
-        List<FavoriteNoContractDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            FavoriteNoContractDTO dto = new FavoriteNoContractDTO();
-            dto.setTitle(row[0].toString());
-            dto.setCity(row[1].toString());
-            dto.setFavorites(((Number) row[2]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
-
-    @GetMapping("/most-active-users")
-    public ResponseEntity<List<FavoriteUsersDTO>> getMostActiveUsers() {
-        List<Object[]> resultados = fC.findMostActiveUsers();
-        List<FavoriteUsersDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            FavoriteUsersDTO dto = new FavoriteUsersDTO();
-            dto.setName(row[0].toString());
-            dto.setLastName(row[1].toString());
-            dto.setTotalFavorites(((Number) row[2]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
-
-    @GetMapping("/monthly-trends")
-    public ResponseEntity<List<FavoriteMonthlyTrendDTO>> getMonthlyTrends() {
-        List<Object[]> resultados = fC.findMonthlyTrend();
-        List<FavoriteMonthlyTrendDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            FavoriteMonthlyTrendDTO dto = new FavoriteMonthlyTrendDTO();
-            dto.setMonth(row[0].toString());
-            dto.setFavoritesAdded(((Number) row[1]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
 
 }

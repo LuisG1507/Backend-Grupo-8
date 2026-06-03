@@ -1,9 +1,9 @@
 package pe.edu.pe.smartrent_backend.DTOS.contractDTOS;
 
-public class ContractLessorIncomeDTO {
+public class ContractAverageDurationDTO {
     private String name;
     private String lastName;
-    private Double totalIncome;
+    private Double averageDays;
 
     public String getName() {
         return name;
@@ -21,11 +21,11 @@ public class ContractLessorIncomeDTO {
         this.lastName = lastName;
     }
 
-    public Double getTotalIncome() {
-        return totalIncome;
+    public Double getAverageDays() {
+        return averageDays;
     }
 
-    public void setTotalIncome(Double totalIncome) {
-        this.totalIncome = totalIncome;
+    public void setAverageDays(Double averageDays) {
+        this.averageDays = averageDays;
     }
 }

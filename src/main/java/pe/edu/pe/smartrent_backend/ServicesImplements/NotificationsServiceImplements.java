@@ -44,47 +44,5 @@ public class NotificationsServiceImplements implements INotifications {
     @Override
     public void Delete(Integer id) {
         nR.deleteById(id);
-
-    }
-
-    @Override
-    public List<Notifications> buscarNoLeidos() {
-        return nR.findByReadFalse();
-    }
-
-
-    @Override
-    public List<NotificationsTypeDTO> getCountByType() {
-        List<Object[]> lista = nR.getCountByTypeRaw();
-        List<NotificationsTypeDTO> listaDTO = new ArrayList<>();
-
-        for (Object[] columna : lista) {
-            NotificationsTypeDTO dto = new NotificationsTypeDTO();
-            dto.setType((String) columna[0]);
-            dto.setQuantity((Long) columna[1]);
-            listaDTO.add(dto);
-        }
-        return listaDTO;
-    }
-
-
-    @Override
-    public List<Object[]> findReadRateByType() {
-        return nR.findReadRateByType();
-    }
-
-    @Override
-    public List<Object[]> findUsersWithMostUnreadNotifications() {
-        return nR.findUsersWithMostUnreadNotifications();
-    }
-
-    @Override
-    public List<Object[]> findMostGeneratedTypesLastMonth() {
-        return nR.findMostGeneratedTypesLastMonth();
-    }
-
-    @Override
-    public List<Object[]> findDaysWithMostSecurityAlerts() {
-        return nR.findDaysWithMostSecurityAlerts();
     }
 }

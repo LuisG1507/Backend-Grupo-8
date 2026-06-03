@@ -42,18 +42,4 @@ public class RoleServicesImplements implements IRole {
         rR.deleteRoleDirecto(id);
     }
 
-
-    // Decisiones
-
-    // Distribución de roles en la plataforma con porcentaje
-    @Override
-    public List<Object[]> RDecision1() {
-        return rR.RDecision1();
-    }
-
-    //Usuarios con más de un rol asignado
-    @Override
-    public List<Object[]> RDecision2() {
-        return rR.RDecision2();
-    }
 }
