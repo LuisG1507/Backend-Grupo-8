@@ -171,14 +171,10 @@ public class EstateController {
         return ResponseEntity.ok(list);
     }
 
-    @GetMapping("/amountT")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
-    public Double amountTotalPrice(){
-            return eI.amountTotal();
-    }
+
 
     @GetMapping("/owners-estates")
-    @PreAuthorize("hasAuthority('ADMIN', 'ARRENDATARIO')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<List<OwnerEstateDTO>> listUsersEst() {
         List<Object[]> results = eI.listUsersEstate();
         List<OwnerEstateDTO> lista = new ArrayList<>();
@@ -231,21 +227,7 @@ public class EstateController {
         return lista;
     }
 
-    @GetMapping("/avg-price-by-city")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
-    public ResponseEntity<?> avgPriceByCityAndType() {
-        List<Object[]> resultados = eI.findAvgPriceByCityAndType();
-        List<EstateAvgPriceDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            EstateAvgPriceDTO dto = new EstateAvgPriceDTO();
-            dto.setCity(row[0].toString());
-            dto.setType(row[1].toString());
-            dto.setAveragePrice(((Number) row[2]).doubleValue());
-            dto.setQuantity(((Number) row[3]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
+
 
     @GetMapping("/best-price-per-room")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
@@ -264,19 +246,7 @@ public class EstateController {
         return ResponseEntity.ok(lista);
     }
 
-    @GetMapping("/available-districts")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
-    public ResponseEntity<?> availableDistricts() {
-        List<Object[]> resultados = eI.findDistrictsWithMostAvailableEstates();
-        List<EstateDistrictAvailabilityDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            EstateDistrictAvailabilityDTO dto = new EstateDistrictAvailabilityDTO();
-            dto.setDistrict(row[0].toString());
-            dto.setAvailableEstates(((Number) row[1]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
+ 
 
     @GetMapping("/price-range-distribution")
     @PreAuthorize("hasAuthority('ADMIN')")

@@ -25,6 +25,7 @@ public class RiskPointsController {
     private IRiskPointsService rP;
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<String> registrar(@RequestBody RiskPointsDTO rD) {
         ModelMapper m = new ModelMapper();
         RiskPoints r = m.map(rD, RiskPoints.class);
@@ -38,6 +39,7 @@ public class RiskPointsController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listarTodo() {
         ModelMapper m = new ModelMapper();
         List<RiskPointsCompleteDTO> list = rP.list().stream().map(y -> {
@@ -69,75 +71,6 @@ public class RiskPointsController {
 //             ⡏⢱ ⣏⡉ ⡎⠑ ⡇ ⢎⡑ ⡇ ⡎⢱ ⡷⣸ ⣏⡉ ⢎⡑
 //             ⠧⠜ ⠧⠤ ⠣⠔ ⠇ ⠢⠜ ⠇ ⠣⠜ ⠇⠹ ⠧⠤ ⠢⠜
 
-
-    //Modelos 3D con mayor cantidad de puntos de riesgo registrados
-    @GetMapping("/decision-01")
-    public List<RiskPointsDecisionDTO1> reporteDecision1() {
-        List<Object[]> resultados = rP.RPDecision1();
-        List<RiskPointsDecisionDTO1> lista = new ArrayList<>();
-
-        for (Object[] row : resultados) {
-            RiskPointsDecisionDTO1 dto = new RiskPointsDecisionDTO1();
-            dto.setId_modelo3d(((Number) row[0]).intValue());
-            dto.setTitle((String) row[1]);
-            dto.setCity((String) row[2]);
-            dto.setTotal_puntos(((Number) row[3]).intValue());
-            lista.add(dto);
-        }
-        return lista;
-    }
-
-
-    //Distribución de puntos de riesgo por severidad con porcentaje
-    @GetMapping("/decision-02")
-    public List<RiskPointsDecisionDTO2> reporteDecision2() {
-        List<Object[]> resultados = rP.RPDecision2();
-        List<RiskPointsDecisionDTO2> lista = new ArrayList<>();
-
-        for (Object[] row : resultados) {
-            RiskPointsDecisionDTO2 dto = new RiskPointsDecisionDTO2();
-            dto.setSeverity((String) row[0]);
-            dto.setTotal(((Number) row[1]).intValue());
-            dto.setPorcentaje(((Number) row[2]).doubleValue());
-            lista.add(dto);
-        }
-        return lista;
-    }
-
-
-    // Inmuebles con más puntos de severidad crítica (prioridad de intervención)
-    @GetMapping("/decision-03")
-    public List<RiskPointsDecisionDTO3> reporteDecision3() {
-        List<Object[]> resultados = rP.RPDecision3();
-        List<RiskPointsDecisionDTO3> lista = new ArrayList<>();
-
-        for (Object[] row : resultados) {
-            RiskPointsDecisionDTO3 dto = new RiskPointsDecisionDTO3();
-            dto.setTitle((String) row[0]);
-            dto.setCity((String) row[1]);
-            dto.setDistrict((String) row[2]);
-            dto.setCritic_points(((Number) row[3]).intValue());
-            lista.add(dto);
-        }
-        return lista;
-    }
-
-    // Modelos 3D sin ningún punto de riesgo registrado
-    @GetMapping("/decision-04")
-    public List<RiskPointsDecisionDTO4> reporteDecision4() {
-        List<Object[]> resultados = rP.RPDecision4();
-        List<RiskPointsDecisionDTO4> lista = new ArrayList<>();
-
-        for (Object[] row : resultados) {
-            RiskPointsDecisionDTO4 dto = new RiskPointsDecisionDTO4();
-            dto.setId_modelo3d(((Number) row[0]).intValue());
-            dto.setTitle((String) row[1]);
-            dto.setCity((String) row[2]);
-            dto.setCreate_date((java.time.LocalDate) row[3]);
-            lista.add(dto);
-        }
-        return lista;
-    }
 
 
 }

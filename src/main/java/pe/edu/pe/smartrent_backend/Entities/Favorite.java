@@ -13,7 +13,7 @@ public class Favorite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idFavorite;
 
-    @Column(name = "creationDate", nullable = false)
+    @Column(name = "creationDate", nullable = true)
     private LocalDate creationDate;
 
     @ManyToOne

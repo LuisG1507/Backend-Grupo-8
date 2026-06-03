@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Conversation;
@@ -22,7 +23,8 @@ public class NotificationsController {
     @Autowired
     private INotifications nS;
 
-    @PostMapping("/web")
+    @PostMapping("/Registrar")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<NotificationsCompleteDTO> registrar(@RequestBody NotificationsCompleteDTO dto) {
         ModelMapper m = new ModelMapper();
         Notifications n = m.map(dto, Notifications.class);
@@ -32,6 +34,7 @@ public class NotificationsController {
     }
 
     @GetMapping("/list")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<List<NotificationDTOInfinite>> listar() {
         ModelMapper m = new ModelMapper();
         List<NotificationDTOInfinite> lista = nS.list().stream().map(y -> m.map(y, NotificationDTOInfinite.class)).collect(Collectors.toList());
@@ -39,6 +42,7 @@ public class NotificationsController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         Optional<Notifications> notifications = nS.listId(id);
         if (notifications.isPresent()) {
@@ -50,6 +54,7 @@ public class NotificationsController {
     }
 
     @PutMapping("/actualizar")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> actualizar(@RequestBody NotificationsCompleteDTO dto) {
         Optional<Notifications> existente = nS.listId(dto.getIdNotification());
         if (existente.isEmpty()) {
@@ -99,85 +104,5 @@ public class NotificationsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Notificación no encontrada");
         }
-    }
-
-    //QuerySimple
-    @GetMapping("/no-leidas")
-    public ResponseEntity<List<NotificationDTOInfinite>> listarNoLeidas() {
-        ModelMapper m = new ModelMapper();
-        List<NotificationDTOInfinite> lista = nS.buscarNoLeidos().stream()
-                .map(y -> m.map(y, NotificationDTOInfinite.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(lista);
-    }
-
-    //QueryToma
-
-
-    //Tasa de lectura por tipo de notificación
-    @GetMapping("/read-rate")
-    public ResponseEntity<?> readRate() {
-        List<Object[]> resultados = nS.findReadRateByType();
-        List<NotificationReadRateDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            NotificationReadRateDTO dto = new NotificationReadRateDTO();
-            dto.setType(row[0].toString());
-            dto.setTotal(((Number) row[1]).longValue());
-            dto.setRead(((Number) row[2]).longValue());
-            dto.setReadRate(((Number) row[3]).doubleValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
-
-    //Usuarios con más notificaciones no leídas (requieren atención inmediata)
-    @GetMapping("/unread-users")
-    public ResponseEntity<?> unreadUsers() {
-        List<Object[]> resultados = nS.findUsersWithMostUnreadNotifications();
-        List<NotificationUnreadUserDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            NotificationUnreadUserDTO dto = new NotificationUnreadUserDTO();
-            dto.setName(row[0].toString());
-            dto.setLastName(row[1].toString());
-            dto.setPending(((Number) row[2]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
-
-    //Tipos de notificación más generados en el último mes
-    @GetMapping("/monthly-types")
-    public ResponseEntity<?> monthlyTypes() {
-        List<Object[]> resultados = nS.findMostGeneratedTypesLastMonth();
-        List<NotificationTypeMonthlyDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            NotificationTypeMonthlyDTO dto = new NotificationTypeMonthlyDTO();
-            dto.setType(row[0].toString());
-            dto.setTotal(((Number) row[1]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
-
-    //Días con mayor generación de alertas de seguridad
-    @GetMapping("/security-alerts")
-    public ResponseEntity<?> securityAlerts() {
-        List<Object[]> resultados = nS.findDaysWithMostSecurityAlerts();
-        List<NotificationSecurityAlertDTO> lista = new ArrayList<>();
-
-        for (Object[] row : resultados) {
-            NotificationSecurityAlertDTO dto = new NotificationSecurityAlertDTO();
-
-            if (row[0] instanceof java.sql.Date) {
-                dto.setCreatedDate(((java.sql.Date) row[0]).toLocalDate());
-            } else {
-                dto.setCreatedDate((LocalDate) row[0]);
-            }
-
-            dto.setTotalAlerts(((Number) row[1]).intValue());
-
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
     }
 }

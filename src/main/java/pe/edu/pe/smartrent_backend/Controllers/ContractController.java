@@ -34,6 +34,7 @@ public class ContractController {
     private IUserRepository uR;
 
     @GetMapping("/list")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<ContractDTO>> list() {
         List<ContractDTO> contracts = cS.list().stream().map(c -> {
             ContractDTO dto = new ContractDTO();
@@ -53,6 +54,7 @@ public class ContractController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> create(@Valid @RequestBody ContractDTO dto) {
         Optional<Estate> estateOpt = eR.findById(dto.getIdEstate());
         Optional<User> lessorOpt = uR.findById(dto.getIdLessor());
@@ -94,9 +96,9 @@ public class ContractController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("ListarId/{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> listId(@PathVariable int id) {
+    public ResponseEntity<?> getById(@PathVariable int id) {
         Optional<Contract> contractOpt = cS.listId(id);
 
         if (contractOpt.isEmpty()) {
@@ -119,6 +121,7 @@ public class ContractController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> update(@Valid @RequestBody ContractDTO dto) {
         Optional<Contract> existingOpt = cS.listId(dto.getIdContract());
         if (existingOpt.isEmpty()) {
@@ -155,6 +158,7 @@ public class ContractController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> delete(@PathVariable int id) {
         Optional<Contract> contractOpt = cS.listId(id);
 
@@ -166,51 +170,10 @@ public class ContractController {
         }
     }
 
-    @GetMapping("/lessors-above-average")
-    public ResponseEntity<?> lessorsAboveAverage() {
-        List<Object[]> resultados = cS.findLessorsAboveAverageIncome();
-        List<ContractLessorIncomeDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            ContractLessorIncomeDTO dto = new ContractLessorIncomeDTO();
-            dto.setName(row[0].toString());
-            dto.setLastName(row[1].toString());
-            dto.setTotalIncome(((Number) row[2]).doubleValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
-    @GetMapping("/contract-rate")
-    public ResponseEntity<?> contractRate() {
-        List<Object[]> resultados = cS.findContractRatePerLessor();
-        List<ContractLessorContractRateDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            ContractLessorContractRateDTO dto = new ContractLessorContractRateDTO();
-            dto.setName(row[0].toString());
-            dto.setLastName(row[1].toString());
-            dto.setActive(((Number) row[2]).longValue());
-            dto.setInactive(((Number) row[3]).longValue());
-            dto.setTotal(((Number) row[4]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
 
-    @GetMapping("/estate-rotation")
-    public ResponseEntity<?> estateRotation() {
-        List<Object[]> resultados = cS.findEstatesWithHighestRotation();
-        List<ContractEstateRotationDTO> lista = new ArrayList<>();
-        for (Object[] row : resultados) {
-            ContractEstateRotationDTO dto = new ContractEstateRotationDTO();
-            dto.setTitle(row[0].toString());
-            dto.setCity(row[1].toString());
-            dto.setDistrict(row[2].toString());
-            dto.setTotalContracts(((Number) row[3]).longValue());
-            lista.add(dto);
-        }
-        return ResponseEntity.ok(lista);
-    }
 
     @GetMapping("/expiring-soon")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> expiringSoon() {
         List<Object[]> resultados = cS.findContractsExpiringSoon();
         List<ContractExpiringDTO> lista = new ArrayList<>();
@@ -225,4 +188,36 @@ public class ContractController {
         }
         return ResponseEntity.ok(lista);
     }
+
+    //Luciana
+
+    @GetMapping("/revenue-by-district")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> revenueByDistrict() {
+        List<Object[]> resultados = cS.findRevenueByDistrict();
+        List<ContractRevenueDistrictDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            ContractRevenueDistrictDTO dto = new ContractRevenueDistrictDTO();
+            dto.setDistrict(row[0].toString());
+            dto.setTotalRevenue(((Number) row[1]).doubleValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/average-duration-lessor")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> averageDurationByLessor() {
+        List<Object[]> resultados = cS.findAverageContractDurationByLessor();
+        List<ContractAverageDurationDTO> lista = new ArrayList<>();
+        for (Object[] row : resultados) {
+            ContractAverageDurationDTO dto = new ContractAverageDurationDTO();
+            dto.setName(row[0].toString());
+            dto.setLastName(row[1].toString());
+            dto.setAverageDays(((Number) row[2]).doubleValue());
+            lista.add(dto);
+        }
+        return ResponseEntity.ok(lista);
+    }
+
 }

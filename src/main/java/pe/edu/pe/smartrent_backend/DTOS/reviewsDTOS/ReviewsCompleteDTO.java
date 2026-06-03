@@ -28,4 +28,7 @@ public class ReviewsCompleteDTO {
 
     public Integer getIdEstate() { return idEstate; }
     public void setIdEstate(Integer idEstate) { this.idEstate = idEstate; }
+
+
+
 }

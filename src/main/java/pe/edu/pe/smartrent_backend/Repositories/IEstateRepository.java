@@ -14,12 +14,8 @@ public interface IEstateRepository extends JpaRepository<Estate, Integer> {
 
     @Query(value = "SELECT * FROM estate\n" +
             "WHERE city = :f1 AND district = :f2 AND type = :t1", nativeQuery = true)
-    List<Estate> filtroCityDistrictType(@Param("f1") String f1,@Param("f2") String f2,@Param("t1") String t1);
+    List<Estate> filtroCityDistrictType(@Param("f1") String f1, @Param("f2") String f2, @Param("t1") String t1);
 
-    @Query(value = "SELECT SUM(monthly_price) AS TotalPrice \n" +
-            "FROM estate\n" +
-            "WHERE rooms >= 3", nativeQuery = true)
-    Double SumTotal();
 
     @Query(value = "SELECT u.name, u.last_name, e.rooms, e.monthly_price\n" +
             "FROM estate e\n" +
@@ -43,28 +39,12 @@ public interface IEstateRepository extends JpaRepository<Estate, Integer> {
     List<Object[]> aar();
 
 
-    //Promedio de precios por Ciudad y Tipo
-    @Query(value = "SELECT city, type,\n" +
-            "       ROUND(AVG(monthly_price)::numeric, 2) AS precio_promedio,\n" +
-            "       COUNT(*) AS cantidad\n" +
-            "FROM estate\n" +
-            "GROUP BY city, type\n" +
-            "ORDER BY precio_promedio DESC",nativeQuery = true)
-    List<Object[]> findAvgPriceByCityAndType();
-
     @Query(value = "SELECT title, city, rooms, monthly_price,\n" +
             "       ROUND((monthly_price / rooms)::numeric, 2) AS precio_por_cuarto\n" +
             "FROM estate\n" +
-            "ORDER BY precio_por_cuarto ASC",nativeQuery = true)
+            "ORDER BY precio_por_cuarto ASC", nativeQuery = true)
     List<Object[]> findBestPricePerRoom();
 
-    @Query(value = "SELECT e.district, COUNT(*) AS inmuebles_disponibles\n" +
-            "FROM estate e\n" +
-            "LEFT JOIN contract c ON e.id_estate = c.id_estate AND c.status = true\n" +
-            "WHERE c.id_contract IS NULL\n" +
-            "GROUP BY e.district\n" +
-            "ORDER BY inmuebles_disponibles DESC",nativeQuery = true)
-    List<Object[]> findDistrictsWithMostAvailableEstates();
 
     @Query(value = "SELECT type,\n" +
             "       SUM(CASE WHEN monthly_price < 500 THEN 1 ELSE 0 END) AS rango_bajo,\n" +
@@ -72,9 +52,8 @@ public interface IEstateRepository extends JpaRepository<Estate, Integer> {
             "       SUM(CASE WHEN monthly_price > 1000 THEN 1 ELSE 0 END) AS rango_alto\n" +
             "FROM estate\n" +
             "GROUP BY type\n" +
-            "ORDER BY type",nativeQuery = true)
+            "ORDER BY type", nativeQuery = true)
     List<Object[]> findDistributionByTypeAndPriceRange();
-
 
 
 }

@@ -21,7 +21,6 @@ public class Models3DServiceImplements implements IModels3D {
     public void registrar(Models3D models3D) {
         mR.save(models3D);
     }
-
     @Override
     public Optional<Models3D> listarId(Integer id) {
         return mR.findById(id);
@@ -45,45 +44,5 @@ public class Models3DServiceImplements implements IModels3D {
     @Override
     public void eliminar(Integer id) {
         mR.deleteById(id);
-    }
-
-    @Override
-    public List<Models3D> buscarPorEstado(String state) {
-        return mR.findByState(state);
-    }
-
-    @Override
-    public List<Models3D> buscarPorFecha(LocalDate fecha) {
-        return mR.buscarPorFecha(fecha);
-    }
-
-    @Override
-    public List<Object[]> modelosConUbicacion() {
-        return mR.modelosConUbicacion();
-    }
-
-    @Override
-    public List<Object[]> inmueblesConModelo() {
-        return mR.inmueblesConModelo();
-    }
-
-    @Override
-    public List<Object[]> findEstatesWithoutModel() {
-        return mR.findEstatesWithoutModel();
-    }
-
-    @Override
-    public List<Object[]> findCitiesWithMostActiveModels() {
-        return mR.findCitiesWithMostActiveModels();
-    }
-
-    @Override
-    public List<Object[]> findStateRate() {
-        return mR.findStateRate();
-    }
-
-    @Override
-    public List<Object[]> findEstatesWithCriticalRiskPoints() {
-        return mR.findEstatesWithCriticalRiskPoints();
     }
 }

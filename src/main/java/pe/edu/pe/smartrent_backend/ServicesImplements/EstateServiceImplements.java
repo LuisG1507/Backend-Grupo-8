@@ -41,20 +41,12 @@ public class EstateServiceImplements implements IEstate {
         eR.deleteById(id);
     }
 
-    @Override
-    public List<Object[]> findAvgPriceByCityAndType() {
-        return eR.findAvgPriceByCityAndType();
-    }
 
     @Override
     public List<Object[]> findBestPricePerRoom() {
         return eR.findBestPricePerRoom();
     }
 
-    @Override
-    public List<Object[]> findDistrictsWithMostAvailableEstates() {
-        return eR.findDistrictsWithMostAvailableEstates();
-    }
 
     @Override
     public List<Object[]> findDistributionByTypeAndPriceRange() {
@@ -66,10 +58,6 @@ public class EstateServiceImplements implements IEstate {
         return eR.filtroCityDistrictType(city,district,type);
     }
 
-    @Override
-    public double amountTotal() {
-        return eR.SumTotal();
-    }
 
     @Override
     public List<Object[]> listUsersEstate() {

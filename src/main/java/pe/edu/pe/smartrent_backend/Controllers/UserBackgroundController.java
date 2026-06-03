@@ -128,35 +128,6 @@ public class UserBackgroundController {
         return lista;
     }
 
-    @GetMapping("/sources-reports")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
-    public List<UserBackgroundSourceDTO> userBackgroundSource() {
-        List<Object[]> resultados = ubS.findMostReportingSources();
-        List<UserBackgroundSourceDTO> lista = new ArrayList<>();
-
-        for (Object[] row : resultados) {
-            UserBackgroundSourceDTO dto = new UserBackgroundSourceDTO();
-            dto.setSource((String) row[0]);
-            dto.setTotalReported(((Number) row[1]).intValue());
-            lista.add(dto);
-        }
-        return lista;
-    }
-
-    @GetMapping("/monthly-trend")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
-    public List<UserBackgroundMonthlyDTO> monthlyList() {
-        List<Object[]> resultados = ubS.findMonthlyTrend();
-        List<UserBackgroundMonthlyDTO> lista = new ArrayList<>();
-
-        for (Object[] row : resultados) {
-            UserBackgroundMonthlyDTO dto = new UserBackgroundMonthlyDTO();
-            dto.setMonth((String) row[0]);
-            dto.setTotalBackground((((Number) row[1]).intValue()));
-            lista.add(dto);
-        }
-        return lista;
-    }
 
 
 
