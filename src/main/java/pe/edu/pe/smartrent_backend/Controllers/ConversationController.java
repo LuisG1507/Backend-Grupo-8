@@ -1,11 +1,13 @@
 package pe.edu.pe.smartrent_backend.Controllers;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.conversationDTOS.*;
+import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.EstateIdDTO;
 import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.User;
@@ -14,6 +16,7 @@ import pe.edu.pe.smartrent_backend.ServicesInterfaces.IMessages;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController

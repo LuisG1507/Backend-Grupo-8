@@ -3,6 +3,7 @@ import pe.edu.pe.smartrent_backend.Entities.User;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface IUser {
 

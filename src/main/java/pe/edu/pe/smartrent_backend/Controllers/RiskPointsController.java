@@ -7,8 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.riskpointsDTOS.*;
+import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.RiskReportIdDTO;
 import pe.edu.pe.smartrent_backend.Entities.Models3D;
 import pe.edu.pe.smartrent_backend.Entities.RiskPoints;
+import pe.edu.pe.smartrent_backend.Entities.RiskReport;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IRiskPointsService;
 
 import java.util.ArrayList;
@@ -50,8 +52,22 @@ public class RiskPointsController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    //listar por id
+    @GetMapping("/listId/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> listId(@PathVariable int id) {
+        ModelMapper m = new ModelMapper();
+        RiskPoints riskR = rP.listId(id);
 
-
+        if (riskR != null) {
+            RiskPointsIdDTO dto = m.map(riskR, RiskPointsIdDTO.class);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Puntos de riesgo no encontrado");
+        }
+    }
+    
 //             ⡏⢱ ⣏⡉ ⡎⠑ ⡇ ⢎⡑ ⡇ ⡎⢱ ⡷⣸ ⣏⡉ ⢎⡑
 //             ⠧⠜ ⠧⠤ ⠣⠔ ⠇ ⠢⠜ ⠇ ⠣⠜ ⠇⠹ ⠧⠤ ⠢⠜
 

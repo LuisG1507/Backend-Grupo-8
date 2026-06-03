@@ -1,80 +1,28 @@
-package pe.edu.pe.smartrent_backend.Entities;
+package pe.edu.pe.smartrent_backend.DTOS.estateDTOS;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Positive;
+import pe.edu.pe.smartrent_backend.Entities.User;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "Estate")
-public class Estate {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class EstateIdDTO {
     private Integer idEstate;
-
-    @Column(name = "title", length = 100, nullable = false)
     private String title;
-
-    @Column(name = "description", length = 200, nullable = false)
     private String description;
-
-    @Column(name = "adress", length = 200, nullable = false)
     private String adress;
-
-    @Column(name = "district", length = 200, nullable = false)
     private String district;
-
-    @Column(name = "city", length = 200, nullable = false)
     private String city;
-
-    @Column(name = "monthlyPrice", nullable = false)
-    @Positive(message = "El valor debe ser positivo")
     private Double monthlyPrice;
-
-    @Column(name = "type", length = 100, nullable = false)
     private String type;
-
-    @Column(name = "state", nullable = false)
     private Boolean state;
-
-    @Column(name = "rooms", nullable = false)
-    @Positive(message = "El valor debe ser positivo")
     private Integer rooms;
-
-    @Column(name = "bathrooms", nullable = false)
-    @Positive(message = "El valor debe ser positivo")
     private Integer bathrooms;
-
-    @Column(name = "areaM2", nullable = false)
-    @Positive(message = "El valor debe ser positivo")
     private Double areaM2;
-
-    @Column(name = "creationDate", nullable = false)
     private LocalDate creationDate;
-
-    @ManyToOne
-    @JoinColumn(name = "idUser")
-    private User user;
-
-    public Estate() {
-    }
-
-    public Estate(Integer idEstate, String title, String description, String adress, String district, String city, Double monthlyPrice, String type, Boolean state, Integer rooms, Integer bathrooms, Double areaM2, LocalDate creationDate, User user) {
-        this.idEstate = idEstate;
-        this.title = title;
-        this.description = description;
-        this.adress = adress;
-        this.district = district;
-        this.city = city;
-        this.monthlyPrice = monthlyPrice;
-        this.type = type;
-        this.state = state;
-        this.rooms = rooms;
-        this.bathrooms = bathrooms;
-        this.areaM2 = areaM2;
-        this.creationDate = creationDate;
-        this.user = user;
-    }
+    private UserD user;
 
     public Integer getIdEstate() {
         return idEstate;
@@ -180,11 +128,23 @@ public class Estate {
         this.creationDate = creationDate;
     }
 
-    public User getUser() {
+    public UserD getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserD user) {
         this.user = user;
+    }
+
+    public static class UserD{
+        private Integer idUser;
+
+        public Integer getIdUser() {
+            return idUser;
+        }
+
+        public void setIdUser(Integer idUser) {
+            this.idUser = idUser;
+        }
     }
 }

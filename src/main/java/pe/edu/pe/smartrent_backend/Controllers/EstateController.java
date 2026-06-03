@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.*;
+import pe.edu.pe.smartrent_backend.DTOS.favoriteDTOS.FavoriteIdDTO;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
+import pe.edu.pe.smartrent_backend.Entities.Favorite;
 import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IEstate;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
@@ -51,7 +53,7 @@ public class EstateController {
         e.setBathrooms(eD.getBathrooms());
         e.setAreaM2(eD.getAreaM2());
         e.setCreationDate(eD.getCreationDate());
-        e.setUsers(user);
+        e.setUser(user);
 
         eI.Register(e);
         return ResponseEntity.ok("Estate registrado correctamente");
@@ -91,7 +93,7 @@ public class EstateController {
         e.setBathrooms(eC.getBathrooms());
         e.setAreaM2(eC.getAreaM2());
         e.setCreationDate(eC.getCreationDate());
-        e.setUsers(eC.getUsers());
+        e.setUser(eC.getUsers());
 
         eI.Actualizar(e);
 
@@ -107,6 +109,22 @@ public class EstateController {
             return ResponseEntity.ok("El valor ha sido eliminado");
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se ha encontrado el valor ingresado");
+        }
+    }
+
+    //listar por id
+    @GetMapping("/listId/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> listId(@PathVariable int id) {
+        ModelMapper m = new ModelMapper();
+        Optional<Estate> estate = eI.listarId(id);
+
+        if (estate.isPresent()) {
+            EstateIdDTO dto = m.map(estate.get(), EstateIdDTO.class);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("EL inmueble no existe");
         }
     }
 
@@ -141,10 +159,10 @@ public class EstateController {
             dto.setCreationDate(e.getCreationDate());
 
             EstateFilterDTO.UserBasicDTO userDTO = new EstateFilterDTO.UserBasicDTO();
-            userDTO.setIdUser(e.getUsers().getIdUser());
-            userDTO.setName(e.getUsers().getName());
-            userDTO.setLastName(e.getUsers().getLastName());
-            userDTO.setUsername(e.getUsers().getUsername());
+            userDTO.setIdUser(e.getUser().getIdUser());
+            userDTO.setName(e.getUser().getName());
+            userDTO.setLastName(e.getUser().getLastName());
+            userDTO.setUsername(e.getUser().getUsername());
             dto.setUser(userDTO);
 
             return dto;
@@ -228,7 +246,7 @@ public class EstateController {
         return ResponseEntity.ok(lista);
     }
 
-
+ 
 
     @GetMapping("/price-range-distribution")
     @PreAuthorize("hasAuthority('ADMIN')")

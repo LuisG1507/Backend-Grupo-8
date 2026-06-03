@@ -27,6 +27,11 @@ public class Models3DServiceImplements implements IModels3D {
     }
 
     @Override
+    public Models3D listId(Integer id) {
+        return mR.findById(id).orElse(null);
+    }
+
+    @Override
     public void actualizar(Models3D models3D) {
         mR.save(models3D);
     }

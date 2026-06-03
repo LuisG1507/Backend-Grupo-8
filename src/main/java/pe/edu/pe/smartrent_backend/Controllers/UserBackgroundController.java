@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.pe.smartrent_backend.DTOS.userDTOS.UserIdDTO;
 import pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS.*;
+import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.Entities.UsersBackground;
 import pe.edu.pe.smartrent_backend.Repositories.IUserBackgroundRepository;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUserBackground;
@@ -42,6 +44,22 @@ public class UserBackgroundController {
             ModelMapper m = new ModelMapper();
             return m.map(x, UserBackgroundGETDTO.class);
         }).collect(Collectors.toList());
+    }
+
+    //listar por id
+    @GetMapping("/listId/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> listId(@PathVariable int id) {
+        ModelMapper m = new ModelMapper();
+        UsersBackground user = ubS.listId(id);
+
+        if (user != null) {
+            UserBackgroundIdDTO dto = m.map(user, UserBackgroundIdDTO.class);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Userbackground no encontrado");
+        }
     }
 
     @PutMapping("/{id}")

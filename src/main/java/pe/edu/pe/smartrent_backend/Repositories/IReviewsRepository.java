@@ -20,13 +20,13 @@ public interface IReviewsRepository extends JpaRepository<Reviews,Integer> {
     List<Object[]> findEstatesBelowAverageRating();
 
     @Query(value = "SELECT u.name, u.last_name,\n" +
-            "       ROUND(AVG(r.calification)::numeric, 2) AS promedio,\n" +
+            "       ROUND(SUM(r.calification)::numeric, 2) AS suma,\n" +
             "       COUNT(r.id_review) AS total_resenas\n" +
             "FROM reviews r\n" +
             "INNER JOIN estate e ON r.id_estate = e.id_estate\n" +
             "INNER JOIN users u ON e.id_user = u.id_user\n" +
             "GROUP BY u.id_user, u.name, u.last_name\n" +
-            "ORDER BY promedio DESC", nativeQuery = true)
+            "ORDER BY suma DESC", nativeQuery = true)
     List<Object[]> findLessorsWithBestRating();
 
     @Query(value = "SELECT e.id_estate, e.title, e.city, e.monthly_price\n" +

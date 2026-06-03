@@ -8,9 +8,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.*;
+import pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS.UserBackgroundIdDTO;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.RiskReport;
 import pe.edu.pe.smartrent_backend.Entities.User;
+import pe.edu.pe.smartrent_backend.Entities.UsersBackground;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IEstate;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IRiskReport;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
@@ -114,5 +116,22 @@ public class RiskReportController {
         }
         rS.Delete(id);
         return ResponseEntity.ok("Registro con ID " + id + " eliminado correctamente.");
+    }
+  
+  
+   //listar por id
+    @GetMapping("/listId/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> listId(@PathVariable int id) {
+        ModelMapper m = new ModelMapper();
+        RiskReport riskR = rS.listId(id);
+
+        if (riskR != null) {
+            RiskReportIdDTO dto = m.map(riskR, RiskReportIdDTO.class);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Informe de riesgo no encontrado");
+        }
     }
 }

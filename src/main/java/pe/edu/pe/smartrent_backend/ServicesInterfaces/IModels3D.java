@@ -8,6 +8,7 @@ public interface IModels3D {
 
     public void registrar(Models3D models3D);
     public Optional<Models3D> listarId(Integer id);
+    public Models3D listId(Integer id);
     public void actualizar(Models3D models3D);
     public List<Models3D> Listar();
     public void eliminar(Integer id);

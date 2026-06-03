@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.favoriteDTOS.*;
+import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Model3DIdDTO;
 import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Models3DDTO;
 import pe.edu.pe.smartrent_backend.Entities.Favorite;
 import pe.edu.pe.smartrent_backend.Entities.Models3D;
