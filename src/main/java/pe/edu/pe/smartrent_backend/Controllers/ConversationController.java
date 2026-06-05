@@ -109,10 +109,19 @@ public class ConversationController {
         return new ResponseEntity<>("La conversación y sus mensajes han sido eliminados", HttpStatus.OK);
     }
 
+    //listar por id
+    @GetMapping("/listId/{id}")
 
+    public ResponseEntity<?> listId(@PathVariable int id) {
+        ModelMapper m = new ModelMapper();
+        Conversation conversation = cI.listId(id);
 
-
-
-
-
+        if (conversation != null) {
+            ConversationIdDTO dto = m.map(conversation, ConversationIdDTO.class);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("La conversacion no existe");
+        }
+    }
 }

@@ -96,6 +96,22 @@ public class FavoriteController {
         }
     }
 
+    //listar por id
+    @GetMapping("/listId/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> listId(@PathVariable int id) {
+        ModelMapper m = new ModelMapper();
+        Favorite favorite = fC.ListarId(id);
+
+        if (favorite != null) {
+            FavoriteIdDTO dto = m.map(favorite, FavoriteIdDTO.class);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No existen favoritos");
+        }
+    }
+
 
 
 
