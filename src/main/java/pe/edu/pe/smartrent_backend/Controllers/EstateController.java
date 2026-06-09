@@ -31,7 +31,7 @@ public class EstateController {
     private IUser uS;
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
     public ResponseEntity<?> registrar(@RequestBody EstateCreateDTO eD){
         User user = uS.listId(eD.getIdUser());
 
@@ -60,7 +60,7 @@ public class EstateController {
     }
 
     @GetMapping("/listAll")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> listarTodo(){
         ModelMapper m = new ModelMapper();
         List<EstateDTO> list = eI.listar().stream().map(y->m.map(y,EstateDTO.class))
@@ -73,7 +73,7 @@ public class EstateController {
     }
 
     @PutMapping("/actualizar")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
     private ResponseEntity<String> actualizar(@RequestBody EstateCompleteDTO eC){
         Optional<Estate> exist = eI.listarId(eC.getIdEstate());
         if(exist.isEmpty()){
@@ -101,7 +101,7 @@ public class EstateController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
     public ResponseEntity<String> eliminar(@PathVariable Integer id){
         Optional<Estate> vE = eI.listarId(id);
         if(vE.isPresent()){
@@ -114,7 +114,7 @@ public class EstateController {
 
     //listar por id
     @GetMapping("/listId/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listId(@PathVariable int id) {
         ModelMapper m = new ModelMapper();
         Optional<Estate> estate = eI.listarId(id);
@@ -129,7 +129,7 @@ public class EstateController {
     }
 
     @GetMapping("/filtro/{Ciudad}/{Distrito}/{Tipo}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> filtroEstate(
             @PathVariable String Ciudad,
             @PathVariable String Distrito,
@@ -174,7 +174,7 @@ public class EstateController {
 
 
     @GetMapping("/owners-estates")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<List<OwnerEstateDTO>> listUsersEst() {
         List<Object[]> results = eI.listUsersEstate();
         List<OwnerEstateDTO> lista = new ArrayList<>();
@@ -192,7 +192,7 @@ public class EstateController {
     }
 
     @GetMapping("/user-estate/{district}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<List<EstateUsersDTO>> ListaUser(@PathVariable String district) {
         List<Object[]> results = eI.EstateDistrict(district);
         List<EstateUsersDTO> lista = new ArrayList<>();
@@ -212,7 +212,7 @@ public class EstateController {
 
     //Listas tipo Object[]
     @GetMapping("/AlquilerEncimaDelPromedio")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public List<AboveAverageRentsDTO> AVG() {
         List<Object[]> resultados = eI.AboveAverageRents();
         List<AboveAverageRentsDTO> lista = new ArrayList<>();
@@ -230,7 +230,7 @@ public class EstateController {
 
 
     @GetMapping("/best-price-per-room")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> bestPricePerRoom() {
         List<Object[]> resultados = eI.findBestPricePerRoom();
         List<EstatePricePerRoomDTO> lista = new ArrayList<>();
@@ -249,7 +249,7 @@ public class EstateController {
  
 
     @GetMapping("/price-range-distribution")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> priceRangeDistribution() {
         List<Object[]> resultados = eI.findDistributionByTypeAndPriceRange();
         List<EstatePriceRangeDTO> lista = new ArrayList<>();

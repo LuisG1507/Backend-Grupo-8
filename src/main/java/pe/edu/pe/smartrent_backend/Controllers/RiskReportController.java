@@ -35,7 +35,7 @@ public class RiskReportController {
     private IEstate eS;
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<String> registrar(@RequestBody RiskReportDTO dto) {
 
         User u = uS.listId(dto.getIdUser());
@@ -60,7 +60,7 @@ public class RiskReportController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<String> modificar(@PathVariable int id, @RequestBody RiskReportDTO dto) {
 
         RiskReport existente = rS.listId(id);
@@ -90,7 +90,7 @@ public class RiskReportController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listar() {
         List<RiskReportDTO> aux = rS.list().stream().map(x -> {
             ModelMapper m = new ModelMapper();
@@ -107,7 +107,7 @@ public class RiskReportController {
 
     //Eliminar
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable("id") Integer id) {
         RiskReport p = rS.listId(id);
         if (p == null) {
@@ -121,7 +121,7 @@ public class RiskReportController {
   
    //listar por id
     @GetMapping("/listId/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listId(@PathVariable int id) {
         ModelMapper m = new ModelMapper();
         RiskReport riskR = rS.listId(id);

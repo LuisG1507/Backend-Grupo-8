@@ -28,7 +28,7 @@ public class Models3DController {
     private IModels3D mI;
 
     @PostMapping("/Register")
-    @PreAuthorize("hasAuthority('ARRENDADOR')")
+    // @PreAuthorize("hasAuthority('ARRENDADOR')")
     private ResponseEntity<?> registrar(@RequestBody Models3DDTO mD) {
         ModelMapper m = new ModelMapper();
         try {
@@ -42,7 +42,7 @@ public class Models3DController {
     }
 
     @PutMapping("/Update")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
     public ResponseEntity<String> actualizar(@RequestBody Models3DCompleteDTO model3D){
         Optional<Models3D> exist = mI.listarId(model3D.getIdModels3D());
         if (exist.isEmpty()) {
@@ -64,7 +64,7 @@ public class Models3DController {
     }
 
     @GetMapping("/ListModels3D")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> ListarModels(){
         ModelMapper m = new ModelMapper();
         List<Models3DDTO> list = mI.Listar().stream().map(y->m.map(y,Models3DDTO.class))
@@ -77,7 +77,7 @@ public class Models3DController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
     public ResponseEntity<?> eliminar(@PathVariable Integer id){
         Optional<Models3D> exist = mI.listarId(id);
         if(exist.isPresent()){
@@ -90,7 +90,7 @@ public class Models3DController {
 
     //listar por id
     @GetMapping("/listId/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listId(@PathVariable int id) {
         ModelMapper m = new ModelMapper();
         Models3D models3D = mI.listId(id);
