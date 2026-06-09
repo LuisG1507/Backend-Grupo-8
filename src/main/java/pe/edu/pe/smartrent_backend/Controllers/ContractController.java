@@ -102,7 +102,7 @@ public class ContractController {
         Optional<Contract> contractOpt = cS.listId(id);
 
         if (contractOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Contract not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Contrato no encontrado");
         }
 
         Contract c = contractOpt.get();

@@ -8,8 +8,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.*;
+import pe.edu.pe.smartrent_backend.DTOS.riskpointsDTOS.RiskPointsIdDTO;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.Reviews;
+import pe.edu.pe.smartrent_backend.Entities.RiskPoints;
 import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IEstate;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IReviewsService;
@@ -102,6 +104,22 @@ public class ReviewsController {
             return new ResponseEntity<>("El valor ha sido eliminado", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("No se ha encontrado el valor ingresado", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //listar por id
+    @GetMapping("/listId/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> listId(@PathVariable int id) {
+        ModelMapper m = new ModelMapper();
+        Reviews reviews = rI.listId(id);
+
+        if (reviews != null) {
+            ReviewsIdDTO dto = m.map(reviews, ReviewsIdDTO.class);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Puntos de riesgo no encontrado");
         }
     }
 

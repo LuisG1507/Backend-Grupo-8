@@ -30,6 +30,11 @@ public class FavoriteServiceImplements implements IFavorite {
     }
 
     @Override
+    public Favorite ListarId(Integer id) {
+        return fR.findById(id).orElse(null);
+    }
+
+    @Override
     public List<Favorite> list() {
         return fR.findAll();
     }
