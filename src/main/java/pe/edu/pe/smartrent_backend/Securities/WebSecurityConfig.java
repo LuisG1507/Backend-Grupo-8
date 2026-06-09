@@ -64,14 +64,14 @@ public class WebSecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
                       .requestMatchers("/Users/Registrar").permitAll()
 //                      .requestMatchers("").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
 //                          .anyRequest().permitAll()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .exceptionHandling(e -> e.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(Customizer.withDefaults());
-        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        // httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 

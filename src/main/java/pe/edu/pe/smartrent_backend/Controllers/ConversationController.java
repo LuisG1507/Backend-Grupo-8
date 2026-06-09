@@ -30,7 +30,7 @@ public class ConversationController {
     private IMessages mS;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> registrar(@RequestBody ConversationDTO cD) {
         Conversation c = new Conversation();
 
@@ -51,7 +51,7 @@ public class ConversationController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listarTodo() {
         List<ConversationCompleteDTO> list = cI.list().stream().map(y -> {
             ConversationCompleteDTO dto = new ConversationCompleteDTO();
@@ -70,7 +70,7 @@ public class ConversationController {
     }
 
     @PutMapping("/actualizar")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> actualizar(@RequestBody ConversationCompleteDTO cC) {
         Conversation exist = cI.listId(cC.getId());
         if (exist == null || exist.getIdConversation() == null) {
@@ -96,7 +96,7 @@ public class ConversationController {
 
     //Delete
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable Integer id) {
         Conversation exist = cI.listId(id);
 

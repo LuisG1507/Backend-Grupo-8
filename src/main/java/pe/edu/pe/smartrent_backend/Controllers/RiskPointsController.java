@@ -28,7 +28,7 @@ public class RiskPointsController {
     private IRiskPointsService rP;
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ARRENDADOR', 'ARRENDATARIO')")
+    // @PreAuthorize("hasAnyAuthority('ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<String> registrar(@RequestBody RiskPointsDTO rD) {
         ModelMapper m = new ModelMapper();
         RiskPoints r = m.map(rD, RiskPoints.class);
@@ -42,7 +42,7 @@ public class RiskPointsController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listarTodo() {
         ModelMapper m = new ModelMapper();
         List<RiskPointsCompleteDTO> list = rP.list().stream().map(y -> {
@@ -57,7 +57,7 @@ public class RiskPointsController {
 
     //listar por id
     @GetMapping("/listId/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listId(@PathVariable int id) {
         ModelMapper m = new ModelMapper();
         RiskPoints riskR = rP.listId(id);
@@ -72,7 +72,7 @@ public class RiskPointsController {
     }
 
     @PutMapping("/actualizar/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
     public ResponseEntity<String> actualizar(@PathVariable Integer id, @RequestBody RiskPointsIdDTO dto) {
         RiskPoints exist = rP.listId(id);
 
@@ -97,7 +97,7 @@ public class RiskPointsController {
 
 
     @DeleteMapping("/eliminar/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
     public ResponseEntity<String> eliminar(@PathVariable Integer id) {
         RiskPoints exist = rP.listId(id);
 
