@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 public class EstateDTO {
 
+    private Integer idEstate;
     private String title;
     private String description;
     private String adress;
@@ -19,6 +20,14 @@ public class EstateDTO {
     private Double areaM2;
     private LocalDate creationDate;
     private int idUser;
+
+    public Integer getIdEstate() {
+        return idEstate;
+    }
+
+    public void setIdEstate(Integer idEstate) {
+        this.idEstate = idEstate;
+    }
 
     public String getTitle() {
         return title;

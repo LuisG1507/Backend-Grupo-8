@@ -6,7 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.messagesDTOS.*;
+import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import pe.edu.pe.smartrent_backend.Entities.Messages;
+import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IConversationService;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IMessages;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
@@ -28,17 +30,38 @@ public class MessagesController {
     @PostMapping("/registrar")
     // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public void registrar(@RequestBody MessagesCompleteDTO dto) {
-        ModelMapper m = new ModelMapper();
-        Messages msg = m.map(dto, Messages.class);
+        Messages msg = new Messages();
+        msg.setContent(dto.getContent());
+        msg.setStatus(dto.getStatus());
+        msg.setDateSent(dto.getDateSent());
+
+        Conversation conversation = new Conversation();
+        conversation.setIdConversation(dto.getIdConversation());
+        msg.setConversation(conversation);
+
+        User user = new User();
+        user.setIdUser(dto.getIdUser());
+        msg.setUser(user);
+
         mS.Registrar(msg);
     }
 
     @PutMapping("/actualizar/{id}")
     // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> actualizar(@PathVariable int id, @RequestBody MessagesCompleteDTO dto) {
-        ModelMapper m = new ModelMapper();
-        Messages msg = m.map(dto, Messages.class);
+        Messages msg = new Messages();
         msg.setIdMessage(id);
+        msg.setContent(dto.getContent());
+        msg.setStatus(dto.getStatus());
+        msg.setDateSent(dto.getDateSent());
+
+        Conversation conversation = new Conversation();
+        conversation.setIdConversation(dto.getIdConversation());
+        msg.setConversation(conversation);
+
+        User user = new User();
+        user.setIdUser(dto.getIdUser());
+        msg.setUser(user);
 
         Messages existente = mS.listId(id).orElse(null);
         if (existente == null) {
@@ -54,7 +77,11 @@ public class MessagesController {
     // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<MessagesDTOInfinite>>listar(){
         ModelMapper m= new ModelMapper();
-        List<MessagesDTOInfinite>lista=mS.list().stream().map(y ->m.map(y, MessagesDTOInfinite.class)).collect(Collectors.toList());
+        List<MessagesDTOInfinite>lista=mS.list().stream().map(y -> {
+            MessagesDTOInfinite dto = m.map(y, MessagesDTOInfinite.class);
+            dto.setIdMessage(y.getIdMessage());
+            return dto;
+        }).collect(Collectors.toList());
         return ResponseEntity.ok(lista);
     }
     @DeleteMapping("/{id}")
@@ -78,6 +105,7 @@ public class MessagesController {
             Messages m = message.get();
 
             MessagesDTOInfinite dto = new MessagesDTOInfinite();
+            dto.setIdMessage(m.getIdMessage());
             dto.setContent(m.getContent());
             dto.setStatus(m.getStatus());
             dto.setDateSent(m.getDateSent());

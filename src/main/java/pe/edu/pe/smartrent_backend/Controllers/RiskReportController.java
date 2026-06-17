@@ -94,7 +94,15 @@ public class RiskReportController {
     public ResponseEntity<?> listar() {
         List<RiskReportDTO> aux = rS.list().stream().map(x -> {
             ModelMapper m = new ModelMapper();
-            return m.map(x, RiskReportDTO.class);
+            RiskReportDTO dto = m.map(x, RiskReportDTO.class);
+            dto.setIdRiskReport(x.getIdRiskReport());
+            if (x.getUser() != null) {
+                dto.setIdUser(x.getUser().getIdUser());
+            }
+            if (x.getEstate() != null) {
+                dto.setIdEstate(x.getEstate().getIdEstate());
+            }
+            return dto;
         }).collect(Collectors.toList());
 
         if (aux.isEmpty()) {

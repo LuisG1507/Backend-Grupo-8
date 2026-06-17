@@ -3,11 +3,20 @@ package pe.edu.pe.smartrent_backend.DTOS.messagesDTOS;
 import java.time.LocalDate;
 
 public class MessagesDTOInfinite {
+    private Integer idMessage;
     private String content;
     private String status;
     private LocalDate dateSent;
     private ConversationBasicDTO conversation;
     private UserBasicDTO user;
+
+    public Integer getIdMessage() {
+        return idMessage;
+    }
+
+    public void setIdMessage(Integer idMessage) {
+        this.idMessage = idMessage;
+    }
 
     public String getContent() {
         return content;

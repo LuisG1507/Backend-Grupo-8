@@ -30,9 +30,16 @@ public class Models3DController {
     @PostMapping("/Register")
     // @PreAuthorize("hasAuthority('ARRENDADOR')")
     private ResponseEntity<?> registrar(@RequestBody Models3DDTO mD) {
-        ModelMapper m = new ModelMapper();
         try {
-            Models3D mL = m.map(mD, Models3D.class);
+            Models3D mL = new Models3D();
+            mL.setFileURL(mD.getFileURL());
+            mL.setState(mD.getState());
+            mL.setCreateDate(mD.getCreateDate());
+
+            Estate estate = new Estate();
+            estate.setIdEstate(mD.getIdEstate());
+            mL.setEstate(estate);
+
             mI.registrar(mL);
             return ResponseEntity.ok("Registrado correctamente");
         } catch (Exception e) {
@@ -67,7 +74,14 @@ public class Models3DController {
     // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> ListarModels(){
         ModelMapper m = new ModelMapper();
-        List<Models3DDTO> list = mI.Listar().stream().map(y->m.map(y,Models3DDTO.class))
+        List<Models3DDTO> list = mI.Listar().stream().map(y -> {
+                    Models3DDTO dto = m.map(y,Models3DDTO.class);
+                    dto.setIdModels3D(y.getIdModels3D());
+                    if (y.getEstate() != null) {
+                        dto.setIdEstate(y.getEstate().getIdEstate());
+                    }
+                    return dto;
+                })
                 .collect(Collectors.toList());
         if(list.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay datos en este objeto");

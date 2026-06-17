@@ -3,12 +3,21 @@ package pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS;
 import java.time.LocalDate;
 
 public class NotificationDTOInfinite {
+    private Integer idNotification;
     private String title;
     private String message;
     private String type;
     private Boolean read;
     private LocalDate createdDate;
     private UserBasicDTO user;
+
+    public Integer getIdNotification() {
+        return idNotification;
+    }
+
+    public void setIdNotification(Integer idNotification) {
+        this.idNotification = idNotification;
+    }
 
     public String getTitle() {
         return title;

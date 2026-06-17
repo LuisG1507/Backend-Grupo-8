@@ -65,6 +65,7 @@ public class FavoriteController {
 
         List<FavoriteDTOInfinite> list = favorites.stream().map(fav -> {
             FavoriteDTOInfinite dto = new FavoriteDTOInfinite();
+            dto.setIdFavorite(fav.getIdFavorite());
             dto.setCreationDate(fav.getCreationDate());
 
             FavoriteDTOInfinite.UserBasicDTO userDTO = new FavoriteDTOInfinite.UserBasicDTO();

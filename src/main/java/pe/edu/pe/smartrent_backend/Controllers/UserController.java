@@ -49,6 +49,9 @@ UserController {
         User p = m.map(dto, User.class);
         p.setIdUser(id);
 
+        if (p.getPassword() == null || p.getPassword().trim().isEmpty()) {
+            p.setPassword(existente.getPassword());
+        }
 
         if (p.getRoles() != null && !p.getRoles().isEmpty()) {
             p.getRoles().forEach(role -> role.setUser(p));

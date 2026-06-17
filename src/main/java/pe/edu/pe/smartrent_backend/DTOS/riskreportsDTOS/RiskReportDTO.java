@@ -5,6 +5,8 @@ import java.time.LocalDate;
 public class RiskReportDTO {
 
 
+    private Integer idRiskReport;
+
     private String type;
 
     private LocalDate creationDate;
@@ -18,6 +20,14 @@ public class RiskReportDTO {
     private Integer idUser;
 
     private Integer idEstate;
+
+    public Integer getIdRiskReport() {
+        return idRiskReport;
+    }
+
+    public void setIdRiskReport(Integer idRiskReport) {
+        this.idRiskReport = idRiskReport;
+    }
 
     public String getType() {
         return type;
