@@ -3,9 +3,18 @@ package pe.edu.pe.smartrent_backend.DTOS.favoriteDTOS;
 import java.time.LocalDate;
 
 public class FavoriteDTOInfinite {
+    private Integer idFavorite;
     private LocalDate creationDate;
     private UserBasicDTO user;
     private EstateBasicDTO estate;
+
+    public Integer getIdFavorite() {
+        return idFavorite;
+    }
+
+    public void setIdFavorite(Integer idFavorite) {
+        this.idFavorite = idFavorite;
+    }
 
     public LocalDate getCreationDate() {
         return creationDate;

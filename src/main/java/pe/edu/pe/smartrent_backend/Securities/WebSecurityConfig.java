@@ -62,10 +62,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(req -> req
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
-                      .requestMatchers("/Users/Registrar").permitAll()
-//                      .requestMatchers("").permitAll()
-                        .anyRequest().authenticated()
-//                          .anyRequest().permitAll()
+                        .anyRequest().permitAll()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)

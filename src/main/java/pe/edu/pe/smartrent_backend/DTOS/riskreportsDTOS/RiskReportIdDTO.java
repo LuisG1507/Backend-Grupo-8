@@ -15,7 +15,7 @@ public class RiskReportIdDTO {
     private String riskLevel;
     private String description;
     private String details;
-    private UserP user;
+    private UserP idUser;
     private EstateP estate;
 
     public Integer getIdRiskReport() {
@@ -66,12 +66,12 @@ public class RiskReportIdDTO {
         this.details = details;
     }
 
-    public UserP getUser() {
-        return user;
+    public UserP getIdUser() {
+        return idUser;
     }
 
-    public void setUser(UserP user) {
-        this.user = user;
+    public void setIdUser(UserP idUser) {
+        this.idUser = idUser;
     }
 
     public EstateP getEstate() {

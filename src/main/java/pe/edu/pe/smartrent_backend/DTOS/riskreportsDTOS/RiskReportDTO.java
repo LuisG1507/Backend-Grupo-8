@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 public class RiskReportDTO {
 
-
     private String type;
 
     private LocalDate creationDate;

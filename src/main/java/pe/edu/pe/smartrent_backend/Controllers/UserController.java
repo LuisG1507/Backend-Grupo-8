@@ -63,7 +63,7 @@ UserController {
 
     //Listar
     @GetMapping("/listar")
-    @PreAuthorize("hasAuthority('ADMIN')")
+   // @PreAuthorize("hasAuthority('ADMIN')")
     public List<UserSinContraseniaDTO> listar() {
         return uS.list().stream().map(x -> {
             ModelMapper m = new ModelMapper();
@@ -73,7 +73,7 @@ UserController {
 
     //Eliminar
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
+    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<String> eliminar(@PathVariable("id") Integer id) {
         User p = uS.listId(id);
         if (p == null) {
@@ -86,7 +86,7 @@ UserController {
 
     //Listar por DNI
     @GetMapping("/findByDni/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listarDni(@PathVariable("id") Integer id) {
         User p = uS.BuscarPorDNI(id);
         if (p == null) {
@@ -101,7 +101,7 @@ UserController {
 
     //listar por id
     @GetMapping("/listarporId/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listId(@PathVariable int id) {
         ModelMapper m = new ModelMapper();
         User user = uS.listId(id);
@@ -117,7 +117,7 @@ UserController {
 
     // Usuarios no verificados con antecedentes registrados
     @GetMapping("/unverified-with-backgrounds")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> unverifiedWithBackgrounds() {
         List<Object[]> resultados = uS.findUnverifiedUsersWithBackgrounds();
 

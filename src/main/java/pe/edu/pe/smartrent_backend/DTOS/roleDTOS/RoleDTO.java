@@ -6,12 +6,18 @@ import pe.edu.pe.smartrent_backend.Entities.User;
 
 public class RoleDTO {
 
-
+    private int id;
     private String rol;
-
     private Integer idUser;
 
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getRol() {
         return rol;

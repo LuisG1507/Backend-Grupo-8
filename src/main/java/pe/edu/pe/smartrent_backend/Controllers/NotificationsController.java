@@ -24,7 +24,7 @@ public class NotificationsController {
     private INotifications nS;
 
     @PostMapping("/Registrar")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<NotificationsCompleteDTO> registrar(@RequestBody NotificationsCompleteDTO dto) {
         ModelMapper m = new ModelMapper();
         Notifications n = m.map(dto, Notifications.class);
@@ -34,7 +34,7 @@ public class NotificationsController {
     }
 
     @GetMapping("/list")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
+    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<List<NotificationDTOInfinite>> listar() {
         ModelMapper m = new ModelMapper();
         List<NotificationDTOInfinite> lista = nS.list().stream().map(y -> m.map(y, NotificationDTOInfinite.class)).collect(Collectors.toList());
@@ -42,7 +42,7 @@ public class NotificationsController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         Optional<Notifications> notifications = nS.listId(id);
         if (notifications.isPresent()) {
@@ -54,7 +54,7 @@ public class NotificationsController {
     }
 
     @PutMapping("/actualizar")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> actualizar(@RequestBody NotificationsCompleteDTO dto) {
         Optional<Notifications> existente = nS.listId(dto.getIdNotification());
         if (existente.isEmpty()) {
