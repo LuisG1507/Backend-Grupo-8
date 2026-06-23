@@ -47,8 +47,13 @@ public class RoleController {
    // @PreAuthorize("hasAuthority('ADMIN')")
     public List<RoleDTO> listar() {
         return rS.list().stream().map(x -> {
-            ModelMapper m = new ModelMapper();
-            return m.map(x, RoleDTO.class);
+            RoleDTO dto = new RoleDTO();
+            dto.setId(x.getId());
+            dto.setRol(x.getRol());
+            if (x.getUser() != null) {
+                dto.setIdUser(x.getUser().getIdUser());
+            }
+            return dto;
         }).collect(Collectors.toList());
     }
 
@@ -62,15 +67,22 @@ public class RoleController {
                         .body("El campo 'rol' no puede estar vacío");
             }
 
-            ModelMapper m = new ModelMapper();
-            Role p = m.map(dto, Role.class);
-            p.setId(id);
-
             Role existente = rS.listId(id);
             if (existente == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("No se puede modificar. No existe un registro con el ID: " + id);
             }
+
+            User u = uS.listId(dto.getIdUser());
+            if (u == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No existe un usuario con ID: " + dto.getIdUser());
+            }
+
+            Role p = new Role();
+            p.setId(id);
+            p.setRol(dto.getRol());
+            p.setUser(u);
 
             rS.Update(p);
             return ResponseEntity.ok("Registro con ID " + id + " modificado correctamente.");
@@ -105,8 +117,12 @@ public class RoleController {
                     .status(HttpStatus.NOT_FOUND)
                     .body("No existe un registro con el ID: " + id);
         }
-        ModelMapper m = new ModelMapper();
-        RoleDTO dto = m.map(p,RoleDTO .class);
+        RoleDTO dto = new RoleDTO();
+        dto.setId(p.getId());
+        dto.setRol(p.getRol());
+        if (p.getUser() != null) {
+            dto.setIdUser(p.getUser().getIdUser());
+        }
         return ResponseEntity.ok(dto);
     }
 

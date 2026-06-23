@@ -30,9 +30,16 @@ public class Models3DController {
     @PostMapping("/Register")
     //@PreAuthorize("hasAuthority('ARRENDADOR')")
     private ResponseEntity<?> registrar(@RequestBody Models3DDTO mD) {
-        ModelMapper m = new ModelMapper();
         try {
-            Models3D mL = m.map(mD, Models3D.class);
+            Models3D mL = new Models3D();
+            mL.setFileURL(mD.getFileURL());
+            mL.setState(mD.getState());
+            mL.setCreateDate(mD.getCreateDate());
+
+            Estate estate = new Estate();
+            estate.setIdEstate(mD.getIdEstate());
+            mL.setEstate(estate);
+
             mI.registrar(mL);
             return ResponseEntity.ok("Registrado correctamente");
         } catch (Exception e) {

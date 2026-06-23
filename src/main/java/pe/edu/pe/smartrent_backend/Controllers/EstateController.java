@@ -31,7 +31,7 @@ public class EstateController {
     private IUser uS;
 
     @PostMapping
-    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
     public ResponseEntity<?> registrar(@RequestBody EstateCreateDTO eD){
         User user = uS.listId(eD.getIdUser());
 

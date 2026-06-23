@@ -34,7 +34,7 @@ public class ContractController {
     private IUserRepository uR;
 
     @GetMapping("/list")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<ContractDTO>> list() {
         List<ContractDTO> contracts = cS.list().stream().map(c -> {
             ContractDTO dto = new ContractDTO();
@@ -54,7 +54,7 @@ public class ContractController {
     }
 
     @PostMapping
-    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> create(@Valid @RequestBody ContractDTO dto) {
         Optional<Estate> estateOpt = eR.findById(dto.getIdEstate());
         Optional<User> lessorOpt = uR.findById(dto.getIdLessor());
@@ -97,7 +97,7 @@ public class ContractController {
     }
 
     @GetMapping("/{id}")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getById(@PathVariable int id) {
         Optional<Contract> contractOpt = cS.listId(id);
 
@@ -121,7 +121,7 @@ public class ContractController {
     }
 
     @PutMapping
-    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> update(@Valid @RequestBody ContractDTO dto) {
         Optional<Contract> existingOpt = cS.listId(dto.getIdContract());
         if (existingOpt.isEmpty()) {
@@ -173,7 +173,7 @@ public class ContractController {
 
 
     @GetMapping("/expiring-soon")
-    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> expiringSoon() {
         List<Object[]> resultados = cS.findContractsExpiringSoon();
         List<ContractExpiringDTO> lista = new ArrayList<>();
@@ -192,7 +192,7 @@ public class ContractController {
     //Luciana
 
     @GetMapping("/revenue-by-district")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> revenueByDistrict() {
         List<Object[]> resultados = cS.findRevenueByDistrict();
         List<ContractRevenueDistrictDTO> lista = new ArrayList<>();

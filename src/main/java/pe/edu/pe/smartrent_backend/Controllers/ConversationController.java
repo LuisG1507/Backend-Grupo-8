@@ -70,7 +70,7 @@ public class ConversationController {
     }
 
     @PutMapping("/actualizar")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> actualizar(@RequestBody ConversationCompleteDTO cC) {
         Conversation exist = cI.listId(cC.getId());
         if (exist == null || exist.getIdConversation() == null) {
@@ -96,7 +96,7 @@ public class ConversationController {
 
     //Delete
     @DeleteMapping("/{id}")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable Integer id) {
         Conversation exist = cI.listId(id);
 
@@ -111,6 +111,7 @@ public class ConversationController {
 
     //listar por id
     @GetMapping("/listId/{id}")
+
     public ResponseEntity<?> listId(@PathVariable int id) {
         ModelMapper m = new ModelMapper();
         Conversation conversation = cI.listId(id);

@@ -5,11 +5,19 @@ import pe.edu.pe.smartrent_backend.Entities.Estate;
 import java.time.LocalDate;
 
 public class Models3DDTO {
+    private Integer idModels3D;
     private String fileURL;
     private String state;
     private LocalDate createDate;
     private int idEstate;
 
+    public Integer getIdModels3D() {
+        return idModels3D;
+    }
+
+    public void setIdModels3D(Integer idModels3D) {
+        this.idModels3D = idModels3D;
+    }
 
     public String getFileURL() {
         return fileURL;
