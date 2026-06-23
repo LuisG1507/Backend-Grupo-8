@@ -10,7 +10,6 @@ public class RoleDTO {
     private String rol;
     private Integer idUser;
 
-
     public int getId() {
         return id;
     }
