@@ -206,7 +206,7 @@ public class ContractController {
     }
 
     @GetMapping("/average-duration-lessor")
-    // @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> averageDurationByLessor() {
         List<Object[]> resultados = cS.findAverageContractDurationByLessor();
         List<ContractAverageDurationDTO> lista = new ArrayList<>();

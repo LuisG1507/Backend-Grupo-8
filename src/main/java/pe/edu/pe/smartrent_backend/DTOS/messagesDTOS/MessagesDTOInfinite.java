@@ -10,6 +10,7 @@ public class MessagesDTOInfinite {
     private ConversationBasicDTO conversation;
     private UserBasicDTO user;
 
+
     public Integer getIdMessage() {
         return idMessage;
     }

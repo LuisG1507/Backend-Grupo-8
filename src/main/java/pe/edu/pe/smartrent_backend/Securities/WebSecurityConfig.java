@@ -68,10 +68,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(req -> req
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
-                      .requestMatchers("/Users/Registrar").permitAll()
-//                      .requestMatchers("").permitAll()
                         .anyRequest().permitAll()
-//                          .anyRequest().permitAll()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -81,7 +78,7 @@ public class WebSecurityConfig {
         return httpSecurity.build();
     }
 
-    @Bean
+   /* @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:4200", "http://127.0.0.1:4200"));
@@ -92,8 +89,5 @@ public class WebSecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
-
-
-
+*/
 }
