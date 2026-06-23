@@ -3,7 +3,7 @@ package pe.edu.pe.smartrent_backend.DTOS.userDTOS;
 import java.time.LocalDate;
 
 public class UserSinContraseniaDTO {
-    private Integer idUser;
+    private int idUser;
     private String name;
     private String lastName;
     private Integer dni;
@@ -16,11 +16,11 @@ public class UserSinContraseniaDTO {
     private Boolean enabled;
     private String role;
 
-    public Integer getIdUser() {
+    public int getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(Integer idUser) {
+    public void setIdUser(int idUser) {
         this.idUser = idUser;
     }
 

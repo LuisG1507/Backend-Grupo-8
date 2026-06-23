@@ -30,7 +30,7 @@ public class ConversationController {
     private IMessages mS;
 
     @PostMapping
-    // @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> registrar(@RequestBody ConversationDTO cD) {
         Conversation c = new Conversation();
 
@@ -51,7 +51,7 @@ public class ConversationController {
     }
 
     @GetMapping
-    // @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listarTodo() {
         List<ConversationCompleteDTO> list = cI.list().stream().map(y -> {
             ConversationCompleteDTO dto = new ConversationCompleteDTO();

@@ -28,7 +28,7 @@ public class MessagesController {
     private IMessages mS;
 
     @PostMapping("/registrar")
-    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
+    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public void registrar(@RequestBody MessagesCompleteDTO dto) {
         Messages msg = new Messages();
         msg.setContent(dto.getContent());
@@ -47,7 +47,7 @@ public class MessagesController {
     }
 
     @PutMapping("/actualizar/{id}")
-    // @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> actualizar(@PathVariable int id, @RequestBody MessagesCompleteDTO dto) {
         Messages msg = new Messages();
         msg.setIdMessage(id);
@@ -74,7 +74,7 @@ public class MessagesController {
     }
 
     @GetMapping("/listar")
-    // @PreAuthorize("hasAuthority('ADMIN')")
+   // @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<MessagesDTOInfinite>>listar(){
         ModelMapper m= new ModelMapper();
         List<MessagesDTOInfinite>lista=mS.list().stream().map(y -> {
@@ -85,7 +85,7 @@ public class MessagesController {
         return ResponseEntity.ok(lista);
     }
     @DeleteMapping("/{id}")
-    // @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         Optional<Messages> message = mS.listId(id);
         if (message.isPresent()) {
@@ -97,7 +97,7 @@ public class MessagesController {
         }
     }
     @GetMapping("/{id}")
-    // @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> buscarPorId(@PathVariable int id) {
         Optional<Messages> message = mS.listId(id);
 

@@ -18,7 +18,7 @@ public class EstateCompleteDTO {
     private Integer bathrooms;
     private Double areaM2;
     private LocalDate creationDate;
-    private User user;
+    private UserId idUser;
 
     public Integer getIdEstate() {
         return idEstate;
@@ -124,11 +124,23 @@ public class EstateCompleteDTO {
         this.creationDate = creationDate;
     }
 
-    public User getUsers() {
-        return user;
+    public UserId getIdUser() {
+        return idUser;
     }
 
-    public void setUsers(User user) {
-        this.user = user;
+    public void setIdUser(UserId idUser) {
+        this.idUser = idUser;
+    }
+
+    public static class UserId{
+        private Integer idUser;
+
+        public Integer getIdUser() {
+            return idUser;
+        }
+
+        public void setIdUser(Integer idUser) {
+            this.idUser = idUser;
+        }
     }
 }

@@ -29,7 +29,7 @@ public class FavoriteController {
 
     //Register
     @PostMapping
-    // @PreAuthorize("hasAnyAuthority('ARRENDATARIO', 'ARRENDADOR')")
+    //@PreAuthorize("hasAnyAuthority('ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> Register(@RequestBody FavoriteDTO fD){
             ModelMapper m = new ModelMapper();
             Favorite p = m.map(fD, Favorite.class);
@@ -38,7 +38,7 @@ public class FavoriteController {
     }
 
     @PutMapping
-    // @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> Update(@RequestBody FavoriteCompleteDTO fD){
         Optional<Favorite> exist = fC.listId(fD.getIdFavorite());
         if(exist.isEmpty()){
@@ -54,7 +54,7 @@ public class FavoriteController {
     }
 
     @GetMapping
-    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
+    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> ListFavorite(){
         List<Favorite> favorites = fC.list();
 
@@ -86,7 +86,7 @@ public class FavoriteController {
     }
 
     @DeleteMapping("/{id}")
-    // @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Integer id){
         Optional<Favorite> exist = fC.listId(id);
         if(exist.isPresent()){
@@ -99,7 +99,7 @@ public class FavoriteController {
 
     //listar por id
     @GetMapping("/listId/{id}")
-    // @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listId(@PathVariable int id) {
         ModelMapper m = new ModelMapper();
         Favorite favorite = fC.ListarId(id);
