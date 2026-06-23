@@ -42,7 +42,12 @@ public class UserBackgroundController {
     public List<UserBackgroundGETDTO> listar() {
         return ubS.list().stream().map(x -> {
             ModelMapper m = new ModelMapper();
-            return m.map(x, UserBackgroundGETDTO.class);
+            UserBackgroundGETDTO dto = m.map(x, UserBackgroundGETDTO.class);
+            dto.setIdUserBackground(x.getIdBackground());
+            if (x.getUser() != null) {
+                dto.setIdUser(x.getUser().getIdUser());
+            }
+            return dto;
         }).collect(Collectors.toList());
     }
 

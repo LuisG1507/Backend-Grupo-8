@@ -37,7 +37,11 @@ public class NotificationsController {
     // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<List<NotificationDTOInfinite>> listar() {
         ModelMapper m = new ModelMapper();
-        List<NotificationDTOInfinite> lista = nS.list().stream().map(y -> m.map(y, NotificationDTOInfinite.class)).collect(Collectors.toList());
+        List<NotificationDTOInfinite> lista = nS.list().stream().map(y -> {
+            NotificationDTOInfinite dto = m.map(y, NotificationDTOInfinite.class);
+            dto.setIdNotification(y.getIdNotification());
+            return dto;
+        }).collect(Collectors.toList());
         return ResponseEntity.ok(lista);
     }
 
@@ -84,6 +88,7 @@ public class NotificationsController {
             Notifications n = notification.get();
 
             NotificationDTOInfinite dto = new NotificationDTOInfinite();
+            dto.setIdNotification(n.getIdNotification());
             dto.setTitle(n.getTitle());
             dto.setMessage(n.getMessage());
             dto.setType(n.getType());

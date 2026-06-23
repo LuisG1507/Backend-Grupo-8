@@ -63,7 +63,14 @@ public class EstateController {
     // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> listarTodo(){
         ModelMapper m = new ModelMapper();
-        List<EstateDTO> list = eI.listar().stream().map(y->m.map(y,EstateDTO.class))
+        List<EstateDTO> list = eI.listar().stream().map(y -> {
+                    EstateDTO dto = m.map(y, EstateDTO.class);
+                    dto.setIdEstate(y.getIdEstate());
+                    if (y.getUser() != null) {
+                        dto.setIdUser(y.getUser().getIdUser());
+                    }
+                    return dto;
+                })
                 .collect(Collectors.toList());
         if(list.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay valores en esta tabla");
