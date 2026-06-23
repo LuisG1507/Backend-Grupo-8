@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/Users")
-public class
-UserController {
+@CrossOrigin(origins = "http://localhost:4200")
+public class UserController {
 
     @Autowired
     private IUser uS;
@@ -36,7 +36,7 @@ UserController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
+   // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
     public ResponseEntity<String> modificar(@PathVariable int id, @RequestBody UserDTO dto) {
         ModelMapper m = new ModelMapper();
 
