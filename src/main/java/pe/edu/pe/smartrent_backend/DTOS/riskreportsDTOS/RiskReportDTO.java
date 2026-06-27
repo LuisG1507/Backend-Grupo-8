@@ -18,13 +18,6 @@ public class RiskReportDTO {
 
     private Integer idEstate;
 
-    public Integer getIdRiskReport() {
-        return idRiskReport;
-    }
-
-    public void setIdRiskReport(Integer idRiskReport) {
-        this.idRiskReport = idRiskReport;
-    }
 
     public String getType() {
         return type;
