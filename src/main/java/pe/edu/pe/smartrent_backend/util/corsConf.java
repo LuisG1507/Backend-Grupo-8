@@ -15,7 +15,7 @@ public class corsConf {
                 registry.addMapping("/**")
                         .allowedOrigins(
                                 "http://localhost:4200",
-                                "https://miapp.com"
+                                "https://frontend-grupo-8.onrender.com"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*");
