@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.notificationsDTOS.*;
+import pe.edu.pe.smartrent_backend.Entities.Conversation;
 import pe.edu.pe.smartrent_backend.Entities.Notifications;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.INotifications;
 
