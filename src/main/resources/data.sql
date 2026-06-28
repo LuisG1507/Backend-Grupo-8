@@ -4,16 +4,15 @@
 
 -- 1. BORRAR TABLAS (orden importante por FKs)
 -- ============================================================
-DROP TABLE IF EXISTS messages CASCADE;
-DROP TABLE IF EXISTS conversation CASCADE;
-DROP TABLE IF EXISTS favorite CASCADE;
-
 TRUNCATE TABLE risk_points CASCADE;
 TRUNCATE TABLE risk_report CASCADE;
 TRUNCATE TABLE users_background CASCADE;
 TRUNCATE TABLE models3d CASCADE;
 TRUNCATE TABLE notification CASCADE;
 TRUNCATE TABLE reviews CASCADE;
+TRUNCATE TABLE favorite CASCADE;
+TRUNCATE TABLE messages CASCADE;
+TRUNCATE TABLE conversation CASCADE;
 TRUNCATE TABLE contract CASCADE;
 TRUNCATE TABLE estate CASCADE;
 TRUNCATE TABLE roles CASCADE;
@@ -324,7 +323,182 @@ VALUES (1, '2024-02-01 00:00:00', '2025-02-01 00:00:00', 2500.00, true, '2024-01
        (40, '2023-12-01 00:00:00', '2024-06-01 00:00:00', 1800.00, false, '2023-11-25 10:00:00', 3, 3, 47);
 
 -- ============================================================
--- 6. REVIEWS
+-- 6. CONVERSATION
+-- ============================================================
+INSERT INTO conversation (id_conversation, id_user1, id_user2, id_estate)
+VALUES (1, 5, 2, 1),
+       (2, 6, 2, 2),
+       (3, 7, 3, 3),
+       (4, 10, 3, 4),
+       (5, 9, 4, 5),
+       (6, 5, 4, 6),
+       (7, 6, 8, 7),
+       (8, 7, 8, 8),
+       (9, 10, 2, 9),
+       (10, 9, 3, 10),
+       (11, 5, 3, 10),
+       (12, 6, 4, 5),
+       (13, 16, 11, 11),
+       (14, 17, 11, 12),
+       (15, 18, 12, 13),
+       (16, 19, 12, 14),
+       (17, 20, 12, 15),
+       (18, 21, 13, 16),
+       (19, 22, 13, 17),
+       (20, 24, 14, 19),
+       (21, 25, 14, 20),
+       (22, 26, 14, 21),
+       (23, 28, 15, 22),
+       (24, 29, 15, 23),
+       (25, 30, 15, 24),
+       (26, 31, 11, 25),
+       (27, 32, 20, 26),
+       (28, 33, 20, 27),
+       (29, 35, 24, 29),
+       (30, 36, 24, 30),
+       (31, 38, 2, 32),
+       (32, 39, 12, 33),
+       (33, 41, 14, 35),
+       (34, 44, 11, 38),
+       (35, 45, 20, 39),
+       (36, 46, 24, 40),
+       (37, 16, 2, 1),
+       (38, 18, 8, 8),
+       (39, 21, 14, 19),
+       (40, 25, 11, 25);
+
+-- ============================================================
+-- 7. MESSAGES
+-- ============================================================
+INSERT INTO messages (id_message, content, status, date_sent, id_conversation, id_user)
+VALUES (1, 'Hola, me interesa el departamento, ¿está disponible?', 'LEIDO', '2024-02-01', 1, 5),
+       (2, 'Sí, está disponible, ¿cuándo quieres verlo?', 'LEIDO', '2024-02-01', 1, 2),
+       (3, 'Tengo una fuga de agua urgente en el baño', 'URGENTE', '2024-03-10', 2, 6),
+       (4, 'Voy a mandar al técnico mañana temprano', 'LEIDO', '2024-03-10', 2, 2),
+       (5, 'El ascensor lleva 3 días sin funcionar', 'URGENTE', '2024-03-15', 3, 7),
+       (6, 'Ya reporté al edificio, están trabajando en ello', 'LEIDO', '2024-03-15', 3, 3),
+       (7, 'Quisiera saber si aceptan mascotas', 'PENDIENTE', '2024-04-01', 4, 10),
+       (8, 'Sí, aceptamos mascotas pequeñas', 'LEIDO', '2024-04-01', 4, 3),
+       (9, 'Hay una gotera en el techo desde la semana pasada', 'URGENTE', '2024-04-10', 5, 9),
+       (10, '¿Cuándo pueden hacer el mantenimiento del aire?', 'PENDIENTE', '2024-04-15', 6, 5),
+       (11, 'Problema eléctrico, se van los breakers constantemente', 'URGENTE', '2024-04-20', 7, 6),
+       (12, 'Buenas, ¿el precio incluye los servicios?', 'LEIDO', '2024-04-25', 8, 7),
+       (13, 'Hola, vi el loft de Barranco, ¿sigue disponible?', 'LEIDO', '2024-05-01', 13, 16),
+       (14, 'Sí, claro, podemos coordinar visita esta semana', 'LEIDO', '2024-05-01', 13, 11),
+       (15, '¿La casa de Asia se alquila por temporada o anual?', 'LEIDO', '2024-05-05', 14, 17),
+       (16, 'Se puede ambas modalidades, ¿qué prefieres?', 'LEIDO', '2024-05-05', 14, 11),
+       (17, 'Quisiera saber si el depa de Magdalena tiene cochera', 'PENDIENTE', '2024-05-10', 15, 18),
+       (18, 'Sí, incluye una cochera techada', 'LEIDO', '2024-05-10', 15, 12),
+       (19, 'El estudio de Lince ¿tiene WiFi incluido?', 'LEIDO', '2024-05-15', 16, 19),
+       (20, 'Sí, WiFi y servicios básicos están incluidos', 'LEIDO', '2024-05-15', 16, 12),
+       (21, 'Hay un olor raro saliendo del desagüe del baño', 'URGENTE', '2024-06-10', 17, 20),
+       (22, 'Mando al gasfitero hoy mismo, disculpas', 'LEIDO', '2024-06-10', 17, 12),
+       (23, 'La casa de Chorrillos ¿permite parrillero?', 'PENDIENTE', '2024-06-15', 18, 21),
+       (24, 'Sí, hay zona de parrilla en el patio', 'LEIDO', '2024-06-15', 18, 13),
+       (25, 'Reporto que el caño del baño está roto', 'URGENTE', '2024-06-20', 19, 22),
+       (26, 'En camino el técnico, espéralo a las 4pm', 'LEIDO', '2024-06-20', 19, 13),
+       (27, 'El penthouse ¿tiene piscina propia o compartida?', 'LEIDO', '2024-06-25', 20, 24),
+       (28, 'Es piscina exclusiva del penthouse', 'LEIDO', '2024-06-25', 20, 14),
+       (29, 'Hay un cortocircuito en la cocina', 'URGENTE', '2024-07-01', 21, 25),
+       (30, 'Cortando la luz general por seguridad, ya envío técnico', 'URGENTE', '2024-07-01', 21, 14),
+       (31, '¿Cuándo se puede hacer el contrato de la casa Surco?', 'PENDIENTE', '2024-07-03', 22, 26),
+       (32, 'Te paso el borrador hoy en la tarde', 'LEIDO', '2024-07-03', 22, 14),
+       (33, 'El parque cerca al flat ¿es seguro de noche?', 'LEIDO', '2024-07-05', 23, 28),
+       (34, 'Sí, está bien iluminado y patrullado', 'LEIDO', '2024-07-05', 23, 15),
+       (35, 'Quisiera negociar el precio del depa Golf', 'PENDIENTE', '2024-07-08', 24, 29),
+       (36, 'Podemos conversar, llámame a las 3pm', 'LEIDO', '2024-07-08', 24, 15),
+       (37, 'El estudio La Victoria ¿tiene problemas de seguridad?', 'PENDIENTE', '2024-07-10', 25, 30),
+       (38, 'La zona ha mejorado mucho, hay vigilancia particular', 'LEIDO', '2024-07-10', 25, 15),
+       (39, 'Detecté humedad en una pared del loft', 'URGENTE', '2024-07-15', 26, 31),
+       (40, 'Voy esta semana a evaluarlo, gracias por avisar', 'LEIDO', '2024-07-15', 26, 11),
+       (41, 'La casa Bellavista ¿se alquila amoblada?', 'LEIDO', '2024-07-20', 27, 32),
+       (42, 'Solo cocina y closets, los muebles los pones tú', 'LEIDO', '2024-07-20', 27, 20),
+       (43, '¿El depa del puerto tiene problemas de ruido?', 'PENDIENTE', '2024-07-25', 28, 33),
+       (44, 'Hay un poco de ruido en horas pico nada más', 'LEIDO', '2024-07-25', 28, 20),
+       (45, 'Se cayó parte del techo del baño', 'URGENTE', '2024-08-05', 29, 35),
+       (46, 'Eso es grave, mando estructura mañana al primera hora', 'URGENTE', '2024-08-05', 29, 24),
+       (47, '¿El flat corporativo viene con servicios pagos?', 'LEIDO', '2024-08-10', 30, 36),
+       (48, 'Agua y mantenimiento incluidos, luz y gas no', 'LEIDO', '2024-08-10', 30, 24),
+       (49, 'Hola, vi el estudio Pardo ¿está libre?', 'LEIDO', '2024-08-15', 31, 38),
+       (50, 'Sí, libre desde el 1 de septiembre', 'LEIDO', '2024-08-15', 31, 2),
+       (51, 'La casa de Pueblo Libre ¿permite hacer reuniones?', 'PENDIENTE', '2024-08-20', 32, 39),
+       (52, 'Sí, siempre que no afecte a los vecinos', 'LEIDO', '2024-08-20', 32, 12),
+       (53, 'El penthouse Barranco ¿tiene jacuzzi?', 'LEIDO', '2024-09-01', 33, 41),
+       (54, 'No tiene jacuzzi pero sí terraza grande', 'LEIDO', '2024-09-01', 33, 14),
+       (55, 'El depa Lince ¿incluye lavadora?', 'PENDIENTE', '2024-09-05', 34, 44),
+       (56, 'No, lavadora la pone el inquilino', 'LEIDO', '2024-09-05', 34, 11),
+       (57, 'Hay olor a gas en la cocina, vine a reportarlo', 'URGENTE', '2024-09-10', 35, 45),
+       (58, 'CIERRA LA LLAVE GENERAL, voy en camino', 'URGENTE', '2024-09-10', 35, 20),
+       (59, '¿La casa Chorrillos tiene servicio de seguridad?', 'LEIDO', '2024-09-15', 36, 46),
+       (60, 'Hay caseta de vigilancia en la calle', 'LEIDO', '2024-09-15', 36, 24),
+       (61, 'Buen día, ¿el depa Larco sigue disponible para verlo?', 'LEIDO', '2024-09-20', 37, 16),
+       (62, 'Sí, agendemos para mañana 10am', 'LEIDO', '2024-09-20', 37, 2),
+       (63, 'Vi el penthouse San Isidro ¿se acepta mascotas grandes?', 'PENDIENTE', '2024-09-22', 38, 18),
+       (64, 'Solo mascotas hasta 15kg, lo siento', 'LEIDO', '2024-09-22', 38, 8),
+       (65, 'Mi familia viene a visitarme ¿hay restricciones?', 'PENDIENTE', '2024-09-25', 39, 21),
+       (66, 'Ningún problema, solo respetar horario de áreas comunes', 'LEIDO', '2024-09-25', 39, 14),
+       (67, 'El loft tiene una mancha extraña en el techo', 'URGENTE', '2024-09-28', 40, 25),
+       (68, 'Mando al técnico mañana, parece humedad del piso superior', 'LEIDO', '2024-09-28', 40, 11);
+
+-- ============================================================
+-- 8. FAVORITE
+-- ============================================================
+INSERT INTO favorite (id_favorite, creation_date, id_user, id_estate)
+VALUES (1, '2024-02-05', 5, 2),
+       (2, '2024-02-10', 5, 6),
+       (3, '2024-02-15', 6, 1),
+       (4, '2024-02-20', 6, 8),
+       (5, '2024-03-01', 7, 3),
+       (6, '2024-03-05', 7, 4),
+       (7, '2024-03-10', 9, 5),
+       (8, '2024-03-15', 9, 8),
+       (9, '2024-03-20', 10, 6),
+       (10, '2024-04-01', 10, 7),
+       (11, '2024-04-05', 5, 8),
+       (12, '2024-04-10', 6, 5),
+       (13, '2024-05-02', 16, 11),
+       (14, '2024-05-03', 16, 25),
+       (15, '2024-05-05', 17, 12),
+       (16, '2024-05-08', 17, 19),
+       (17, '2024-05-12', 18, 13),
+       (18, '2024-05-15', 18, 33),
+       (19, '2024-05-18', 19, 14),
+       (20, '2024-05-20', 19, 24),
+       (21, '2024-05-22', 20, 15),
+       (22, '2024-05-25', 20, 39),
+       (23, '2024-05-28', 21, 16),
+       (24, '2024-06-01', 21, 29),
+       (25, '2024-06-03', 22, 17),
+       (26, '2024-06-05', 22, 38),
+       (27, '2024-06-08', 23, 18),
+       (28, '2024-06-10', 23, 28),
+       (29, '2024-06-12', 24, 19),
+       (30, '2024-06-15', 24, 35),
+       (31, '2024-06-18', 25, 20),
+       (32, '2024-06-20', 25, 30),
+       (33, '2024-06-22', 26, 21),
+       (34, '2024-06-25', 26, 40),
+       (35, '2024-06-28', 28, 22),
+       (36, '2024-07-01', 29, 23),
+       (37, '2024-07-03', 30, 24),
+       (38, '2024-07-05', 31, 25),
+       (39, '2024-07-08', 32, 26),
+       (40, '2024-07-10', 33, 27),
+       (41, '2024-07-15', 35, 29),
+       (42, '2024-07-18', 36, 30),
+       (43, '2024-07-20', 38, 32),
+       (44, '2024-07-22', 39, 33),
+       (45, '2024-07-25', 41, 35),
+       (46, '2024-08-01', 44, 38),
+       (47, '2024-08-05', 45, 39),
+       (48, '2024-08-10', 46, 40),
+       (49, '2024-08-15', 5, 19),
+       (50, '2024-08-20', 6, 29),
+       (51, '2024-08-25', 9, 35),
+       (52, '2024-09-01', 10, 12);
+
+-- ============================================================
+-- 9. REVIEWS
 -- ============================================================
 INSERT INTO reviews (id_review, calification, comment, creation_date, id_user, id_estate)
 VALUES (1, 5.0, 'Excelente departamento, muy limpio y bien ubicado', '2024-05-01', 5, 1),
@@ -369,7 +543,7 @@ VALUES (1, 5.0, 'Excelente departamento, muy limpio y bien ubicado', '2024-05-01
        (40, 5.0, 'El propietario es excelente, muy responsable', '2024-11-15', 24, 19);
 
 -- ============================================================
--- 7. NOTIFICATION
+-- 10. NOTIFICATION
 -- ============================================================
 INSERT INTO notification (id_notification, title, message, type, read, created_date, id_user)
 VALUES (1, 'Nuevo contrato', 'Tu contrato para Miraflores ha sido activado', 'CONTRATO', true, '2024-02-01', 5),
@@ -422,7 +596,7 @@ VALUES (1, 'Nuevo contrato', 'Tu contrato para Miraflores ha sido activado', 'CO
        (45, 'Pago recibido', 'Pago de Octubre del depa Jesús María recibido', 'PAGO', true, '2024-10-05', 13);
 
 -- ============================================================
--- 8. MODELS3D
+-- 11. MODELS3D
 -- ============================================================
 INSERT INTO models3d (id_models3d, fileurl, state, create_date, id_estate)
 VALUES (1, 'https://cdn.smartrent.pe/models/estate1.glb', 'ACTIVO', '2024-02-10', 1),
@@ -447,7 +621,7 @@ VALUES (1, 'https://cdn.smartrent.pe/models/estate1.glb', 'ACTIVO', '2024-02-10'
        (20, 'https://cdn.smartrent.pe/models/estate40.glb', 'INACTIVO', '2024-08-25', 40);
 
 -- ============================================================
--- 9. RISK_POINTS
+-- 12. RISK_POINTS
 -- ============================================================
 INSERT INTO risk_points (id_risk_points, description, cordx, cordy, cordz, severity, id_models3d)
 VALUES (1, 'Grieta en pared principal', 12.5, 3.2, 0.0, 'ALTO', 1),
@@ -489,7 +663,7 @@ VALUES (1, 'Grieta en pared principal', 12.5, 3.2, 0.0, 'ALTO', 1),
        (37, 'Salida de emergencia mal señalizada', 2.5, 4.0, 0.0, 'MEDIO', 20);
 
 -- ============================================================
--- 10. RISK_REPORT
+-- 13. RISK_REPORT
 -- ============================================================
 INSERT INTO risk_report (id_risk_report, type, creation_date, risk_level, description, details, id_user, id_estate)
 VALUES (1, 'Estructural', '2024-03-01', 'ALTO', 'Grieta visible en pared de carga',
@@ -554,7 +728,7 @@ VALUES (1, 'Estructural', '2024-03-01', 'ALTO', 'Grieta visible en pared de carg
         'Mejorar carteles y luces de emergencia', 44, 40);
 
 -- ============================================================
--- 11. USERS_BACKGROUND
+-- 14. USERS_BACKGROUND
 -- ============================================================
 INSERT INTO users_background (id_background, type, description, source, registration_date, id_user)
 VALUES (1, 'Morosidad', 'Deuda pendiente con arrendador anterior por 3 meses', 'INFOCORP', '2023-06-01', 7),
