@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/Users")
-@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
     @Autowired
@@ -68,10 +67,9 @@ public class UserController {
     @GetMapping("/listar")
    // @PreAuthorize("hasAuthority('ADMIN')")
     public List<UserSinContraseniaDTO> listar() {
-        return uS.list().stream().map(x -> {
-            ModelMapper m = new ModelMapper();
-            return m.map(x, UserSinContraseniaDTO.class);
-        }).collect(Collectors.toList());
+        return uS.list().stream()
+                .map(this::toUserWithoutPasswordDTO)
+                .collect(Collectors.toList());
     }
 
     //Eliminar
@@ -97,9 +95,7 @@ public class UserController {
                     .status(HttpStatus.NOT_FOUND)
                     .body("No existe un registro con el ID: " + id);
         }
-        ModelMapper m = new ModelMapper();
-        UserSinContraseniaDTO dto = m.map(p, UserSinContraseniaDTO.class);
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(toUserWithoutPasswordDTO(p));
     }
 
     //listar por id
@@ -136,6 +132,21 @@ public class UserController {
         }
 
         return ResponseEntity.ok(lista);
+    }
+
+    private UserSinContraseniaDTO toUserWithoutPasswordDTO(User user) {
+        ModelMapper mapper = new ModelMapper();
+        UserSinContraseniaDTO dto = mapper.map(user, UserSinContraseniaDTO.class);
+
+        String roles = user.getRoles() == null
+                ? ""
+                : user.getRoles().stream()
+                .filter(role -> role.getRol() != null)
+                .map(role -> role.getRol())
+                .collect(Collectors.joining(", "));
+
+        dto.setRole(roles);
+        return dto;
     }
 
 }

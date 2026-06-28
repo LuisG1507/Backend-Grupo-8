@@ -1,5 +1,4 @@
 package pe.edu.pe.smartrent_backend.ServicesInterfaces;
-import pe.edu.pe.smartrent_backend.Controllers.FavoriteController;
 import pe.edu.pe.smartrent_backend.Entities.Favorite;
 import java.util.List;
 import java.util.Optional;

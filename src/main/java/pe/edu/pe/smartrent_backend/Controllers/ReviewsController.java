@@ -4,14 +4,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.*;
-import pe.edu.pe.smartrent_backend.DTOS.riskpointsDTOS.RiskPointsIdDTO;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.Reviews;
-import pe.edu.pe.smartrent_backend.Entities.RiskPoints;
 import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IEstate;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IReviewsService;
@@ -64,11 +60,7 @@ public class ReviewsController {
             return dto;
         }).collect(Collectors.toList());
 
-        if (list.isEmpty()) {
-            return new ResponseEntity<>("No hay valores en esta tabla", HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(list, HttpStatus.OK);
-        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @PutMapping("/actualizar/{id}")

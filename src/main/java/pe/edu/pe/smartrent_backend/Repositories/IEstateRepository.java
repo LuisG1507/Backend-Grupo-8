@@ -12,9 +12,14 @@ import java.util.List;
 @Repository
 public interface IEstateRepository extends JpaRepository<Estate, Integer> {
 
-    @Query(value = "SELECT * FROM estate\n" +
-            "WHERE city = :f1 AND district = :f2 AND type = :t1", nativeQuery = true)
-    List<Estate> filtroCityDistrictType(@Param("f1") String f1, @Param("f2") String f2, @Param("t1") String t1);
+    @Query(value = "SELECT * FROM estate " +
+            "WHERE LOWER(TRIM(city)) = LOWER(TRIM(:city)) " +
+            "AND LOWER(TRIM(district)) = LOWER(TRIM(:district)) " +
+            "AND LOWER(TRIM(type)) = LOWER(TRIM(:type))", nativeQuery = true)
+    List<Estate> filtroCityDistrictType(
+            @Param("city") String city,
+            @Param("district") String district,
+            @Param("type") String type);
 
 
     @Query(value = "SELECT u.name, u.last_name, e.rooms, e.monthly_price\n" +

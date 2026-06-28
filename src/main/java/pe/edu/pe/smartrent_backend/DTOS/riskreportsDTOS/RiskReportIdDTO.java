@@ -1,11 +1,5 @@
 package pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import pe.edu.pe.smartrent_backend.Entities.Estate;
-import pe.edu.pe.smartrent_backend.Entities.User;
-
 import java.time.LocalDate;
 
 public class RiskReportIdDTO {
@@ -15,8 +9,8 @@ public class RiskReportIdDTO {
     private String riskLevel;
     private String description;
     private String details;
-    private UserP idUser;
-    private EstateP estate;
+    private Integer idUser;
+    private Integer idEstate;
 
     public Integer getIdRiskReport() {
         return idRiskReport;
@@ -66,43 +60,19 @@ public class RiskReportIdDTO {
         this.details = details;
     }
 
-    public UserP getIdUser() {
+    public Integer getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(UserP idUser) {
+    public void setIdUser(Integer idUser) {
         this.idUser = idUser;
     }
 
-    public EstateP getEstate() {
-        return estate;
+    public Integer getIdEstate() {
+        return idEstate;
     }
 
-    public void setEstate(EstateP estate) {
-        this.estate = estate;
-    }
-
-    public static class EstateP{
-        private Integer idEstate;
-
-        public Integer getIdEstate() {
-            return idEstate;
-        }
-
-        public void setIdEstate(Integer idEstate) {
-            this.idEstate = idEstate;
-        }
-    }
-
-    public static class UserP{
-        private Integer idUser;
-
-        public Integer getIdUser() {
-            return idUser;
-        }
-
-        public void setIdUser(Integer idUser) {
-            this.idUser = idUser;
-        }
+    public void setIdEstate(Integer idEstate) {
+        this.idEstate = idEstate;
     }
 }

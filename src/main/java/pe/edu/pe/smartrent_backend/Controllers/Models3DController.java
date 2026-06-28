@@ -76,11 +76,7 @@ public class Models3DController {
         ModelMapper m = new ModelMapper();
         List<Model3DIdDTO> list = mI.Listar().stream().map(y->m.map(y,Model3DIdDTO.class))
                 .collect(Collectors.toList());
-        if(list.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay datos en este objeto");
-        }else{
-            return ResponseEntity.ok(list);
-        }
+        return ResponseEntity.ok(list);
     }
 
     @DeleteMapping("/{id}")

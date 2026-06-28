@@ -1,23 +1,17 @@
 package pe.edu.pe.smartrent_backend.Controllers;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.*;
-import pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS.UserBackgroundIdDTO;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
 import pe.edu.pe.smartrent_backend.Entities.RiskReport;
 import pe.edu.pe.smartrent_backend.Entities.User;
-import pe.edu.pe.smartrent_backend.Entities.UsersBackground;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IEstate;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IRiskReport;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -92,16 +86,9 @@ public class RiskReportController {
     @GetMapping
     //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listar() {
-        List<RiskReportIdDTO> aux = rS.list().stream().map(x -> {
-            ModelMapper m = new ModelMapper();
-            return m.map(x, RiskReportIdDTO.class);
-        }).collect(Collectors.toList());
-
-        if (aux.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No hay registros encontrados");
-
-        }
+        List<RiskReportIdDTO> aux = rS.list().stream()
+                .map(this::toRiskReportIdDTO)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(aux);
     }
 
@@ -123,15 +110,30 @@ public class RiskReportController {
     @GetMapping("/listId/{id}")
     //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listId(@PathVariable int id) {
-        ModelMapper m = new ModelMapper();
         RiskReport riskR = rS.listId(id);
 
         if (riskR != null) {
-            RiskReportIdDTO dto = m.map(riskR, RiskReportIdDTO.class);
-            return ResponseEntity.ok(dto);
+            return ResponseEntity.ok(toRiskReportIdDTO(riskR));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Informe de riesgo no encontrado");
         }
+    }
+
+    private RiskReportIdDTO toRiskReportIdDTO(RiskReport riskReport) {
+        RiskReportIdDTO dto = new RiskReportIdDTO();
+        dto.setIdRiskReport(riskReport.getIdRiskReport());
+        dto.setType(riskReport.getType());
+        dto.setCreationDate(riskReport.getCreationDate());
+        dto.setRiskLevel(riskReport.getRiskLevel());
+        dto.setDescription(riskReport.getDescription());
+        dto.setDetails(riskReport.getDetails());
+        if (riskReport.getUser() != null) {
+            dto.setIdUser(riskReport.getUser().getIdUser());
+        }
+        if (riskReport.getEstate() != null) {
+            dto.setIdEstate(riskReport.getEstate().getIdEstate());
+        }
+        return dto;
     }
 }
