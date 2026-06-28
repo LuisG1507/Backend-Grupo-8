@@ -1,12 +1,6 @@
 package pe.edu.pe.smartrent_backend.DTOS.models3DDTOs;
 
-import jakarta.persistence.*;
-import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.RiskReportIdDTO;
-import pe.edu.pe.smartrent_backend.Entities.Estate;
-import pe.edu.pe.smartrent_backend.Entities.RiskPoints;
-
 import java.time.LocalDate;
-import java.util.List;
 
 public class Model3DIdDTO {
     private Integer idModels3D;

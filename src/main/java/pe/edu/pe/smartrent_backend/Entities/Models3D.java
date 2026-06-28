@@ -3,7 +3,6 @@ package pe.edu.pe.smartrent_backend.Entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "Models3D")
@@ -25,9 +24,6 @@ public class Models3D {
     @OneToOne
     @JoinColumn(name = "idEstate")
     private Estate estate;
-
-    @OneToMany(mappedBy = "models3D", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RiskPoints> riskPoints;
 
     public Models3D() {
     }

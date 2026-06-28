@@ -4,17 +4,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.favoriteDTOS.*;
-import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Model3DIdDTO;
-import pe.edu.pe.smartrent_backend.DTOS.models3DDTOs.Models3DDTO;
 import pe.edu.pe.smartrent_backend.Entities.Favorite;
-import pe.edu.pe.smartrent_backend.Entities.Models3D;
-import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IFavorite;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,11 +51,6 @@ public class FavoriteController {
     //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> ListFavorite(){
         List<Favorite> favorites = fC.list();
-
-        if(favorites.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No hay listas en este objeto");
-        }
 
         List<FavoriteDTOInfinite> list = favorites.stream().map(fav -> {
             FavoriteDTOInfinite dto = new FavoriteDTOInfinite();

@@ -4,12 +4,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.*;
-import pe.edu.pe.smartrent_backend.DTOS.favoriteDTOS.FavoriteIdDTO;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
-import pe.edu.pe.smartrent_backend.Entities.Favorite;
 import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IEstate;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
@@ -65,11 +62,7 @@ public class EstateController {
         ModelMapper m = new ModelMapper();
         List<EstateCompleteDTO> list = eI.listar().stream().map(y->m.map(y,EstateCompleteDTO.class))
                 .collect(Collectors.toList());
-        if(list.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay valores en esta tabla");
-        }else {
-            return ResponseEntity.ok(list);
-        }
+        return ResponseEntity.ok(list);
     }
 
     @PutMapping("/actualizar")
@@ -132,14 +125,14 @@ public class EstateController {
         }
     }
 
-    @GetMapping("/filtro/{Ciudad}/{Distrito}/{Tipo}")
+    @GetMapping("/filtro/{ciudad}/{distrito}/{tipo}")
     //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> filtroEstate(
-            @PathVariable String Ciudad,
-            @PathVariable String Distrito,
-            @PathVariable String Tipo){
+            @PathVariable("ciudad") String ciudad,
+            @PathVariable("distrito") String distrito,
+            @PathVariable("tipo") String tipo){
 
-        List<Estate> estates = eI.filtrarInmueblesPorCiudadDistritoTipo(Ciudad, Distrito, Tipo);
+        List<Estate> estates = eI.filtrarInmueblesPorCiudadDistritoTipo(ciudad, distrito, tipo);
 
         if(estates.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
