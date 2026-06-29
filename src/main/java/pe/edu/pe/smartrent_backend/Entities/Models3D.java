@@ -12,7 +12,7 @@ public class Models3D {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idModels3D;
 
-    @Column(name = "fileURL", length = 200, nullable = false)
+    @Column(name = "fileURL", length = 2000, nullable = false)
     private String fileURL;
 
     @Column(name = "state", length = 100, nullable = false)
@@ -21,8 +21,8 @@ public class Models3D {
     @Column(name = "createDate", nullable = false)
     private LocalDate createDate;
 
-    @OneToOne
-    @JoinColumn(name = "idEstate")
+    @ManyToOne
+    @JoinColumn(name = "idEstate", nullable = false)
     private Estate estate;
 
     public Models3D() {
