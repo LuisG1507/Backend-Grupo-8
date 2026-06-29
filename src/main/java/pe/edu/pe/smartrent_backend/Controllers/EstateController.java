@@ -2,6 +2,7 @@ package pe.edu.pe.smartrent_backend.Controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -102,8 +103,13 @@ public class EstateController {
     public ResponseEntity<String> eliminar(@PathVariable Integer id){
         Optional<Estate> vE = eI.listarId(id);
         if(vE.isPresent()){
-            eI.eliminar(id);
-            return ResponseEntity.ok("El valor ha sido eliminado");
+            try {
+                eI.eliminar(id);
+                return ResponseEntity.ok("El valor ha sido eliminado");
+            } catch (DataIntegrityViolationException exception) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("No se puede eliminar el inmueble porque tiene registros relacionados");
+            }
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se ha encontrado el valor ingresado");
         }
