@@ -15,6 +15,7 @@ public class UserDTO {
     private LocalDate createdDate;
     private LocalDate updateDate;
     private Boolean enabled;
+    private String role;
 
     public String getName() {
         return name;
@@ -104,5 +105,11 @@ public class UserDTO {
         this.enabled = enabled;
     }
 
+    public String getRole() {
+        return role;
+    }
 
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

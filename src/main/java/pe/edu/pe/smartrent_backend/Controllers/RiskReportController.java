@@ -3,6 +3,7 @@ package pe.edu.pe.smartrent_backend.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
@@ -108,7 +109,7 @@ public class RiskReportController {
   
    //listar por id
     @GetMapping("/listId/{id}")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listId(@PathVariable int id) {
         RiskReport riskR = rS.listId(id);
 
