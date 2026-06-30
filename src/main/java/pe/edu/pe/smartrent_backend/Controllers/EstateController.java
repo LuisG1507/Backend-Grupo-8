@@ -2,6 +2,7 @@ package pe.edu.pe.smartrent_backend.Controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -63,15 +64,11 @@ public class EstateController {
         ModelMapper m = new ModelMapper();
         List<EstateCompleteDTO> list = eI.listar().stream().map(y->m.map(y,EstateCompleteDTO.class))
                 .collect(Collectors.toList());
-        if(list.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay valores en esta tabla");
-        }else {
-            return ResponseEntity.ok(list);
-        }
+        return ResponseEntity.ok(list);
     }
 
     @PutMapping("/actualizar")
-    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
     private ResponseEntity<String> actualizar(@RequestBody EstateCompleteDTO eC){
         Optional<Estate> exist = eI.listarId(eC.getIdEstate());
         if(exist.isEmpty()){
@@ -103,12 +100,17 @@ public class EstateController {
     }
 
     @DeleteMapping("/{id}")
-    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
     public ResponseEntity<String> eliminar(@PathVariable Integer id){
         Optional<Estate> vE = eI.listarId(id);
         if(vE.isPresent()){
-            eI.eliminar(id);
-            return ResponseEntity.ok("El valor ha sido eliminado");
+            try {
+                eI.eliminar(id);
+                return ResponseEntity.ok("El valor ha sido eliminado");
+            } catch (DataIntegrityViolationException exception) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("No se puede eliminar el inmueble porque tiene registros relacionados");
+            }
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no se ha encontrado el valor ingresado");
         }
@@ -116,7 +118,7 @@ public class EstateController {
 
     //listar por id
     @GetMapping("/listId/{id}")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listId(@PathVariable int id) {
         ModelMapper m = new ModelMapper();
         Optional<Estate> estate = eI.listarId(id);
@@ -130,14 +132,14 @@ public class EstateController {
         }
     }
 
-    @GetMapping("/filtro/{Ciudad}/{Distrito}/{Tipo}")
-    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
+    @GetMapping("/filtro/{ciudad}/{distrito}/{tipo}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> filtroEstate(
-            @PathVariable String Ciudad,
-            @PathVariable String Distrito,
-            @PathVariable String Tipo){
+            @PathVariable("ciudad") String ciudad,
+            @PathVariable("distrito") String distrito,
+            @PathVariable("tipo") String tipo){
 
-        List<Estate> estates = eI.filtrarInmueblesPorCiudadDistritoTipo(Ciudad, Distrito, Tipo);
+        List<Estate> estates = eI.filtrarInmueblesPorCiudadDistritoTipo(ciudad, distrito, tipo);
 
         if(estates.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -176,7 +178,7 @@ public class EstateController {
 
 
     @GetMapping("/owners-estates")
-    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<List<OwnerEstateDTO>> listUsersEst() {
         List<Object[]> results = eI.listUsersEstate();
         List<OwnerEstateDTO> lista = new ArrayList<>();
@@ -194,7 +196,7 @@ public class EstateController {
     }
 
     @GetMapping("/user-estate/{district}")
-    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<List<EstateUsersDTO>> ListaUser(@PathVariable String district) {
         List<Object[]> results = eI.EstateDistrict(district);
         List<EstateUsersDTO> lista = new ArrayList<>();
@@ -214,7 +216,7 @@ public class EstateController {
 
     //Listas tipo Object[]
     @GetMapping("/AlquilerEncimaDelPromedio")
-    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public List<AboveAverageRentsDTO> AVG() {
         List<Object[]> resultados = eI.AboveAverageRents();
         List<AboveAverageRentsDTO> lista = new ArrayList<>();
@@ -232,7 +234,7 @@ public class EstateController {
 
 
     @GetMapping("/best-price-per-room")
-    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> bestPricePerRoom() {
         List<Object[]> resultados = eI.findBestPricePerRoom();
         List<EstatePricePerRoomDTO> lista = new ArrayList<>();
@@ -251,7 +253,7 @@ public class EstateController {
  
 
     @GetMapping("/price-range-distribution")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> priceRangeDistribution() {
         List<Object[]> resultados = eI.findDistributionByTypeAndPriceRange();
         List<EstatePriceRangeDTO> lista = new ArrayList<>();

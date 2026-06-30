@@ -3,7 +3,6 @@ package pe.edu.pe.smartrent_backend.Entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "Models3D")
@@ -13,7 +12,7 @@ public class Models3D {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idModels3D;
 
-    @Column(name = "fileURL", length = 200, nullable = false)
+    @Column(name = "fileURL", length = 2000, nullable = false)
     private String fileURL;
 
     @Column(name = "state", length = 100, nullable = false)
@@ -22,12 +21,9 @@ public class Models3D {
     @Column(name = "createDate", nullable = false)
     private LocalDate createDate;
 
-    @OneToOne
-    @JoinColumn(name = "idEstate")
+    @ManyToOne
+    @JoinColumn(name = "idEstate", nullable = false)
     private Estate estate;
-
-    @OneToMany(mappedBy = "models3D", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RiskPoints> riskPoints;
 
     public Models3D() {
     }
