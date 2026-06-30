@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.userDTOS.*;
+import pe.edu.pe.smartrent_backend.Entities.Role;
 import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
@@ -28,10 +29,31 @@ public class UserController {
 
     //Registrar
     @PostMapping("/Registrar")
-    public void registrar(@RequestBody UserDTO dto) {
+    public ResponseEntity<String> registrar(@RequestBody UserDTO dto) {
+        // En el registro publico nunca se permite crear un usuario ADMIN.
+        if (!"ARRENDADOR".equals(dto.getRole())
+                && !"ARRENDATARIO".equals(dto.getRole())) {
+            return ResponseEntity.badRequest()
+                    .body("Seleccione el rol ARRENDADOR o ARRENDATARIO.");
+        }
+
         ModelMapper m = new ModelMapper();
         User p = m.map(dto, User.class);
+
+        // Estos valores los controla el sistema, no el formulario.
+        p.setCreatedDate(LocalDate.now());
+        p.setUpdateDate(LocalDate.now());
+        p.setStatusVerification(false);
+        p.setEnabled(true);
+
+        Role role = new Role();
+        role.setRol(dto.getRole());
+        role.setUser(p);
+        p.setRoles(List.of(role));
+
         uS.Register(p);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("Usuario registrado correctamente.");
     }
 
     @PutMapping("/{id}")

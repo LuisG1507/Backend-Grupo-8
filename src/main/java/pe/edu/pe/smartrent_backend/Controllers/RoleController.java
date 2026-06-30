@@ -28,7 +28,7 @@ public class RoleController {
     private IUser uS;
 
     @PostMapping
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> registrar(@RequestBody RoleDTO dto) {
         User u = uS.listId(dto.getIdUser());
         if (u == null) {
@@ -44,7 +44,7 @@ public class RoleController {
 
     //Listar
     @GetMapping("/ListarRoles")
-   // @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<RoleDTO> listar() {
         return rS.list().stream().map(x -> {
             RoleDTO dto = new RoleDTO();
@@ -59,7 +59,7 @@ public class RoleController {
 
 
     @PutMapping("/{id}")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> modificar(@PathVariable int id, @RequestBody RoleDTO dto) {
         try {
             if (dto.getRol() == null || dto.getRol().trim().isEmpty()) {
@@ -95,7 +95,7 @@ public class RoleController {
 
     //Eliminar
     @DeleteMapping("/{id}")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable("id") Integer id) {
         Role p = rS.listId(id);
         if (p == null) {
@@ -109,7 +109,7 @@ public class RoleController {
 
     //Listar por ID
     @GetMapping("/{id}")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {
         Role p = rS.listId(id);
         if (p == null) {
