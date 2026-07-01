@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pe.edu.pe.smartrent_backend.Entities.Role;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 
@@ -15,4 +16,9 @@ public interface IRoleRepository extends JpaRepository<Role,Integer> {
     @Modifying
     @Query("DELETE FROM Role r WHERE r.id = :id")
     void deleteRoleDirecto(@Param("id") Integer id);
+
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE FROM roles WHERE user_id = :userId", nativeQuery = true)
+    void deleteByUserId(@Param("userId") Integer userId);
 }

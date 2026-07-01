@@ -11,6 +11,7 @@ public interface IModels3D {
     public Models3D listId(Integer id);
     public void actualizar(Models3D models3D);
     public List<Models3D> Listar();
+    public List<Models3D> listarPorUsername(String username);
     public void eliminar(Integer id);
 
 }

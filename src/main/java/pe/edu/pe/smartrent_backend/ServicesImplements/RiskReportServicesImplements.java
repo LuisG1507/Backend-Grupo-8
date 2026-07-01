@@ -37,6 +37,11 @@ public class RiskReportServicesImplements implements IRiskReport {
     }
 
     @Override
+    public List<RiskReport> listByUsername(String username) {
+        return rR.findByEstateUserUsername(username);
+    }
+
+    @Override
     public void Delete(Integer id) {
         rR.deleteById(id);
     }

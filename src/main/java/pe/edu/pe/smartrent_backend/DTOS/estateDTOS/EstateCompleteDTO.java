@@ -19,6 +19,9 @@ public class EstateCompleteDTO {
     private Double areaM2;
     private LocalDate creationDate;
     private UserId idUser;
+    private String ownerName;
+    private String ownerLastName;
+    private String ownerPhoneNumber;
 
     public Integer getIdEstate() {
         return idEstate;
@@ -130,6 +133,30 @@ public class EstateCompleteDTO {
 
     public void setIdUser(UserId idUser) {
         this.idUser = idUser;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getOwnerLastName() {
+        return ownerLastName;
+    }
+
+    public void setOwnerLastName(String ownerLastName) {
+        this.ownerLastName = ownerLastName;
+    }
+
+    public String getOwnerPhoneNumber() {
+        return ownerPhoneNumber;
+    }
+
+    public void setOwnerPhoneNumber(String ownerPhoneNumber) {
+        this.ownerPhoneNumber = ownerPhoneNumber;
     }
 
     public static class UserId{

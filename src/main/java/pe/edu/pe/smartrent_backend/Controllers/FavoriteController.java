@@ -8,7 +8,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.favoriteDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Favorite;
+import pe.edu.pe.smartrent_backend.ServicesInterfaces.IEstate;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IFavorite;
+import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,10 +24,28 @@ public class FavoriteController {
     @Autowired
     private IFavorite fC;
 
+    @Autowired
+    private IUser uS;
+
+    @Autowired
+    private IEstate eS;
+
     //Register
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> Register(@RequestBody FavoriteDTO fD){
+            String validationError = validarFavorito(
+                    fD.getCreationDate(), fD.getUser(), fD.getEstate());
+            if (validationError != null) {
+                return ResponseEntity.badRequest().body(validationError);
+            }
+            if (uS.listId(fD.getUser().getIdUser()) == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+            }
+            if (eS.listarId(fD.getEstate().getIdEstate()).isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Inmueble no encontrado.");
+            }
+
             ModelMapper m = new ModelMapper();
             Favorite p = m.map(fD, Favorite.class);
             fC.Register(p);
@@ -39,6 +59,18 @@ public class FavoriteController {
         if(exist.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El valor no existe");
         }
+        String validationError = validarFavorito(
+                fD.getCreationDate(), fD.getUser(), fD.getEstate());
+        if (validationError != null) {
+            return ResponseEntity.badRequest().body(validationError);
+        }
+        if (uS.listId(fD.getUser().getIdUser()) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+        }
+        if (eS.listarId(fD.getEstate().getIdEstate()).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Inmueble no encontrado.");
+        }
+
         Favorite m = exist.get();
         m.setCreationDate(fD.getCreationDate());
         m.setUser(fD.getUser());
@@ -103,6 +135,21 @@ public class FavoriteController {
         }
     }
 
+    private String validarFavorito(
+            java.time.LocalDate creationDate,
+            pe.edu.pe.smartrent_backend.Entities.User user,
+            pe.edu.pe.smartrent_backend.Entities.Estate estate) {
+        if (creationDate == null || creationDate.isAfter(java.time.LocalDate.now())) {
+            return "La fecha del favorito no puede estar en el futuro.";
+        }
+        if (user == null || user.getIdUser() == null || user.getIdUser() <= 0) {
+            return "Seleccione un usuario valido.";
+        }
+        if (estate == null || estate.getIdEstate() == null || estate.getIdEstate() <= 0) {
+            return "Seleccione un inmueble valido.";
+        }
+        return null;
+    }
 
 
 

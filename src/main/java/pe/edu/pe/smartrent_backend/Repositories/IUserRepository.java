@@ -25,6 +25,10 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
     @Query(value = "insert into roles (rol, user_id) VALUES (:rol, :user_id)", nativeQuery = true)
     void insRol(@Param("rol") String authority, @Param("user_id") Integer user_id);
 
+    @Modifying
+    @Query(value = "DELETE FROM users WHERE id_user = :id", nativeQuery = true)
+    void deleteUserDirecto(@Param("id") Integer id);
+
     @Query("SELECT u FROM User u WHERE u.dni = :d")
     User findByDNI(Integer d);
 

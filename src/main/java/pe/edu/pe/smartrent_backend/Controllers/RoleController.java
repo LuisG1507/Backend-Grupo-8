@@ -30,6 +30,11 @@ public class RoleController {
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> registrar(@RequestBody RoleDTO dto) {
+        String validationError = validarRol(dto);
+        if (validationError != null) {
+            return ResponseEntity.badRequest().body(validationError);
+        }
+
         User u = uS.listId(dto.getIdUser());
         if (u == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -62,6 +67,11 @@ public class RoleController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> modificar(@PathVariable int id, @RequestBody RoleDTO dto) {
         try {
+            String validationError = validarRol(dto);
+            if (validationError != null) {
+                return ResponseEntity.badRequest().body(validationError);
+            }
+
             if (dto.getRol() == null || dto.getRol().trim().isEmpty()) {
                 return ResponseEntity.badRequest()
                         .body("El campo 'rol' no puede estar vacío");
@@ -124,6 +134,18 @@ public class RoleController {
             dto.setIdUser(p.getUser().getIdUser());
         }
         return ResponseEntity.ok(dto);
+    }
+
+    private String validarRol(RoleDTO dto) {
+        if (dto.getRol() == null || (!dto.getRol().equals("ADMIN")
+                && !dto.getRol().equals("ARRENDADOR")
+                && !dto.getRol().equals("ARRENDATARIO"))) {
+            return "Seleccione un rol valido.";
+        }
+        if (dto.getIdUser() == null || dto.getIdUser() <= 0) {
+            return "Seleccione un usuario valido.";
+        }
+        return null;
     }
 
 }

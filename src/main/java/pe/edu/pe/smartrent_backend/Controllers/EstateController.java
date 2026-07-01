@@ -6,6 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.estateDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
@@ -30,9 +31,18 @@ public class EstateController {
     private IUser uS;
 
     @PostMapping
-    // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
-    public ResponseEntity<?> registrar(@RequestBody EstateCreateDTO eD){
-        User user = uS.listId(eD.getIdUser());
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
+    public ResponseEntity<?> registrar(@RequestBody EstateCreateDTO eD, Authentication authentication){
+        String validationError = validarInmueble(
+                eD.getTitle(), eD.getDescription(), eD.getAdress(), eD.getDistrict(),
+                eD.getCity(), eD.getMonthlyPrice(), eD.getType(), eD.getState(),
+                eD.getRooms(), eD.getBathrooms(), eD.getAreaM2(), eD.getCreationDate());
+        if (validationError != null) {
+            return ResponseEntity.badRequest().body(validationError);
+        }
+
+        // El propietario se obtiene del usuario autenticado, no de un ID escrito en el formulario.
+        User user = uS.findByUsername(authentication.getName());
 
         if(user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -59,21 +69,56 @@ public class EstateController {
     }
 
     @GetMapping("/listAll")
-    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> listarTodo(){
         ModelMapper m = new ModelMapper();
-        List<EstateCompleteDTO> list = eI.listar().stream().map(y->m.map(y,EstateCompleteDTO.class))
+        List<EstateCompleteDTO> list = eI.listar().stream().map(y -> {
+                    EstateCompleteDTO dto = m.map(y, EstateCompleteDTO.class);
+                    if (y.getUser() != null) {
+                        dto.setOwnerName(y.getUser().getName());
+                        dto.setOwnerLastName(y.getUser().getLastName());
+                        dto.setOwnerPhoneNumber(y.getUser().getPhoneNumber());
+                    }
+                    return dto;
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/my-estates")
+    @PreAuthorize("hasAuthority('ARRENDADOR')")
+    public ResponseEntity<?> listarMisInmuebles(Authentication authentication) {
+        ModelMapper m = new ModelMapper();
+        List<EstateCompleteDTO> list = eI.listarPorUsername(authentication.getName()).stream()
+                .map(y -> {
+                    EstateCompleteDTO dto = m.map(y, EstateCompleteDTO.class);
+                    if (y.getUser() != null) {
+                        dto.setOwnerName(y.getUser().getName());
+                        dto.setOwnerLastName(y.getUser().getLastName());
+                        dto.setOwnerPhoneNumber(y.getUser().getPhoneNumber());
+                    }
+                    return dto;
+                })
                 .collect(Collectors.toList());
         return ResponseEntity.ok(list);
     }
 
     @PutMapping("/actualizar")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
-    private ResponseEntity<String> actualizar(@RequestBody EstateCompleteDTO eC){
+    public ResponseEntity<String> actualizar(@RequestBody EstateCompleteDTO eC){
         Optional<Estate> exist = eI.listarId(eC.getIdEstate());
         if(exist.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El inmueble no fue encontrado");
         }
+
+        String validationError = validarInmueble(
+                eC.getTitle(), eC.getDescription(), eC.getAdress(), eC.getDistrict(),
+                eC.getCity(), eC.getMonthlyPrice(), eC.getType(), eC.getState(),
+                eC.getRooms(), eC.getBathrooms(), eC.getAreaM2(), eC.getCreationDate());
+        if (validationError != null) {
+            return ResponseEntity.badRequest().body(validationError);
+        }
+
         Estate e = exist.get();
 
         e.setTitle(eC.getTitle());
@@ -118,7 +163,7 @@ public class EstateController {
 
     //listar por id
     @GetMapping("/listId/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR')")
     public ResponseEntity<?> listId(@PathVariable int id) {
         ModelMapper m = new ModelMapper();
         Optional<Estate> estate = eI.listarId(id);
@@ -266,5 +311,48 @@ public class EstateController {
             lista.add(dto);
         }
         return ResponseEntity.ok(lista);
+    }
+
+    private String validarInmueble(
+            String title, String description, String adress, String district, String city,
+            Double monthlyPrice, String type, Boolean state, Integer rooms,
+            Integer bathrooms, Double areaM2, java.time.LocalDate creationDate) {
+        if (title == null || title.trim().length() < 3 || title.trim().length() > 100) {
+            return "El titulo debe contener entre 3 y 100 caracteres.";
+        }
+        if (description == null || description.trim().length() < 10 || description.trim().length() > 200) {
+            return "La descripcion debe contener entre 10 y 200 caracteres.";
+        }
+        if (adress == null || adress.trim().length() < 5 || adress.trim().length() > 200) {
+            return "La direccion debe contener entre 5 y 200 caracteres.";
+        }
+        if (district == null || district.trim().length() < 2 || district.trim().length() > 100) {
+            return "El distrito debe contener entre 2 y 100 caracteres.";
+        }
+        if (city == null || city.trim().length() < 2 || city.trim().length() > 100) {
+            return "La ciudad debe contener entre 2 y 100 caracteres.";
+        }
+        if (monthlyPrice == null || monthlyPrice <= 0 || monthlyPrice > 100000) {
+            return "El precio mensual debe ser mayor que 0 y menor o igual a 100000.";
+        }
+        if (!"Casa".equals(type) && !"Departamento".equals(type)) {
+            return "Seleccione Casa o Departamento como tipo de inmueble.";
+        }
+        if (state == null) {
+            return "Seleccione el estado del inmueble.";
+        }
+        if (rooms == null || rooms < 1 || rooms > 20) {
+            return "Las habitaciones deben estar entre 1 y 20.";
+        }
+        if (bathrooms == null || bathrooms < 1 || bathrooms > 20) {
+            return "Los banos deben estar entre 1 y 20.";
+        }
+        if (areaM2 == null || areaM2 <= 0 || areaM2 > 10000) {
+            return "El area debe ser mayor que 0 y menor o igual a 10000 m2.";
+        }
+        if (creationDate == null || creationDate.isAfter(java.time.LocalDate.now())) {
+            return "La fecha de creacion no puede estar en el futuro.";
+        }
+        return null;
     }
 }

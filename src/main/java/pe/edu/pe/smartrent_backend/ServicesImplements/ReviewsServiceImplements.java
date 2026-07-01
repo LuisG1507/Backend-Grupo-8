@@ -26,6 +26,11 @@ public class ReviewsServiceImplements implements IReviewsService {
     }
 
     @Override
+    public List<Reviews> listByUsername(String username) {
+        return rR.findByEstateUserUsername(username);
+    }
+
+    @Override
     public void delete(Integer id) {
         rR.deleteById(id);
     }

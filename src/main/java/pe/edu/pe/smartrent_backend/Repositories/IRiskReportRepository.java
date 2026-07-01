@@ -8,4 +8,6 @@ import pe.edu.pe.smartrent_backend.Entities.RiskReport;
 import java.util.List;
 
 @Repository
-public interface IRiskReportRepository extends JpaRepository<RiskReport,Integer> {}
+public interface IRiskReportRepository extends JpaRepository<RiskReport,Integer> {
+    List<RiskReport> findByEstateUserUsername(String username);
+}

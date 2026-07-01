@@ -1,4 +1,5 @@
 package pe.edu.pe.smartrent_backend.ServicesImplements;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,16 +40,23 @@ public class UserServicesImplements implements IUser {
     }
 
     @Override
+    public User findByUsername(String username) {
+        return uR.findOneByUsername(username);
+    }
+
+    @Override
     public List<User> list() {
         return uR.findAll();
     }
 
     @Override
+    @Transactional
     public void Delete(Integer id) {
-        User user = uR.findById(id).orElseThrow();
-        user.getRoles().clear();
-        uR.save(user);
-        uR.deleteById(id);
+        if (!uR.existsById(id)) {
+            throw new IllegalArgumentException("El usuario no existe");
+        }
+        rR.deleteByUserId(id);
+        uR.deleteUserDirecto(id);
     }
 
     @Override
