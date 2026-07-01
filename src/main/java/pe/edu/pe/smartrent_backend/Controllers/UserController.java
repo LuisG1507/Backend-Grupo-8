@@ -30,11 +30,25 @@ public class UserController {
     //Registrar
     @PostMapping("/Registrar")
     public ResponseEntity<String> registrar(@RequestBody UserDTO dto) {
+        String validationError = validarUsuario(dto, true);
+        if (validationError != null) {
+            return ResponseEntity.badRequest().body(validationError);
+        }
+
         // En el registro publico nunca se permite crear un usuario ADMIN.
         if (!"ARRENDADOR".equals(dto.getRole())
                 && !"ARRENDATARIO".equals(dto.getRole())) {
             return ResponseEntity.badRequest()
                     .body("Seleccione el rol ARRENDADOR o ARRENDATARIO.");
+        }
+
+        if (uS.findByUsername(dto.getUsername()) != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("El nombre de usuario ya se encuentra registrado.");
+        }
+        if (uS.BuscarPorDNI(dto.getDni()) != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("El DNI ya se encuentra registrado.");
         }
 
         ModelMapper m = new ModelMapper();
@@ -67,8 +81,26 @@ public class UserController {
                     .body("No se puede modificar. No existe un registro con el ID: " + id);
         }
 
+        String validationError = validarUsuario(dto, false);
+        if (validationError != null) {
+            return ResponseEntity.badRequest().body(validationError);
+        }
+
+        User sameUsername = uS.findByUsername(dto.getUsername());
+        if (sameUsername != null && !sameUsername.getIdUser().equals(id)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("El nombre de usuario ya se encuentra registrado.");
+        }
+        User sameDni = uS.BuscarPorDNI(dto.getDni());
+        if (sameDni != null && !sameDni.getIdUser().equals(id)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("El DNI ya se encuentra registrado.");
+        }
+
         User p = m.map(dto, User.class);
         p.setIdUser(id);
+        p.setCreatedDate(existente.getCreatedDate());
+        p.setUpdateDate(LocalDate.now());
 
         if (p.getPassword() == null || p.getPassword().trim().isEmpty()) {
             p.setPassword(existente.getPassword());
@@ -169,6 +201,37 @@ public class UserController {
 
         dto.setRole(roles);
         return dto;
+    }
+
+    private String validarUsuario(UserDTO dto, boolean passwordRequired) {
+        if (dto.getName() == null || !dto.getName().trim().matches("[\\p{L} ]{2,50}")) {
+            return "El nombre debe contener entre 2 y 50 letras.";
+        }
+        if (dto.getLastName() == null || !dto.getLastName().trim().matches("[\\p{L} ]{2,50}")) {
+            return "El apellido debe contener entre 2 y 50 letras.";
+        }
+        if (dto.getDni() == null || dto.getDni() < 10000000 || dto.getDni() > 99999999) {
+            return "El DNI debe contener exactamente 8 digitos.";
+        }
+        if (dto.getUsername() == null || !dto.getUsername().matches("[A-Za-z0-9_]{4,20}")) {
+            return "El usuario debe tener entre 4 y 20 caracteres y no usar espacios.";
+        }
+        if (passwordRequired && (dto.getPassword() == null || dto.getPassword().length() < 6)) {
+            return "La contrasena debe tener al menos 6 caracteres.";
+        }
+        if (!passwordRequired && dto.getPassword() != null && !dto.getPassword().isBlank()
+                && dto.getPassword().length() < 6) {
+            return "La nueva contrasena debe tener al menos 6 caracteres.";
+        }
+        if (dto.getProfilePhoto() == null || dto.getProfilePhoto().length() > 1000
+                || (!dto.getProfilePhoto().startsWith("http://")
+                && !dto.getProfilePhoto().startsWith("https://"))) {
+            return "Ingrese una URL valida para la foto de perfil.";
+        }
+        if (dto.getPhoneNumber() == null || !dto.getPhoneNumber().matches("9\\d{8}")) {
+            return "El telefono debe comenzar con 9 y contener 9 digitos.";
+        }
+        return null;
     }
 
 }

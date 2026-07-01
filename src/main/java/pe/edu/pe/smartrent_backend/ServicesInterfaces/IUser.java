@@ -10,6 +10,7 @@ public interface IUser {
     public void Register(User user); //Registrar
     public void Update(User user); //Modificar
     public User listId(Integer id); //ListarId
+    public User findByUsername(String username);
     public List<User> list(); //Listartodo
     public void Delete(Integer id);
     public User BuscarPorDNI(Integer id); //Filtro Simple para buscar por DNI

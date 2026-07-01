@@ -12,6 +12,8 @@ import java.util.List;
 @Repository
 public interface IEstateRepository extends JpaRepository<Estate, Integer> {
 
+    List<Estate> findByUserUsername(String username);
+
     @Query(value = "SELECT * FROM estate " +
             "WHERE LOWER(TRIM(city)) = LOWER(TRIM(:city)) " +
             "AND LOWER(TRIM(district)) = LOWER(TRIM(:district)) " +

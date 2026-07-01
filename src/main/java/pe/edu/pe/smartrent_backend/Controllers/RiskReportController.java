@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.riskreportsDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
@@ -32,6 +33,10 @@ public class RiskReportController {
     @PostMapping
     //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<String> registrar(@RequestBody RiskReportDTO dto) {
+        String validationError = validarReporte(dto);
+        if (validationError != null) {
+            return ResponseEntity.badRequest().body(validationError);
+        }
 
         User u = uS.listId(dto.getIdUser());
         if (u == null) return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -64,6 +69,11 @@ public class RiskReportController {
                     .body("No se puede modificar. No existe un registro con el ID: " + id);
         }
 
+        String validationError = validarReporte(dto);
+        if (validationError != null) {
+            return ResponseEntity.badRequest().body(validationError);
+        }
+
         User u = uS.listId(dto.getIdUser());
         if (u == null) return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("No existe usuario con ID: " + dto.getIdUser());
@@ -85,12 +95,22 @@ public class RiskReportController {
     }
 
     @GetMapping
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> listar() {
         List<RiskReportIdDTO> aux = rS.list().stream()
                 .map(this::toRiskReportIdDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(aux);
+    }
+
+    // Lista solamente los reportes asociados a inmuebles del arrendador autenticado.
+    @GetMapping("/my-reports")
+    @PreAuthorize("hasAuthority('ARRENDADOR')")
+    public ResponseEntity<?> listarMisReportes(Authentication authentication) {
+        List<RiskReportIdDTO> reports = rS.listByUsername(authentication.getName()).stream()
+                .map(this::toRiskReportIdDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(reports);
     }
 
     //Eliminar
@@ -136,5 +156,33 @@ public class RiskReportController {
             dto.setIdEstate(riskReport.getEstate().getIdEstate());
         }
         return dto;
+    }
+
+    private String validarReporte(RiskReportDTO dto) {
+        if (dto.getType() == null || dto.getType().trim().length() < 3
+                || dto.getType().trim().length() > 50) {
+            return "El tipo debe contener entre 3 y 50 caracteres.";
+        }
+        if (dto.getCreationDate() == null || dto.getCreationDate().isAfter(java.time.LocalDate.now())) {
+            return "La fecha del reporte no puede estar en el futuro.";
+        }
+        if (dto.getRiskLevel() == null || (!dto.getRiskLevel().equals("BAJO")
+                && !dto.getRiskLevel().equals("MEDIO")
+                && !dto.getRiskLevel().equals("ALTO"))) {
+            return "Seleccione un nivel de riesgo valido.";
+        }
+        if (dto.getDescription() == null || dto.getDescription().trim().length() < 10
+                || dto.getDescription().trim().length() > 500) {
+            return "La descripcion debe contener entre 10 y 500 caracteres.";
+        }
+        if (dto.getDetails() == null || dto.getDetails().trim().length() < 5
+                || dto.getDetails().trim().length() > 200) {
+            return "Los detalles deben contener entre 5 y 200 caracteres.";
+        }
+        if (dto.getIdUser() == null || dto.getIdUser() <= 0
+                || dto.getIdEstate() == null || dto.getIdEstate() <= 0) {
+            return "Seleccione un usuario y un inmueble validos.";
+        }
+        return null;
     }
 }

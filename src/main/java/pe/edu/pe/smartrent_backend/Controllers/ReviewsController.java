@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.pe.smartrent_backend.DTOS.reviewsDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.Estate;
@@ -34,6 +35,19 @@ public class ReviewsController {
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<String> registrar(@RequestBody ReviewsDTO rD) {
+        String validationError = validarResena(
+                rD.getCalification(), rD.getComment(), rD.getCreationDate(),
+                rD.getIdUser(), rD.getIdEstate());
+        if (validationError != null) {
+            return ResponseEntity.badRequest().body(validationError);
+        }
+        if (uS.listId(rD.getIdUser()) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+        }
+        if (eS.listarId(rD.getIdEstate()).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Inmueble no encontrado.");
+        }
+
         ModelMapper m = new ModelMapper();
         Reviews r = m.map(rD, Reviews.class);
 
@@ -50,7 +64,7 @@ public class ReviewsController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO')")
     public ResponseEntity<?> listarTodo() {
         ModelMapper m = new ModelMapper();
         List<ReviewsCompleteDTO> list = rI.list().stream().map(y -> {
@@ -64,6 +78,22 @@ public class ReviewsController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    // El username sale del token, por eso el arrendador no puede consultar datos de otro propietario.
+    @GetMapping("/my-reviews")
+    @PreAuthorize("hasAuthority('ARRENDADOR')")
+    public ResponseEntity<?> listarMisResenias(Authentication authentication) {
+        ModelMapper m = new ModelMapper();
+        List<ReviewsCompleteDTO> list = rI.listByUsername(authentication.getName()).stream().map(y -> {
+            ReviewsCompleteDTO dto = m.map(y, ReviewsCompleteDTO.class);
+            dto.setIdReview(y.getIdReview());
+            dto.setIdUser(y.getUser().getIdUser());
+            dto.setIdEstate(y.getEstate().getIdEstate());
+            return dto;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(list);
+    }
+
     @PutMapping("/actualizar/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> actualizar(@PathVariable int id, @RequestBody ReviewsCompleteDTO rC) {
@@ -71,6 +101,13 @@ public class ReviewsController {
         Reviews exist = rI.listId(id);
         if (exist == null) {
             return new ResponseEntity<>("La reseña no fue encontrada", HttpStatus.NOT_FOUND);
+        }
+
+        String validationError = validarResena(
+                rC.getCalification(), rC.getComment(), rC.getCreationDate(),
+                rC.getIdUser(), rC.getIdEstate());
+        if (validationError != null) {
+            return ResponseEntity.badRequest().body(validationError);
         }
 
         User u = uS.listId(rC.getIdUser());
@@ -181,5 +218,23 @@ public class ReviewsController {
             lista.add(dto);
         }
         return ResponseEntity.ok(lista);
+    }
+
+    private String validarResena(
+            Double calification, String comment, java.time.LocalDate creationDate,
+            Integer idUser, Integer idEstate) {
+        if (calification == null || calification < 1 || calification > 5) {
+            return "La calificacion debe estar entre 1 y 5.";
+        }
+        if (comment == null || comment.trim().length() < 5 || comment.trim().length() > 200) {
+            return "El comentario debe contener entre 5 y 200 caracteres.";
+        }
+        if (creationDate == null || creationDate.isAfter(java.time.LocalDate.now())) {
+            return "La fecha de la resena no puede estar en el futuro.";
+        }
+        if (idUser == null || idUser <= 0 || idEstate == null || idEstate <= 0) {
+            return "Seleccione un usuario y un inmueble validos.";
+        }
+        return null;
     }
 }

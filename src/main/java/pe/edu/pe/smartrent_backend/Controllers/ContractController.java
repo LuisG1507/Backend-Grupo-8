@@ -56,6 +56,11 @@ public class ContractController {
     @PostMapping
      @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<?> create(@Valid @RequestBody ContractDTO dto) {
+        String validationError = validarContrato(dto);
+        if (validationError != null) {
+            return ResponseEntity.badRequest().body(validationError);
+        }
+
         Optional<Estate> estateOpt = eR.findById(dto.getIdEstate());
         Optional<User> lessorOpt = uR.findById(dto.getIdLessor());
         Optional<User> lesseeOpt = uR.findById(dto.getIdLessee());
@@ -126,6 +131,11 @@ public class ContractController {
         Optional<Contract> existingOpt = cS.listId(dto.getIdContract());
         if (existingOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Contract not found");
+        }
+
+        String validationError = validarContrato(dto);
+        if (validationError != null) {
+            return ResponseEntity.badRequest().body(validationError);
         }
 
         Optional<Estate> estateOpt = eR.findById(dto.getIdEstate());
@@ -218,6 +228,29 @@ public class ContractController {
             lista.add(dto);
         }
         return ResponseEntity.ok(lista);
+    }
+
+    private String validarContrato(ContractDTO dto) {
+        if (dto.getStartDate() == null || dto.getEndDate() == null) {
+            return "Las fechas de inicio y fin son obligatorias.";
+        }
+        if (!dto.getEndDate().isAfter(dto.getStartDate())) {
+            return "La fecha de fin debe ser posterior a la fecha de inicio.";
+        }
+        if (dto.getCreatedAt() == null || dto.getCreatedAt().isAfter(LocalDateTime.now().plusMinutes(1))) {
+            return "La fecha de creacion no puede estar en el futuro.";
+        }
+        if (dto.getMonthlyAmount() == null || dto.getMonthlyAmount() <= 0
+                || dto.getMonthlyAmount() > 100000) {
+            return "El monto mensual debe ser mayor que 0 y menor o igual a 100000.";
+        }
+        if (dto.getIdEstate() <= 0 || dto.getIdLessor() <= 0 || dto.getIdLessee() <= 0) {
+            return "Seleccione un inmueble, arrendador y arrendatario validos.";
+        }
+        if (dto.getIdLessor() == dto.getIdLessee()) {
+            return "El arrendador y el arrendatario deben ser usuarios diferentes.";
+        }
+        return null;
     }
 
 }

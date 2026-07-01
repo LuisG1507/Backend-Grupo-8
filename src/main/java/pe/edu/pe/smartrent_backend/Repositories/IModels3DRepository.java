@@ -11,4 +11,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public interface IModels3DRepository extends JpaRepository<Models3D, Integer> {}
+public interface IModels3DRepository extends JpaRepository<Models3D, Integer> {
+    List<Models3D> findByEstateUserUsername(String username);
+}
