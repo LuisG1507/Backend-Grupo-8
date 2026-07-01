@@ -8,6 +8,7 @@ public interface IEstate {
     public Optional<Estate> listarId(Integer id);
     public void Actualizar(Estate estE);
     public List<Estate> listar();
+    public List<Estate> listarPorUsername(String username);
     public void eliminar(Integer id);
     public List<Estate> filtrarInmueblesPorCiudadDistritoTipo(String city, String district, String type);
     public List<Object[]> listUsersEstate();

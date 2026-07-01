@@ -12,6 +12,7 @@ import pe.edu.pe.smartrent_backend.DTOS.userbackgorundDTOS.*;
 import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.Entities.UsersBackground;
 import pe.edu.pe.smartrent_backend.Repositories.IUserBackgroundRepository;
+import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUserBackground;
 
 import java.util.ArrayList;
@@ -25,14 +26,26 @@ public class UserBackgroundController {
     @Autowired
     private IUserBackground ubS;
 
+    @Autowired
+    private IUser uS;
+
 
     //Registrar
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
-    public void registrar(@RequestBody UserBackgroundDTO dto) {
+    public ResponseEntity<String> registrar(@RequestBody UserBackgroundDTO dto) {
+        String validationError = validarAntecedente(dto);
+        if (validationError != null) {
+            return ResponseEntity.badRequest().body(validationError);
+        }
+        if (uS.listId(dto.getUser().getIdUser()) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+        }
+
         ModelMapper m = new ModelMapper();
         UsersBackground p = m.map(dto, UsersBackground.class);
         ubS.Register(p);
+        return ResponseEntity.ok("Antecedente registrado correctamente.");
     }
 
     //Listar
@@ -84,6 +97,13 @@ public class UserBackgroundController {
                     .body("No se puede modificar. No existe un registro con el ID: " + id);
         }
 
+        String validationError = validarAntecedente(dto);
+        if (validationError != null) {
+            return ResponseEntity.badRequest().body(validationError);
+        }
+        if (uS.listId(dto.getUser().getIdUser()) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+        }
 
         ubS.Update(p);
         return ResponseEntity.ok("Registro con ID " + id + " modificado correctamente.");
@@ -136,7 +156,28 @@ public class UserBackgroundController {
         return lista;
     }
 
-
-
+    private String validarAntecedente(UserBackgroundDTO dto) {
+        if (dto.getType() == null || dto.getType().trim().length() < 3
+                || dto.getType().trim().length() > 50) {
+            return "El tipo debe contener entre 3 y 50 caracteres.";
+        }
+        if (dto.getDescription() == null || dto.getDescription().trim().length() < 10
+                || dto.getDescription().trim().length() > 200) {
+            return "La descripcion debe contener entre 10 y 200 caracteres.";
+        }
+        if (dto.getSource() == null || dto.getSource().trim().length() < 3
+                || dto.getSource().trim().length() > 50) {
+            return "La fuente debe contener entre 3 y 50 caracteres.";
+        }
+        if (dto.getRegistrationDate() == null
+                || dto.getRegistrationDate().isAfter(java.time.LocalDate.now())) {
+            return "La fecha de registro no puede estar en el futuro.";
+        }
+        if (dto.getUser() == null || dto.getUser().getIdUser() == null
+                || dto.getUser().getIdUser() <= 0) {
+            return "Seleccione un usuario valido.";
+        }
+        return null;
+    }
 
 }

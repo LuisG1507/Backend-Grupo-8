@@ -10,6 +10,8 @@ import java.util.Objects;
 
 public interface IReviewsRepository extends JpaRepository<Reviews,Integer> {
 
+    List<Reviews> findByEstateUserUsername(String username);
+
     @Query(value = "SELECT e.title, e.city,\n" +
             "       ROUND(AVG(r.calification)::numeric, 2) AS promedio\n" +
             "FROM reviews r\n" +

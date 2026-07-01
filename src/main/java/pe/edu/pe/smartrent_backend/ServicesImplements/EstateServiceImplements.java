@@ -37,6 +37,11 @@ public class EstateServiceImplements implements IEstate {
     }
 
     @Override
+    public List<Estate> listarPorUsername(String username) {
+        return eR.findByUserUsername(username);
+    }
+
+    @Override
     public void eliminar(Integer id) {
         eR.deleteById(id);
     }

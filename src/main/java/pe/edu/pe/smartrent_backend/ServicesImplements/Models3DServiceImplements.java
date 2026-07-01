@@ -42,6 +42,11 @@ public class Models3DServiceImplements implements IModels3D {
     }
 
     @Override
+    public List<Models3D> listarPorUsername(String username) {
+        return mR.findByEstateUserUsername(username);
+    }
+
+    @Override
     public void eliminar(Integer id) {
         mR.deleteById(id);
     }

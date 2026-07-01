@@ -5,6 +5,7 @@ import java.util.List;
 public interface IReviewsService {
     public void insert(Reviews review);
     public List<Reviews> list();
+    public List<Reviews> listByUsername(String username);
     public void delete(Integer id);
     public Reviews listId(Integer id);
     public void update(Reviews review);

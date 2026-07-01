@@ -8,6 +8,7 @@ public interface IRiskReport {
     public void Update(RiskReport r); //Modificar
     public RiskReport listId(Integer id); //ListarId
     public List<RiskReport> list(); //Listartodo
+    public List<RiskReport> listByUsername(String username);
     public void Delete(Integer id); //Eliminar
 
 }
