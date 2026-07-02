@@ -170,7 +170,7 @@ public class UserController {
 
     // Usuarios no verificados con antecedentes registrados
     @GetMapping("/unverified-with-backgrounds")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> unverifiedWithBackgrounds() {
         List<Object[]> resultados = uS.findUnverifiedUsersWithBackgrounds();
 
