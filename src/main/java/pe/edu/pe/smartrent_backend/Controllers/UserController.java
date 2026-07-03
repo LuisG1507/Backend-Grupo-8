@@ -71,7 +71,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-   // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> modificar(@PathVariable int id, @RequestBody UserDTO dto) {
         ModelMapper m = new ModelMapper();
 
@@ -119,7 +119,7 @@ public class UserController {
 
     //Listar
     @GetMapping("/listar")
-   // @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<UserSinContraseniaDTO> listar() {
         return uS.list().stream()
                 .map(this::toUserWithoutPasswordDTO)
@@ -128,7 +128,7 @@ public class UserController {
 
     //Eliminar
     @DeleteMapping("/{id}")
-    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDADOR', 'ARRENDATARIO')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable("id") Integer id) {
         User p = uS.listId(id);
         if (p == null) {
@@ -141,7 +141,7 @@ public class UserController {
 
     //Listar por DNI
     @GetMapping("/findByDni/{id}")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listarDni(@PathVariable("id") Integer id) {
         User p = uS.BuscarPorDNI(id);
         if (p == null) {
@@ -154,7 +154,7 @@ public class UserController {
 
     //listar por id
     @GetMapping("/listarporId/{id}")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> listId(@PathVariable int id) {
         ModelMapper m = new ModelMapper();
         User user = uS.listId(id);
