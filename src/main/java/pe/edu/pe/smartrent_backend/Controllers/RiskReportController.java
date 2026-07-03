@@ -31,7 +31,7 @@ public class RiskReportController {
     private IEstate eS;
 
     @PostMapping
-    //@PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<String> registrar(@RequestBody RiskReportDTO dto) {
         String validationError = validarReporte(dto);
         if (validationError != null) {
@@ -60,7 +60,7 @@ public class RiskReportController {
     }
 
     @PutMapping("/{id}")
-   // @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ARRENDATARIO', 'ARRENDADOR')")
     public ResponseEntity<String> modificar(@PathVariable int id, @RequestBody RiskReportDTO dto) {
 
         RiskReport existente = rS.listId(id);
@@ -115,7 +115,7 @@ public class RiskReportController {
 
     //Eliminar
     @DeleteMapping("/{id}")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> eliminar(@PathVariable("id") Integer id) {
         RiskReport p = rS.listId(id);
         if (p == null) {
