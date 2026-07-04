@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import pe.edu.pe.smartrent_backend.Entities.User;
 import pe.edu.pe.smartrent_backend.Repositories.IRoleRepository;
 import pe.edu.pe.smartrent_backend.Repositories.IUserRepository;
+import pe.edu.pe.smartrent_backend.Securities.WebSecurityConfig;
 import pe.edu.pe.smartrent_backend.ServicesInterfaces.IUser;
 
 import java.time.LocalDate;
@@ -22,7 +23,6 @@ public class UserServicesImplements implements IUser {
     @Autowired
     private IRoleRepository rR;
 
-
     @Override
     public void Register(User user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
@@ -31,6 +31,7 @@ public class UserServicesImplements implements IUser {
 
     @Override
     public void Update(User user) {
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         uR.save(user);
     }
 
