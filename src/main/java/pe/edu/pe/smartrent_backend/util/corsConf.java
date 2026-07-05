@@ -16,7 +16,8 @@ public class corsConf {
                         .allowedOrigins(
                                 "http://localhost:4200",
                                 "http://127.0.0.1:4200",
-                                "https://frontend-grupo-8.onrender.com"
+                                "https://frontend-grupo-8.onrender.com",
+                                "https://smartrent-frontend-396930085922.us-central1.run.app"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*");
